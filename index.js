@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
     
         <a href="/">Home</a>
         <a href="/restaurants/about">About</a>
-        <a href="/restaurants/list">Restaurant</a>
+        <a href="/restaurants/list">Restaurants</a>
         <a href="/customers/sign-in">My Bookings</a>
         <a href="/customers/sign-in">Sign In</a>
         
