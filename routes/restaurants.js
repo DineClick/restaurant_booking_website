@@ -12,27 +12,27 @@ router.get("/about", (req, res) => {
     res.render("about.ejs")
 })
 
-// 3. Restaurant Login page 
-router.get("/login", (req, res) => {
-    // res.send("Restaurant Login Page");
-    res.render("login.ejs")
+// 3. Restaurant Sign In page 
+router.get("/sign-in", (req, res) => {
+    // res.send("Restaurant Sign In Page");
+    res.render("sign-in.ejs")
 })
 
-router.post("/login", (req, res) => {
+router.post("/sign-in", (req, res) => {
     // check the email and password against the database
 })
 
 // 4. Restaurant Registration page (Sign up)
-router.get("/register", (req, res) => {
+router.get("/registration", (req, res) => {
     // res.send("Restaurant Registration Page");
-    res.render("restaurants-register.ejs")
+    res.render("restaurants-registration.ejs")
 })
 
-// 5. Restaurant Profile page (show all information about the restaurant)
+// 5. Restaurant Account page (show all information about the restaurant)
 // Need to implement when the restaurant want to update the information or delete the account
-router.get("/profile", (req, res) => {
-    res.send("Restaurant Profile Page");
-    res.render("restaurants-profile.ejs")
+router.get("/account", (req, res) => {
+    res.send("Restaurant Account Page");
+    res.render("restaurants-account.ejs")
 })
 
 // 4. list of the Restaurant (when click on restaurant button)

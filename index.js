@@ -31,12 +31,12 @@ app.get('/', (req, res) => {
     
         <a href="/">Home</a>
         <a href="/restaurants/about">About</a>
-        <a href="/restaurants/list">Restaurant</a>
-        <a href="/customers/login">My Bookings</a>
-        <a href="/customers/login">Sign In</a>
+        <a href="/restaurants/list">Restaurants</a>
+        <a href="/customers/sign-in">My Bookings</a>
+        <a href="/customers/sign-in">Sign In</a>
         
         <br><br>
-        <a href="/customers/login">Reserve Now</a>
+        <a href="/customers/sign-in">Reserve Now</a>
     `);
 });
 

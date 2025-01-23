@@ -5,26 +5,26 @@ router.get("/", (req, res) => {
     res.render("customers-homepage");
 })
 
-// Customer Login page 
-router.get("/login", (req, res) => {
-    // res.send("Customer Login Page");
-    res.render("login.ejs")
+// Customer Sign In page 
+router.get("/sign-in", (req, res) => {
+    // res.send("Customer Sign In Page");
+    res.render("sign-in.ejs")
 })
 
-router.post("/login", (req, res) => {
+router.post("/sign-in", (req, res) => {
     // check the email and password against the database
 })
 
 // Customer Registration page (Sign up)
-router.get("/register", (req, res) => {
+router.get("/registration", (req, res) => {
     // res.send("Customer Registration Page");
-    res.render("customers-register.ejs")
+    res.render("customers-registration.ejs")
 })
 
-// Customer Profile page (show all information about the customer)
-router.get("/profile", (req, res) => {
-    res.send("Customer Profile Page");
-    res.render("customers-profile.ejs")
+// Customer Account page (show all information about the customer)
+router.get("/account", (req, res) => {
+    res.send("Customer Account Page");
+    res.render("customers-account.ejs")
 })
 
 // Export the router object so index.js can access it
