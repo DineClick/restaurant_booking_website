@@ -62,9 +62,5 @@ CREATE TABLE IF NOT EXISTS pre_order_menu (
     PRIMARY KEY (booking_id, menu_id)
 );
 
--- Insert default data
-
-
-
 COMMIT;
 

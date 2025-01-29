@@ -1,6 +1,5 @@
 //main entry point for the application
 
-// Set up express, bodyparser and EJS
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -22,23 +21,19 @@ global.db = new sqlite3.Database('./database.db',function(err){
     }
 });
 
-// Overall homepage before users choose to login
+//
+const session = require('express-session');
+
+app.use(session({
+    secret: 'dineclick',
+    resave: false, 
+    saveUninitialized: true
+})); 
+
+// changes : instead of sending the html, we are rendering the ejs file
 app.get('/', (req, res) => {
-    // res.send('Home page before login')
-    res.send(`
-        <h1>Welcome to the Restaurant Reservation System</h1>
-        <p> Please choose your role </p>
-    
-        <a href="/">Home</a>
-        <a href="/restaurants/about">About</a>
-        <a href="/restaurants/list">Restaurants</a>
-        <a href="/customers/sign-in">My Bookings</a>
-        <a href="/customers/sign-in">Sign In</a>
-        
-        <br><br>
-        <a href="/customers/sign-in">Reserve Now</a>
-    `);
-});
+    res.render('homepage.ejs');
+})
 
 const restaurantsRoutes = require('./routes/restaurants');
 app.use('/restaurants', restaurantsRoutes);

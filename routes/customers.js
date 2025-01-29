@@ -24,7 +24,7 @@ router.get("/registration", (req, res) => {
 // Customer Account page (show all information about the customer)
 router.get("/account", (req, res) => {
     res.send("Customer Account Page");
-    res.render("customers-account.ejs")
+    // res.render("customers-account.ejs")
 })
 
 // Export the router object so index.js can access it
