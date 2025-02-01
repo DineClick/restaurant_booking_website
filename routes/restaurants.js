@@ -18,98 +18,51 @@ router.get("/about", (req, res) => {
 // 3. Restaurant Sign In page 
 router.get("/sign-in", (req, res) => {
     // res.send("Restaurant Sign In Page");
-    res.render("sign-in.ejs")
+    res.render("restaurants-sign-in.ejs")
 })
 
 router.post('/sign-in', async (req, res) => {
     const { email, password } = req.body;
 
-    try {
-        // Step 1: Check the Customer table
-        const customerSignInQuery = `SELECT * FROM customer WHERE customer_email = ?`;
-        global.db.get(customerSignInQuery, [email], async (err, customerData) => {
-            if (err) {
-                console.error('Database error (Customer):', err);
-                return res.send(`
-                    <script>
-                        alert("Internal Server Error");
-                        window.location.href = "/restaurants/sign-in";
-                    </script>
-                `);
-            }
+    const restaurantSignInQuery = `SELECT * FROM restaurant WHERE restaurant_email = ?`;
+    global.db.get(restaurantSignInQuery, [email], async (err, restaurantData) => {
+        if (err) {
+            console.error('Database error (Restaurant):', err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/restaurants/sign-in";
+                </script>
+            `);
+        }
 
-            if (customerData) {
-                // Validate customer password
-                const isCustomerPasswordValid = await bcrypt.compare(password, customerData.customer_password);
-                if (isCustomerPasswordValid) {
-                    // Login successful for Customer
-                    req.session.customer_id = customerData.customer_id;
-                    req.session.customer_name = customerData.customer_name;
-                    return res.redirect('/customers/account');
-                } else {
-                    // Invalid password for Customer
-                    return res.send(`
-                        <script>
-                            alert("Invalid email or password.");
-                            window.location.href = "/restaurants/sign-in";
-                        </script>
-                    `);
-                }
-            }
-
-            // Check the Restaurant table if no match found in Customer table
-            const restaurantSignInQuery = `SELECT * FROM restaurant WHERE restaurant_email = ?`;
-            global.db.get(restaurantSignInQuery, [email], async (err, restaurantData) => {
-                if (err) {
-                    console.error('Database error (Restaurant):', err);
-                    return res.send(`
-                        <script>
-                            alert("Internal Server Error");
-                            window.location.href = "/restaurants/sign-in";
-                        </script>
-                    `);
-                }
-
-                if (restaurantData) {
-                    // Validate restaurant password
-                    const isRestaurantPasswordValid = await bcrypt.compare(password, restaurantData.restaurant_password);
-                    if (isRestaurantPasswordValid) {
-                        // Login successful for Restaurant
-                        req.session.restaurant_id = restaurantData.restaurant_id;
-                        req.session.restaurant_name = restaurantData.restaurant_name;
-                        return res.redirect('/restaurants/account');
-                    } else {
-                        // Invalid password for Restaurant
-                        return res.send(`
-                            <script>
-                                alert("Invalid email or password.");
-                                window.location.href = "/restaurants/sign-in";
-                            </script>
-                        `);
-                    }
-                }
-
-                // If no match found in either table
+        if (restaurantData) {
+            // Validate restaurant password
+            const isRestaurantPasswordValid = await bcrypt.compare(password, restaurantData.restaurant_password);
+            if (isRestaurantPasswordValid) {
+                // Login successful for Restaurant
+                req.session.restaurant_id = restaurantData.restaurant_id;
+                req.session.restaurant_name = restaurantData.restaurant_name;
+                return res.redirect('/restaurants/account');
+            } else {
+                // Invalid password for Restaurant
                 return res.send(`
                     <script>
                         alert("Invalid email or password.");
                         window.location.href = "/restaurants/sign-in";
                     </script>
                 `);
-            });
-        });
-    } catch (error) {
-        console.error('Sign-In error:', error);
-        return res.status(500).send(`
-            <script>
-                alert("Internal Server Error");
-                window.location.href = "/restaurants/sign-in";
-            </script>
-        `);
-    }
+            }
+        } else {
+            return res.send(`
+                <script>
+                    alert("Invalid email or password.");
+                    window.location.href = "/restaurants/sign-in";
+                </script>
+            `);
+        }
+    });     
 });
-
-
 
 // 4. Restaurant Registration page (Sign up)
 router.get("/registration", (req, res) => {
