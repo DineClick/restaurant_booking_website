@@ -52,6 +52,39 @@ body.homepage{
     color: white;
 }
 
+.dropdown-signIn{
+    position: relative;
+}
+
+.dropdown-signIn-option {
+    display: none;
+    position: absolute;
+    top: 100%; /* Place below the parent menu item */
+    right: 0;  /* Align to the right */
+    background: #efefef;
+    min-width: 200px;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.dropdown-signIn-option li a {
+    color: #333; /* Black text for dropdown items */
+    padding: 12px 16px;
+    display: block;
+}
+
+.dropdown-signIn-option li a:hover {
+    background: #6fbf73; /* Green background on hover */
+    color: white;
+}
+
+.dropdown-signIn:hover .dropdown-signIn-option {
+    display: block;
+}
+
+
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column; /* Stack logo and nav-buttons vertically */
