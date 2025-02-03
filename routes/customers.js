@@ -71,34 +71,5 @@ router.get("/account", (req, res) => {
     // res.render("customers-account.ejs")
 })
 
-// Customer List of Restaurant Page
-router.get("/list", (req, res) => {
-    //Define the query for List of Restaurants
-    const restaurantListQuery = "SELECT * FROM restaurant";
-
-    //Execute the query and render the page with the results
-    global.db.all(restaurantListQuery, (err, restaurantListResult) => {
-        if (err) {
-            next(err);
-        } else {
-            //Get the Searched Keywords
-            if (req.query.searchedKeywords) {
-                const keywords = req.query.searchedKeywords.toLowerCase(); 
-                const restaurantList = restaurantListResult.filter(restaurant => restaurant.restaurant_name.toLowerCase().includes(keywords));
-                res.render("customers-list.ejs", {restaurant_list: restaurantList});
-            } else {
-                res.render("customers-list.ejs", {restaurant_list: restaurantListResult});
-            } 
-        }
-    })
-})
-
-router.post("/list", (req, res) => {
-    const restaurantID = req.body.bookRestaurant;
-    res.redirect("/customers/");
-    //should render restaurant details page
-    //res.render("");
-})
-
 // Export the router object so index.js can access it
 module.exports = router;
