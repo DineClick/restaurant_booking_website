@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <title>Restaurant Page</title>
+</head>
+<body>
+
+        <header>
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    
+                    <li><a href="/restaurants">Home</a></li>
+                    <li><a href="/restaurants/about">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants">My Bookings</a></li>
+                    <li><a href="/restaurants/sign-in">Sign In</a></li>
+                </ul>
+            </nav>
+        </header>
+
+    <form action="/restaurants/list" method="GET">
+        <input type = "text" name = "searchedKeywords" placeholder = "Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        <% restaurant_list.forEach((restaurant) => { %>
+            <li>
+                <h3><%= restaurant.restaurant_name %></h3> <br>
+                <img src= "<%= restaurant.restaurant_image %>" alt="Restaurant Image"> <br>
+                Description:
+                <p><%= restaurant.restaurant_description %></p> <br>
+                <br>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
