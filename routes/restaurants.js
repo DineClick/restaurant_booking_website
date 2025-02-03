@@ -77,26 +77,10 @@ router.get("/account", (req, res) => {
     // res.render("restaurants-account.ejs")
 })
 
-// 6. list of the Restaurants
+// 4. list of the Restaurant (when click on restaurant button)
+// book button cannot be clicked because is restaurant account
 router.get("/list", (req, res) => {
-    //Define the query for List of Restaurants
-    const restaurantListQuery = "SELECT * FROM restaurant";
-
-    //Execute the query and render the page with the results
-    global.db.all(restaurantListQuery, (err, restaurantListResult) => {
-        if (err) {
-            next(err);
-        } else {
-            //Get the Searched Keywords
-            if (req.query.searchedKeywords) {
-                const keywords = req.query.searchedKeywords.toLowerCase(); 
-                const restaurantList = restaurantListResult.filter(restaurant => restaurant.restaurant_name.toLowerCase().includes(keywords));
-                res.render("restaurants-list.ejs", {restaurant_list: restaurantList});
-            } else {
-                res.render("restaurants-list.ejs", {restaurant_list: restaurantListResult});
-            } 
-        }
-    })
+    res.send("List of the Restaurant");
 })
 
 // Export the router object so index.js can access it
