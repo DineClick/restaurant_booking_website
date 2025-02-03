@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <title>Restaurant Page</title>
+</head>
+<body>
+
+
+    <form action="/customers/list" method="GET">
+        <input type = "text" name = "searchedKeywords" placeholder = "Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        <% restaurant_list.forEach((restaurant) => { %>
+            <li>
+                <h3><%= restaurant.restaurant_name %></h3> <br>
+                <img src= "<%= restaurant.restaurant_image %>" alt="Restaurant Image"> <br>
+                Description:
+                <p><%= restaurant.restaurant_description %></p> <br>
+                <br>
+                <form action="/customers/list" method="POST">
+                    <button name = "bookRestaurant" type = "submit" value = "<%= restaurant.restaurant_id %>">Book</button>
+                </form> 
+                <br>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
