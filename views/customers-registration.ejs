@@ -1,31 +1,66 @@
-<!-- Login page for both customers and restaurants -->
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Customer Sign Up Page</title>
-        <link rel="stylesheet" href="/main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Sign Up Page</title>
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+  <body>
+    <div>
+      <h1>Customer Sign Up page</h1>
 
-    </head>
+      <!-- Customers sign up form -->
+      <form action="/customers/registration" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required /><br /><br />
 
-    <body>
-        <div>
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+        /><br /><br />
 
-            <h1>Customer Sign Up page</h1>
+        <label for="full_name">Full Name:</label>
+        <input
+          type="text"
+          id="full_name"
+          name="full_name"
+          required
+        /><br /><br />
 
-            <form style="display: inline">
-                <button type="button" onclick="location.href='/customers/registration'">Customer</button>
-            </form>
+        <label for="phone_number">Phone Number:</label>
+        <input
+          type="text"
+          id="phone_number"
+          name="phone_number"
+          required
+        /><br /><br />
 
-            <form style="display: inline"></form>
-                <button type="button" onclick="location.href='/restaurants/registration'">Restaurant</button>
-            </form>
+        <button type="submit">Sign Up</button>
+      </form>
 
-            <br><br>
-            <p>Already have account ? <a href="/customers/sign-in">Login Here</a></p>
+      <br /><br />
+      <p>
+        Already have an account? <a href="/customers/sign-in">Login Here</a>
+      </p>
 
-        </div>
-    </body>
+      <form style="display: inline">
+        <button type="button" onclick="location.href='/customers/registration'">
+          Customer
+        </button>
+      </form>
+
+      <form style="display: inline">
+        <button
+          type="button"
+          onclick="location.href='/restaurants/registration'"
+        >
+          Restaurant
+        </button>
+      </form>
+    </div>
+  </body>
 </html>

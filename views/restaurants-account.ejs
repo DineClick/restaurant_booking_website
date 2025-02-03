@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Restaurant Account Page</title>
-        <link rel="stylesheet" href="/main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Profile</title>
+  </head>
+  <body>
+    <h1>Restaurant Profile</h1>
+    <p>Welcome, <%= restaurant.restaurant_name %>!</p>
 
-    </head>
+    <!-- Log Out Button -->
+    <form action="/restaurants/sign-out" method="GET">
+      <button type="submit">Log Out</button>
+    </form>
 
-    <body>
-        <div>
-            <h1>Restaurant Profile</h1>
-        </div>
-    </body>
+    <!-- You can add more profile details here -->
+  </body>
 </html>
-
