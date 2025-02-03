@@ -1,54 +1,89 @@
-<!-- Login page for both customers and restaurants -->
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign In Page</title>
-        <link rel="stylesheet" href="/main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In Page</title>
+    <link rel="stylesheet" href="/main.css" />
+    <script>
+      // Change the form action as userType based on JavaScript
+      function updateFormAction() {
+        const userType = document.getElementById("userType").value;
+        const form = document.getElementById("sign-in-form");
 
-    </head>
+        if (userType === "customer") {
+          form.action = "/customers/sign-in"; // when choose customer
+        } else {
+          form.action = "/restaurants/sign-in"; // when choose restaurant
+        }
 
-    <body class="sign-in-page">
-        <header >
-            <!-- navigation part -->
-            <nav class="navbar">
-                <div class="logo">
-                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
-                </div>
+        console.log("Form action updated to: " + form.action); // check the action at console
+      }
 
-                <ul class="nav-buttons">
-                    
-                    <li><a href="/restaurants">Home</a></li>
-                    <li><a href="/restaurants/about">About</a></li>
-                    <li><a href="/restaurants/list">Restaurants</a></li>
-                    <li><a href="/restaurants">My Bookings</a></li>
-                    <li><a href="/customers/sign-in">Sign In</a></li>
-                </ul>
-            </nav>
-        </header>
-        
-        <div class="sign-in-box">
-            <h1>Sign In</h1>
-            <form id="sign-in-form" method="POST" action="/customers/sign-in">
-                <label for="email"><strong>Email:</strong> </label>
-                <input type="email" id="email" name="email"placeholder="Enter email" required>
-                <br><br>
-
-                <label for="password"><strong>Password:</strong> </label>
-                <input type="password" id="password" name="password"  placeholder="Enter password" required>
-                <br><br>
-
-                <button type="submit" id="SignInButton">Sign In</button>
-            </form>
-
-            <br><br>
-
-            <div class="registration-page"></div>
-                <p>Don't have an account ? <a href="/customers/registration">Sign up here</a></p>
-            </div>
-
+      // Basically call updateFormAction() after we load the page
+      window.onload = function () {
+        updateFormAction();
+      };
+    </script>
+  </head>
+  <body class="sign-in-page">
+    <header>
+      <!-- navigation part -->
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/images/dine_click_logo.png" alt="Dine Click Logo" />
         </div>
-    </body>
+        <ul class="nav-buttons">
+          <li><a href="/restaurants">Home</a></li>
+          <li><a href="/restaurants/about">About</a></li>
+          <li><a href="/restaurants/list">Restaurants</a></li>
+          <li><a href="/restaurants">My Bookings</a></li>
+          <li><a href="/customers/sign-in">Sign In</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="sign-in-box">
+      <h1>Sign In</h1>
+      <form id="sign-in-form" method="POST" action="/customers/sign-in">
+        <!-- Choose the sign in type -->
+        <label for="userType"><strong>Sign in as:</strong> </label>
+        <select
+          name="userType"
+          id="userType"
+          required
+          onchange="updateFormAction()"
+        >
+          <option value="customer" selected>Customer</option>
+          <option value="restaurant">Restaurant</option></select
+        ><br /><br />
+
+        <label for="email"><strong>Email:</strong> </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter email"
+          required
+        /><br /><br />
+
+        <label for="password"><strong>Password:</strong> </label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter password"
+          required
+        /><br /><br />
+
+        <button type="submit" id="SignInButton">Sign In</button>
+      </form>
+
+      <br /><br />
+      <p>
+        Don't have an account?
+        <a href="/customers/registration">Sign up here</a>
+      </p>
+    </div>
+  </body>
 </html>

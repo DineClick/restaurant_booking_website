@@ -23,14 +23,7 @@
                     <li><a href="/restaurants/about">About</a></li>
                     <li><a href="/restaurants/list">Restaurants</a></li>
                     <li><a href="/restaurants">My Bookings</a></li>
-                    <!-- <li><a href="/restaurants/sign-in">Sign In</a></li> -->
-                    <li class="dropdown-signIn">
-                        <a href="#">Sign In</a>
-                        <ul class="dropdown-signIn-option">
-                            <li><a href="/customers/sign-in">Sign In as Customer</a></li>
-                            <li><a href="/restaurants/sign-in">Sign In as Restaurant</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="/restaurants/sign-in">Sign In</a></li>
                 </ul>
             </nav>
         </header>
@@ -89,33 +82,6 @@
                 </p>
             </div>
         </footer>
-
-        <!-- ensure the script is run after the entire HTML page is loaded -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                // This is used to manage the sign in options (sign in as customer or restaurant)
-                const dropdown = document.querySelector('.dropdown-signIn');
-                const dropdownMenu = document.querySelector('.dropdown-signIn-option');
-
-                // Toggle the dropdown on click of "Sign In"
-                dropdown.addEventListener('click', function (event) {
-                    // Check if the clicked element have link inside 
-                    if (event.target.tagName === 'A' && event.target.closest('.dropdown-signIn-option')) {
-                        return; // stop further execution of this function
-                    }
-                    event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
-                    // use to toggle the dropdown
-                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-                });
-
-                // Close the dropdown if clicked outside
-                document.addEventListener('click', function (event) {
-                    if (!dropdown.contains(event.target)) {
-                        dropdownMenu.style.display = 'none';
-                    }
-                });
-            });
-        </script>
     </body>
 </html>
 

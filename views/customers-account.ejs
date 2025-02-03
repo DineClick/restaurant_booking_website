@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Customer Account Page</title>
-        <link rel="stylesheet" href="/main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Account</title>
+  </head>
+  <body>
+    <h1>Welcome, <%= customer.customer_name %>!</h1>
+    <p>Email: <%= customer.customer_email %></p>
+    <p>Phone Number: <%= customer.customer_phone_number %></p>
+    <p>Image: <%= customer.customer_image || 'No image uploaded' %></p>
 
-    </head>
-
-    <body class="homepage">
-        <div class="center-box">
-            <h1>Customer Profile</h1>
-        </div>
-    </body>
+    <a href="/customers/sign-out">Sign out</a>
+  </body>
 </html>
-
