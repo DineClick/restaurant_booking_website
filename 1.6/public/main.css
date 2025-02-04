@@ -1,0 +1,249 @@
+/* Styling for website*/
+/* Home page styling (josephine) */
+body.homepage{
+    font-family: Arial, sans-serif;
+    padding:0;
+    margin:0;
+    background-color: #EFEFEF;
+}
+
+/* Navigation button */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center; /*Center the navigation buttons*/
+    background-color: #7fc1a1;
+    box-sizing: border-box;
+    position: fixed; /* Allow absolute positioning for the logo */
+    white-space: nowrap;
+    top:0;
+    width:100%;
+}
+
+.logo {
+    left: 20px; /* Add space from the left edge */
+}
+
+.navbar .logo img {
+    height: 50px; /*logo size */
+    width:100px; 
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center; /* Center buttons in the navbar */
+    gap: 50px; /* Add space between buttons */
+    list-style: none; /* Remove bullets */
+    margin: 0;
+    padding: 0;
+}
+
+.nav-buttons li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 10px 20px; /* Add spacing inside buttons */
+    border-radius: 20px; /* Rounded corners for buttons */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.nav-buttons li a:hover {
+    background-color: black; /* Black background on hover */
+    color: white;
+}
+
+.dropdown-signIn{
+    position: relative;
+}
+
+.dropdown-signIn-option {
+    display: none;
+    position: absolute;
+    top: 100%; /* Place below the parent menu item */
+    right: 0;  /* Align to the right */
+    background: #efefef;
+    min-width: 200px;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.dropdown-signIn-option li a {
+    color: #333; /* Black text for dropdown items */
+    padding: 12px 16px;
+    display: block;
+}
+
+.dropdown-signIn-option li a:hover {
+    background: #6fbf73; /* Green background on hover */
+    color: white;
+}
+
+.dropdown-signIn:hover .dropdown-signIn-option {
+    display: block;
+}
+
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Stack logo and nav-buttons vertically */
+        align-items: center;
+    }
+
+    .nav-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 15px; /* Reduce gap between buttons */
+    }
+
+    .nav-buttons li a {
+        font-size: 14px;
+        padding: 8px 15px; /*Adjust padding for smaller screens */
+    }
+
+    .nav-buttons li a:hover {
+        padding: 10px 20px; 
+    }
+}
+
+.reserve-button {
+    background-color: #7fc1a1; 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.reserve-button:hover {
+    background-color: #4caf50;
+}
+
+/* Hero section */
+.hero-image {
+    width:100%; 
+    height:50vh; 
+}
+
+/* Why Us section */
+h2 {
+    font-size: 24px; 
+    padding: 40px 20px; 
+}
+
+.reasons {
+    display:flex; 
+    justify-content: space-between;
+}
+
+.reason img {
+    padding: 20px;
+    width: 80%; 
+    height: auto; 
+    border-radius: 10px;
+}
+
+/* ========================================================================= */
+/* About page styling setting */
+body.aboutpage{
+    font-family: Arial, sans-serif;
+    padding:0;
+    margin:0;
+    background-color: #EFEFEF;
+}
+
+/* About section */
+.about-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 40px;
+    gap: 20px;
+    text-align: left;
+}
+
+/* About logo */
+.about-section .about-logo img {
+    height: 200px;
+    width: auto;
+}
+
+/* About content */
+.about-content {
+    max-width: 600px;
+}
+
+.about-content h1 {
+    color: #62b5a8;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.about-content p {
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* ============================================================ */
+/* Sign In page styling  */
+body.sign-in-page{
+    background-color: #efefef;
+    margin:0; 
+    padding:0; 
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center vertically */
+    height: 100vh; /*Set the height of the body to fill the entire viewport*/
+}
+
+.sign-in-box {
+    background-color: #fff;
+    justify-content: center;
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    width: 300px;
+    margin-top: auto;
+    margin-bottom: auto;
+
+}
+
+.sign-in-box h1 {
+    margin-bottom: 20px;
+}
+
+.sign-in-box label{
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.sign-in-box input{
+    width: 93%; 
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.sign-in-box button {
+    background-color:#7fc1a1;
+    width: 40%;
+    padding: 10px;
+    border-radius: 4px; 
+    font-size: 16px; 
+    cursor: pointer; 
+}
+
+.sign-in-box button:hover {
+    background-color: #4a9872;
+}
