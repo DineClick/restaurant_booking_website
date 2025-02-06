@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS restaurant (
     restaurant_address TEXT NOT NULL,
     restaurant_password TEXT NOT NULL,
     restaurant_description TEXT,
-    restaurant_image TEXT -- Store pathing, example: "/restaurant-images/example.jpg"
+    restaurant_image TEXT, -- Store pathing, example: "/restaurant-images/example.jpg"
     restaurant_floorplan_image TEXT -- -- Store pathing, example: "/restaurant-images/example.jpg"
 );
 

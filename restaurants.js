@@ -1,0 +1,366 @@
+const express = require("express");
+const router = express.Router();
+
+// For hashing passwords
+const bcrypt = require("bcrypt");
+
+//For image upload and delete
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs'); 
+
+//Set the Storage for Restaurant-related Images Destination and Filename Format Using multer
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        //Save Files in the public/restaurants-images directory
+        cb(null, path.join(__dirname, '../public/restaurants-images'));
+    },
+    filename: function (req, file, cb) {
+        //Use the original filename or add a timestamp to avoid filename collisions
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({storage: storage});
+
+// 1. Restaurant Homepage after login (Sign in change to account)
+router.get("/", (req, res) => {
+    res.render("homepage.ejs");
+})
+
+// 2. About page
+router.get("/about", (req, res) => {
+    res.render("about.ejs")
+})
+
+// 3. Restaurant Sign In page 
+router.get("/sign-in", (req, res) => {
+    // res.send("Restaurant Sign In Page");
+    res.render("restaurants-sign-in.ejs")
+})
+
+router.post('/sign-in', async (req, res) => {
+    const { email, password } = req.body;
+
+    const restaurantSignInQuery = `SELECT * FROM restaurant WHERE restaurant_email = ?`;
+    global.db.get(restaurantSignInQuery, [email], async (err, restaurantData) => {
+        if (err) {
+            console.error('Database error (Restaurant):', err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/restaurants/sign-in";
+                </script>
+            `);
+        }
+
+        if (restaurantData) {
+            // Validate restaurant password
+            const isRestaurantPasswordValid = await bcrypt.compare(password, restaurantData.restaurant_password);
+            if (isRestaurantPasswordValid) {
+                // Login successful for Restaurant
+                req.session.restaurant_id = restaurantData.restaurant_id;
+                req.session.restaurant_name = restaurantData.restaurant_name;
+                return res.redirect('/restaurants/account');
+            } else {
+                // Invalid password for Restaurant
+                return res.send(`
+                    <script>
+                        alert("Invalid email or password.");
+                        window.location.href = "/restaurants/sign-in";
+                    </script>
+                `);
+            }
+        } else {
+            return res.send(`
+                <script>
+                    alert("Invalid email or password.");
+                    window.location.href = "/restaurants/sign-in";
+                </script>
+            `);
+        }
+    });     
+});
+
+// 4. Restaurant Registration page (Sign up)
+router.get("/registration", (req, res) => {
+    res.send("Restaurant Registration Page");
+    // res.render("restaurants-registration.ejs")
+})
+
+// 5. Restaurant Account page
+router.get("/account", (req, res) => {
+    restaurantID = req.session.restaurant_id;
+
+    //Define the query for Restaurant Account Data
+    restaurantAccountQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+                    
+    //Execute the query and render the page with the results
+    global.db.all(restaurantAccountQuery, [restaurantID], (err, restaurantAccountResult) => {
+        if (err) {
+            console.error("Database error (Restaurant):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/restaurants/account";
+                </script>`);
+        } else {
+            restaurant_data = restaurantAccountResult[0];
+
+            //Define the query for Menu List
+            menuListQuery = "SELECT * FROM menu_list WHERE restaurant_id = ?";
+                                    
+            //Execute the query and render the page with the results
+            global.db.all(menuListQuery, [restaurantID], (err, menuListResult) => {
+                if (err) {
+                    console.error("Database error (Restaurant - Menu):", err);
+                    return res.send(`
+                        <script>
+                            alert("Internal Server Error");
+                            window.location.href = "/restaurants/account";
+                        </script>`);
+                } else {
+                    res.render("restaurants-account.ejs", {restaurant_data: restaurant_data, menu_list: menuListResult});
+                }
+            });
+        }
+    })
+})
+
+router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'restaurant_floorplan_image'}]), (req, res, next) => {
+    restaurantID = req.session.restaurantID;
+    const buttonClicked = req.body.submitButton;
+
+    if (buttonClicked === "updateRestaurantAccount") {
+        //Define the query to Update Restaurant Account
+        updateRestaurantAccount = [req.body.restaurant_name, req.body.restaurant_email, req.body.restaurant_phone_number, req.body.restaurant_address, req.body.restaurant_password, req.body.restaurant_description, restaurantID];
+        updateRestaurantAccountQuery = "UPDATE restaurant SET restaurant_name = ?, restaurant_email = ?, restaurant_phone_number = ?, restaurant_address = ?, restaurant_password = ?, restaurant_description = ? WHERE restaurant_id = ?";
+
+        //Execute the query and render the page with the results
+        global.db.run(updateRestaurantAccountQuery, updateRestaurantAccount, (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Update Failed");
+                        window.location.href = "/restaurants/account";
+                    </script>
+                `);
+            } else {
+                res.redirect("/restaurants/account");
+            }
+        });
+    } else if (buttonClicked === "deleteRestaurantAccount") {
+        //Define the query to Delete Restaurant Account
+        deleteRestaurantAccountQuery = "DELETE FROM restaurant WHERE restaurant_id = ?";
+
+        //Execute the query and render the page with the results
+        global.db.run(deleteRestaurantAccountQuery, [restaurantID], (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Delete Failed");
+                        window.location.href = "/restaurants/account";
+                    </script>
+                `);
+            } else {
+                res.redirect("/restaurants/homepage");
+            }
+        });
+    } else if (buttonClicked === "updateRestaurantImage") {
+        //Define the query for Restaurant Account Data
+        restaurantAccountQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+        
+        //Execute the query and render the page with the results
+        global.db.all(restaurantAccountQuery, [restaurantID], (err, restaurantAccountResult) => {
+            if (err) {
+                console.error("Database error (Restaurant - Update Profile Picture):", err);
+                return res.send(`
+                    <script>
+                        alert("Internal Server Error");
+                        window.location.href = "/restaurants/account";
+                    </script>`);
+            } else {
+                //Delete Previous Image
+                prevRestaurantImage = "public/" + restaurantAccountResult[0].restaurant_image;
+
+                fs.unlink(prevRestaurantImage, (err) => {
+                    //Define the query to Upload New Restaurant Image
+                    restaurantImagePath = "/restaurants-images/" + req.files['restaurant_image'][0].filename;
+                    updateRestaurantImage = [restaurantImagePath, restaurantID]
+                    updateRestaurantImageQuery = "UPDATE restaurant SET restaurant_image = ? WHERE restaurant_id = ?";
+
+                    //Execute the query and render the page with the results
+                    global.db.run(updateRestaurantImageQuery, updateRestaurantImage, (err) => {
+                        if (err) {
+                            return res.send(`
+                                <script>
+                                    alert("Update New Profile Picture Failed");
+                                    window.location.href = "/restaurants/account";
+                                </script>
+                            `);
+                        } else {
+                            res.redirect("/restaurants/account");
+                        }
+                    });
+                });
+            }
+        });
+    } else if (buttonClicked === "updateFloorplanImage") {
+        //Define the query for Restaurant Account Data
+        restaurantAccountQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+        
+        //Execute the query and render the page with the results
+        global.db.all(restaurantAccountQuery, [restaurantID], (err, restaurantAccountResult) => {
+            if (err) {
+                console.error("Database error (Restaurant - Update Floorplan Image):", err);
+                return res.send(`
+                    <script>
+                        alert("Internal Server Error");
+                        window.location.href = "/restaurants/account";
+                    </script>`);
+            } else {
+                //Delete Previous Image
+                prevFloorplanImage = "public/" + restaurantAccountResult[0].restaurant_floorplan_image;
+
+                fs.unlink(prevFloorplanImage, (err) => {
+                    //Define the query to Upload New Restaurant Image
+                    floorplanImagePath = "/restaurants-images/" + req.files['restaurant_floorplan_image'][0].filename;
+                    updateFloorplanImage = [floorplanImagePath, restaurantID]
+                    updateFloorplanImageQuery = "UPDATE restaurant SET restaurant_floorplan_image = ? WHERE restaurant_id = ?";
+
+                    //Execute the query and render the page with the results
+                    global.db.run(updateFloorplanImageQuery, updateFloorplanImage, (err) => {
+                        if (err) {
+                            return res.send(`
+                                <script>
+                                    alert("Update New Floorplan Image Failed");
+                                    window.location.href = "/restaurants/account";
+                                </script>
+                            `);
+                        } else {
+                            res.redirect("/restaurants/account");
+                        }
+                    });
+                });
+            }
+        });
+    }
+})
+
+// 6. Restaurant Edit Menu page
+router.get("/edit-menu", (req, res) => {
+    restaurantID = req.session.restaurantID;
+
+    //Define the query for Menu List
+    menuListQuery = "SELECT * FROM menu_list WHERE restaurant_id = ?";
+                    
+    //Execute the query and render the page with the results
+    global.db.all(menuListQuery, [restaurantID], (err, menuListResult) => {
+        if (err) {
+            console.error("Database error (Menu List):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/restaurants/edit-menu";
+                </script>`);
+        } else {
+            res.render("restaurants-edit-menu.ejs", {menu_list: menuListResult});
+        }
+    });
+})
+
+router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
+    restaurantID = req.session.restaurantID;
+    const buttonClicked = req.body.submitButton;
+
+    if (buttonClicked.includes("addMenu")) {
+        //Define the query for Add Menu
+        addMenu = [restaurantID, req.body.menu_name]
+        addMenuQuery = "INSERT INTO menu_list (restaurant_id, menu_name) VALUES (?,?)";
+
+        global.db.run(addMenuQuery, addMenu, (err, next) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Add Failed");
+                        window.location.href = "/restaurants/edit-menu";
+                    </script>
+                `);
+            } else { 
+                res.redirect("/restaurants/edit-menu");
+            }
+        })
+    } else if (buttonClicked.includes("updateImage")) {
+        //Get Menu ID 
+        menuData = buttonClicked.match(/(\d+)/);
+        menuID = menuData[0];
+
+        //Define the query for Menu
+        menuQuery = "SELECT * FROM menu_list WHERE menu_id = ?";
+        
+        //Execute the query and render the page with the results
+        global.db.all(menuQuery, [menuID], (err, menuResult) => {
+            if (err) {
+                console.error("Database error (Update Image - Menu List):", err);
+                return res.send(`
+                    <script>
+                        alert("Internal Server Error");
+                        window.location.href = "/restaurants/edit-menu";
+                    </script>`);
+            } else {
+                //Delete Previous Image
+                prevMenuImage = "public/" + menuResult[0].menu_image;
+
+                fs.unlink(prevMenuImage, (err) => {
+                    //Define the query to Upload New Menu Image
+                    menuImagePath = "/restaurants-images/" + req.file.filename;
+                    uploadMenuImage = [menuImagePath, menuID]
+                    uploadMenuImageQuery = "UPDATE menu_list SET menu_image = ? WHERE menu_id = ?";
+
+                    //Execute the query and render the page with the results
+                    global.db.run(uploadMenuImageQuery, uploadMenuImage, (err) => {
+                        if (err) {
+                            return res.send(`
+                                <script>
+                                    alert("Update New Menu Image Failed");
+                                    window.location.href = "/restaurants/edit-menu";
+                                </script>
+                            `);
+                        } else {
+                            res.redirect("/restaurants/edit-menu");
+                        }
+                    });
+                });
+            }
+        });
+    } else if (buttonClicked.includes("deleteMenu")) {
+        //Get Menu ID 
+        menuData = buttonClicked.match(/(\d+)/);
+        menuID = menuData[0];
+
+        //Define the query to Delete Restaurant Account
+        deleteMenuQuery = "DELETE FROM menu_list WHERE menu_id = ?";
+
+        //Execute the query and render the page with the results
+        global.db.run(deleteMenuQuery, [menuID], (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Delete Failed");
+                        window.location.href = "/restaurants/edit-menu";
+                    </script>
+                `);
+            } else {
+                res.redirect("/restaurants/edit-menu");
+            }
+        });
+    }
+})
+
+// 7. list of the Restaurant (when click on restaurant button)
+// book button cannot be clicked because is restaurant account
+router.get("/list", (req, res) => {
+    res.send("List of the Restaurant");
+})
+
+// Export the router object so index.js can access it
+module.exports = router;
