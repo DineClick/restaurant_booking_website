@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS seating_list (
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id)
 );
 
-CREATE TABLE reservations (
+CREATE TABLE IF NOT EXISTS reservations (
     reservation_id INTEGER PRIMARY KEY AUTOINCREMENT, -- Unique reservation ID
     customer_id INT NOT NULL,
     rest_id INT NOT NULL,
