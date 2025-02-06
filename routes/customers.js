@@ -169,11 +169,108 @@ router.post("/registration", upload.single('customer_image'), async (req, res) =
     })
 });
 
+// Customer Account page
+router.get("/account", (req, res, next) => {
+    customerID = req.session.customer_id;
 
-// Customer Account page (show all information about the customer)
-router.get("/account", (req, res) => {
-    res.send("Customer Account Page");
-    // res.render("customers-account.ejs")
+    //Define the query for Customer Account Data
+    customerAccountQuery = "SELECT * FROM customer WHERE customer_id = ?";
+                    
+    //Execute the query and render the page with the results
+    global.db.all(customerAccountQuery, [customerID], (err, customerAccountResult) => {
+        if (err) {
+            console.error("Database error (Customer):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/customers/account";
+                    </script>`);
+        } else {
+            customer_data = customerAccountResult[0];
+            res.render("customers-account.ejs", {customer_data: customer_data});
+        }
+    });  
+})
+
+router.post("/account", upload.single('customer_image'), (req, res, next) => { 
+    customerID = req.session.customer_id;  
+    const buttonClicked = req.body.submitButton;
+
+    if (buttonClicked === "updateCustomerAccount") {
+        //Define the query to Update Customer Account
+        updateCustomerAccount = [req.body.customer_name, req.body.customer_email, req.body.customer_phone_number, req.body.customer_password, customerID];
+        updateCustomerAccountQuery = "UPDATE customer SET customer_name = ?, customer_email = ?, customer_phone_number = ?, customer_password = ? WHERE customer_id = ?";
+
+        //Execute the query and render the page with the results
+        global.db.run(updateCustomerAccountQuery, updateCustomerAccount, (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Update Failed");
+                        window.location.href = "/customers/account";
+                    </script>
+                `);
+            } else {
+                res.redirect("/customers/account");
+            }
+        });
+    } else if (buttonClicked === "deleteCustomerAccount") {
+        //Define the query to Delete Customer Account
+        deleteCustomerAccountQuery = "DELETE FROM customer WHERE customer_id = ?";
+
+        //Execute the query and render the page with the results
+        global.db.run(deleteCustomerAccountQuery, [customerID], (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Delete Failed");
+                        window.location.href = "/customers/account";
+                    </script>
+                `);
+            } else {
+                res.redirect("/customers/");
+            }
+        });
+    } else if (buttonClicked === "updateCustomerImage") {
+        //Define the query for Customer Account Data
+        customerAccountQuery = "SELECT * FROM customer WHERE customer_id = ?";
+                
+        //Execute the query and render the page with the results
+        global.db.all(customerAccountQuery, [customerID], (err, customerAccountResult) => {
+            if (err) {
+                console.error("Database error (Customer):", err);
+                return res.send(`
+                    <script>
+                        alert("Internal Server Error - Update Image Failed");
+                        window.location.href = "/customers/account";
+                    </script>`);
+            } else {
+                //Delete Previous Image
+                prevCustomerImage = "public/" + customerAccountResult[0].customer_image;
+                console.log(prevCustomerImage);
+                fs.unlink(prevCustomerImage, (err) => {
+                    //Define the query to Update New Customer Image
+                    customerImagePath = "/customers-images/" + req.file.filename;
+                    updateCustomerImage = [customerImagePath, customerID]
+                    updateCustomerImageQuery = "UPDATE customer SET customer_image = ? WHERE customer_id = ?";
+            
+                    //Execute the query and render the page with the results
+                    global.db.run(updateCustomerImageQuery, updateCustomerImage, (err) => {
+                        if (err) {
+                            return res.send(`
+                                <script>
+                                    alert("Update New Image Failed");
+                                    window.location.href = "/customers/account";
+                                </script>
+                            `);
+                        } else {
+                            res.redirect("/customers/account");
+                        }
+                    });
+                });
+            }
+        });
+    }
 })
 
 // Export the router object so index.js can access it
