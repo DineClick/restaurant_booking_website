@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Customer Account Page</title>
-        <link rel="stylesheet" href="/main.css">
-
-    </head>
-
-    <body class="account-page">
-        <header >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Account</title>
+  </head>
+  
+        <header>
             <!-- navigation part -->
             <nav class="navbar">
                 <div class="logo">
@@ -26,9 +23,15 @@
                 </ul>
             </nav>
         </header>
-
+        
+  <body>
+    <h1>Customer Profile</h1>
+    <h1>Welcome, <%= customer.customer_name %>!</h1>
+    
+    </head>
+    <body class="account-page">
+        
         <div class="customer-profile">
-            <h1>Customer Profile</h1>
             Profile Picture:  <br>
             <img src= "<%= customer_data.customer_image %>" alt="Missing Profile Picture"> <br>
 
@@ -50,5 +53,8 @@
             </form>
         </div>
     </body>
-</html>
 
+    <a href="/customers/sign-out">Sign out</a>
+    
+  </body>
+</html>

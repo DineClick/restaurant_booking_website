@@ -1,31 +1,69 @@
-<!-- Login page for both customers and restaurants -->
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Restaurant Sign Up Page</title>
-        <link rel="stylesheet" href="/main.css">
-
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Restaurant Registration Page</title>
+        <link rel="stylesheet" href="/main.css" />
     </head>
 
     <body>
         <div>
+            <h1>Restaurant Registration</h1>
 
-            <h1>Restaurant Sign Up page</h1>
+            <!-- Restaurant Registration Form -->
+            <form action="/restaurants/registration" method="POST" enctype="multipart/form-data">
+                <label for="restaurant_name">Restaurant Name:</label>
+                <input type="text" id="restaurant_name" name="restaurant_name" required/><br /><br />
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required /><br /><br />
+
+                <label for="restaurant_phone_number">Phone Number:</label>
+                <input type="text" id="restaurant_phone_number" name="restaurant_phone_number"/><br /><br />
+
+                <label for="restaurant_address">Address:</label>
+                <input type="text" id="restaurant_address" name="restaurant_address"/><br /><br />
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required/><br /><br />
+
+                <label for="restaurant_description">Description:</label>
+                <input type="text" id="restaurant_description" name="restaurant_description"/><br /><br />
+    
+                <label for="restaurant_image">Profile Picture: </label><br>
+                <input type="file" id="restaurant_image" name="restaurant_image" /><br><br>
+                <img id="imagePreview" style="max-width: 300px; display: none;"> <br><br>
+                
+                <button type="submit">Register</button>
+            </form>
+
+            <!-- Used to preview image when restaurant upload their profile picture -->
+            <script>
+                document.getElementById("restaurant_image").addEventListener("change", function(event) {
+                    const file = event.target.files[0]; // Get the selected file
+                    if (file) {
+                        const reader = new FileReader(); 
+                        reader.onload = function(e) {
+                            const imgPreview = document.getElementById("imagePreview");
+                            imgPreview.src = e.target.result; 
+                            imgPreview.style.display = "block"; // Show the image preview
+                        };
+                        reader.readAsDataURL(file); 
+                    }
+                });
+            </script>
+
+            <br /><br />
+            <p> Already have an account? <a href="/restaurants/sign-in">Login Here</a></p>
 
             <form style="display: inline">
                 <button type="button" onclick="location.href='/customers/registration'">Customer</button>
             </form>
 
-            <form style="display: inline"></form>
+            <form style="display: inline">
                 <button type="button" onclick="location.href='/restaurants/registration'">Restaurant</button>
             </form>
-
-            <br><br>
-            <p>Already have account ? <a href="/restaurants/sign-in">Login Here</a></p>
-
         </div>
     </body>
 </html>

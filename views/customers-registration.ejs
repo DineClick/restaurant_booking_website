@@ -1,31 +1,59 @@
-<!-- Login page for both customers and restaurants -->
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Customer Sign Up Page</title>
-        <link rel="stylesheet" href="/main.css">
-
+        <link rel="stylesheet" href="/main.css" />
     </head>
-
+    
     <body>
         <div>
+            <h1>Customer registration</h1>
+            <form action="/customers/registration" method="POST" enctype="multipart/form-data">
+                <label for="full_name">Full Name:</label>
+                <input type="text" id="full_name" name="full_name" required/> <br /><br />
 
-            <h1>Customer Sign Up page</h1>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required /><br /><br />
+
+                <label for="phone_number">Phone Number:</label>
+                <input type="text" id="phone_number" name="phone_number" required/><br /><br />
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required/><br /><br />
+
+                <label for="customer_image">Profile Picture: </label><br>
+                <input type="file" id="customer_image" name="customer_image" /><br><br>
+                <img id="imagePreview" style="max-width: 300px; display: none;"><br><br>
+                <button type="submit">Register</button>
+            </form>
+
+            <!-- Used to preview image when customer upload their profile picture -->
+            <script>
+                document.getElementById("customer_image").addEventListener("change", function(event) {
+                    const file = event.target.files[0]; // Get the selected file
+                    if (file) {
+                        const reader = new FileReader(); 
+                        reader.onload = function(e) {
+                            const imgPreview = document.getElementById("imagePreview");
+                            imgPreview.src = e.target.result; 
+                            imgPreview.style.display = "block"; // Show the image preview
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            </script><br><br />
+
+            <p>Already have an account? <a href="/customers/sign-in">Login Here</a></p>
 
             <form style="display: inline">
                 <button type="button" onclick="location.href='/customers/registration'">Customer</button>
             </form>
 
-            <form style="display: inline"></form>
+            <form style="display: inline">
                 <button type="button" onclick="location.href='/restaurants/registration'">Restaurant</button>
             </form>
-
-            <br><br>
-            <p>Already have account ? <a href="/customers/sign-in">Login Here</a></p>
-
         </div>
     </body>
 </html>

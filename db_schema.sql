@@ -37,16 +37,19 @@ CREATE TABLE IF NOT EXISTS seating_list (
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id)
 );
 
-CREATE TABLE IF NOT EXISTS bookings (
-    booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    booking_date DATE NOT NULL, -- YYYY-MM-DD
-    booking_time TIME NOT NULL, -- HH:MM:SS
-    num_of_adult INT NOT NULL,
-    num_of_child INT NOT NULL,
+CREATE TABLE reservations (
+    reservation_id INTEGER PRIMARY KEY AUTOINCREMENT, -- Unique reservation ID
     customer_id INT NOT NULL,
-    table_id INT NOT NULL,
+    rest_id INT NOT NULL,
+    reservation_date TEXT NOT NULL,
+    booking_time TEXT NOT NULL,
+    slot TEXT NOT NULL,
+    num_guests INTEGER DEFAULT 1,
+    special_request TEXT, -- Any customer special request
+    table_id INT NOT NULL, -- Table assigned for the reservation
+    status TEXT DEFAULT 'pending', -- Status of the reservation
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    FOREIGN KEY (table_id) REFERENCES seating_list(table_id)
+    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id)
 );
 
 CREATE TABLE IF NOT EXISTS menu_list (

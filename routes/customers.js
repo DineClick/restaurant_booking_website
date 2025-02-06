@@ -28,7 +28,6 @@ router.get("/", (req, res) => {
 
 // Customer Sign In page 
 router.get("/sign-in", (req, res) => {
-    // res.send("Customer Sign In Page");
     res.render("customers-sign-in.ejs")
 })
 
@@ -79,9 +78,96 @@ router.post("/sign-in", (req, res) => {
 
 // Customer Registration page (Sign up)
 router.get("/registration", (req, res) => {
-    // res.send("Customer Registration Page");
     res.render("customers-registration.ejs")
 })
+
+// Handling customer registration
+router.post("/registration", upload.single('customer_image'), async (req, res) => {
+    const { full_name, email, phone_number, password } = req.body;
+
+    // Check if the image was uploaded
+    if(!req.file){
+        return res.send(`
+            <script>
+                alert("Please upload a profile picture.");
+                window.location.href = "/customers/registration";
+            </script>`);
+    }
+
+    // Store image path in the database
+    const customerImgPath = "/customers-images/" + req.file.filename; 
+
+    const checkCustomerEmailQuery = "SELECT * FROM customer WHERE customer_email = ?";
+    const checkRestaurantEmailQuery = "SELECT * FROM restaurant WHERE restaurant_email = ?";
+
+    // Check if the email is already registered as a restaurant or customer (one email only belong to one type of user (restaurant or customer))
+    global.db.get(checkRestaurantEmailQuery, [email], async (err, restaurantData) => {
+        if (err) {
+            console.error("Database error during insertion:", err);
+            return res.send(`
+                <script>
+                    alert("Error: Internal Server Error. Please try again later.");
+                    window.location.href = "/customers/registration";
+                </script>`);
+        }
+
+        global.db.get(checkCustomerEmailQuery, [email], async (err, customerData) => {
+            if (err) {
+                console.error("Database error during insertion:", err);
+                return res.send(`
+                    <script>
+                        alert("Error: Internal Server Error. Please try again later.");
+                        window.location.href = "/customers/registration";
+                    </script>`);
+            }
+    
+            if(restaurantData){
+                return res.send(`
+                    <script>
+                        alert("Error: This email is already registered as a restaurant. Please use a different email");
+                        window.location.href = "/customers/registration";
+                    </script>`);
+            } else if (customerData){
+                return res.send(`
+                    <script>
+                        alert("Error: This email is already registered as a customer. Please use a different email");
+                        window.location.href = "/customers/registration";
+                    </script>`);
+            // If the email is not registered as a restaurant or customer, hash the password and insert the new customer data 
+            } else {
+                bcrypt.hash(password, 10, (hashErr, hashedPassword) => {
+                    if (hashErr) {
+                        console.error("Error hashing password:", hashErr);
+                        return res.send(`
+                            <script>
+                                alert("Error: Internal Server Error. Please try again later.");
+                                window.location.href = "/customers/registration";
+                            </script>`);
+                    }
+    
+                    // insert new customer data with the hashed password
+                    const insertQuery = `INSERT INTO customer (customer_name, customer_email, customer_phone_number, customer_password, customer_image) VALUES (?, ?, ?, ?, ?)`;
+                    global.db.run(insertQuery, [full_name, email, phone_number, hashedPassword, customerImgPath], (err) => {
+                        if (err) { // 쿼리 실행 중 오류 발생 시
+                            console.error("Error inserting customer data:", err);
+                            return res.send(`
+                                <script>
+                                    alert("Error: Internal Server Error. Please try again later.");
+                                    window.location.href = "/customers/registration";
+                                </script>`);
+                        }
+                        // 성공적으로 등록되었을 때
+                        res.send(`
+                            <script>
+                                alert("Registration successful. Please sign in to continue."); 
+                                window.location.href = "/customers/sign-in";
+                            </script>`)
+                    })
+                })            
+            }
+        })
+    })
+});
 
 // Customer Account page
 router.get("/account", (req, res, next) => {

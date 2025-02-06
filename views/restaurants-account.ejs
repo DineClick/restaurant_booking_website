@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Restaurant Account Page</title>
-        <link rel="stylesheet" href="/main.css">
-
-    </head>
-
-    <body class="account-page">
-        <header >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Profile</title>
+  </head>
+  
+        <header>
             <!-- navigation part -->
             <nav class="navbar">
                 <div class="logo">
@@ -26,9 +23,15 @@
                 </ul>
             </nav>
         </header>
+        
+       
+  <body>
+    <h1>Restaurant Profile</h1>
+    <p>Welcome, <%= restaurant.restaurant_name %>!</p>
 
-        <div class="customer-profile">
-            <h1>Restaurant Profile</h1>
+    <body class="account-page">
+        
+        <div class="customer-profile">           
             Profile Picture:  <br>
             <img src= "<%= restaurant_data.restaurant_image %>" alt="Missing Profile Picture"> <br>
             <br>
@@ -77,5 +80,11 @@
             <br>
         </div>
     </body>
+    
+    <!-- Log Out Button -->
+    <form action="/restaurants/sign-out" method="GET">
+      <button type="submit">Log Out</button>
+    </form>
+    
+  </body>
 </html>
-
