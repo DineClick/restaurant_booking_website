@@ -22,14 +22,24 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
-// 1. Restaurant Homepage after login (Sign in change to account)
+// homepage before sign in
 router.get("/", (req, res) => {
     res.render("homepage.ejs");
 })
 
-// 2. About page
+// Homepage after sign in
+router.get("/homepage", (req, res) => {
+    res.render("restaurants-homepage.ejs");
+})
+
+// About page before sign in
 router.get("/about", (req, res) => {
     res.render("about.ejs")
+})
+
+// About page after sign in
+router.get("/about-us", (req, res) => {
+    res.render("restaurants-about.ejs")
 })
 
 // 3. Restaurant Sign In page 
@@ -446,6 +456,17 @@ router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
 router.get("/list", (req, res) => {
     res.send("List of the Restaurant");
 })
+
+// Restaurant logout route
+router.get("/sign-out", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error during session destruction:", err);
+        return res.status(500).send("Error logging out.");
+      }
+      res.redirect("/restaurants"); // Redirect to login page after logout
+    });
+  });
 
 // Export the router object so index.js can access it
 module.exports = router;

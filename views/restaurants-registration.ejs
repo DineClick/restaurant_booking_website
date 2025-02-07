@@ -8,6 +8,30 @@
     </head>
 
     <body>
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    
+                    <li><a href="/restaurants">Home</a></li>
+                    <li><a href="/restaurants/about">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants">My Bookings</a></li>
+                    <li class="dropdown-signIn">
+                        <a href="#">Sign In</a>
+                        <ul class="dropdown-signIn-option">
+                            <li><a href="/customers/sign-in">Sign In as Customer</a></li>
+                            <li><a href="/restaurants/sign-in">Sign In as Restaurant</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
         <div>
             <h1>Restaurant Registration</h1>
 
@@ -38,8 +62,8 @@
                 <button type="submit">Register</button>
             </form>
 
-            <!-- Used to preview image when restaurant upload their profile picture -->
             <script>
+                // <!-- Used to preview image when restaurant upload their profile picture -->
                 document.getElementById("restaurant_image").addEventListener("change", function(event) {
                     const file = event.target.files[0]; // Get the selected file
                     if (file) {
@@ -52,6 +76,31 @@
                         reader.readAsDataURL(file); 
                     }
                 });
+
+                // This is used to manage the sign in options (sign in as customer or restaurant)
+                document.addEventListener("DOMContentLoaded", function () {
+                // This is used to manage the sign in options (sign in as customer or restaurant)
+                const dropdown = document.querySelector('.dropdown-signIn');
+                const dropdownMenu = document.querySelector('.dropdown-signIn-option');
+
+                // Toggle the dropdown on click of "Sign In"
+                dropdown.addEventListener('click', function (event) {
+                    // Check if the clicked element have link inside 
+                    if (event.target.tagName === 'A' && event.target.closest('.dropdown-signIn-option')) {
+                        return; // stop further execution of this function
+                    }
+                    event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
+                    // use to toggle the dropdown
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                });
+
+                // Close the dropdown if clicked outside
+                document.addEventListener('click', function (event) {
+                    if (!dropdown.contains(event.target)) {
+                        dropdownMenu.style.display = 'none';
+                    }
+                });
+            });
             </script>
 
             <br /><br />
