@@ -1,27 +1,100 @@
-<!-- Restaurant home page (After successfully login) -->
+<!-- First page appears when we access http://localhost:3000 -->
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home Page</title>
+        <title>Home</title>
         <link rel="stylesheet" href="/main.css">
 
     </head>
 
-    <body>
-        <div>
-            <h1>Welcome to restaurant homepage</h1>
-            <p>Please choose your role</p>
-            
+    <body class="homepage">
+        <header>
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
 
-            <button type="button" onclick="location.href='/restaurants'">Home</button>
-            <button type="button" onclick="location.href='/restaurants/about'">About</button>
-            <button type="button" onclick="location.href='/restaurants/list'">Restaurant</button>
-            <button type="button" onclick="location.href='/restaurants/bookings'">My Bookings</button>
-            <button type="button" onclick="location.href='/restaurants/account'">Account</button>
-        </div>
+                <ul class="nav-buttons">
+                    <li><a href="/restaurants/homepage">Home</a></li>
+                    <li><a href="/restaurants/about-us">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants/homepage">My Bookings</a></li>
+                    <li><a href="/restaurants/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Hero section (big picture that appears at the top of the webpage)-->
+        <section class="hero-image">
+            <img src="/images/restaurant_pict.png" alt="restaurant-picture" class="hero-image"><br><br>
+            <button class="reserve-button" onclick="location.href='/customers/sign-in'">
+                Reserve Now
+                <img src="/icon/reception.png" alt="reception icon" class="icon">
+            </button>
+        </section>
+        <br><br>
+
+        <!-- Why Us? section -->
+         <section class="why-us">
+            <h2>Why Us?</h2>
+
+            <div class="reasons">
+                <!-- Fast reservations -->
+                <div class="reason">
+                    <img src="/images/fast-reservation-img.png" alt="fast-reservation-img">
+                    <h3>Fast Reservations</h3>
+                    <p>Experience seamless and efficient reservation with our platform. Easily find and reserve your table at selected restaurant in just a few clicks</p>
+                </div>
+
+                <!-- Seat selection -->
+                <div class="reason">
+                    <img src="/images/seat-selection-img.png" alt="seat-selection-img">
+                    <h3>Seat selection</h3>
+                    <p>Enhace your dining experience with flexible seat selection feature. Visualise the restaurant's floor plan and secure the perfect spot to match your mood</p>
+                </div>
+                
+                <!-- Pre-order convinience -->
+                <div class="reason">
+                    <img src="/images/pre-order-convinience-img.png" alt="pre-order-convinience-img">
+                    <h3>Pre-order convinience</h3>
+                    <p>Eliminating waiting times by pre-ordering your favorite dishes before you arrive, giving you more time to relax and enjoy your dining experience</p>
+                </div>
+
+            </div>
+         </section>
+
+        <!-- Footer section -->
+        <footer class="footer">
+            <div class="contact-us">
+                <h3>Contact Us</h3>
+                <p><img src="/icon/phone.png" alt="phone-icon" class="icon"> +65 12335688 </p>
+                <p><img src="/icon/email.png" alt="phone-icon" class="icon"> support@dineclick.com </p>
+                <p><img src="/icon/location.png" alt="phone-icon" class="icon"> 137 Telok Ayer St, #07-23 Singapore 068602 </p>
+            </div>
+
+            <div class="follow-us">
+                <h3>Follow us</h3>
+                <!-- <p> -->
+                    <a href="https://www.whatsapp.com/" target="_blank">
+                        <img src="/icon/whatsapp.png" alt="whatsapp icon" class="icon">
+                    </a>
+
+                    <a href="https://www.facebook.com/" target="_blank">
+                        <img src="/icon/facebook.png" alt="facebook icon" class="icon">
+                    </a>
+                    
+                    <a href="https://www.instagram.com/" target="_blank">
+                        <img src="/icon/instagram.png" alt="instagram icon" class="icon">
+                    </a>
+                <!-- </p> -->
+            </div>
+        </footer>
+
+       
     </body>
 </html>
 
