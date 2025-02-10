@@ -222,7 +222,7 @@ router.get("/account", (req, res) => {
 })
 
 router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'restaurant_floorplan_image'}]), (req, res, next) => {
-    restaurantID = req.session.restaurantID;
+    restaurantID = req.session.restaurant_id;
     const buttonClicked = req.body.submitButton;
 
     if (buttonClicked === "updateRestaurantAccount") {
@@ -343,7 +343,7 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
 
 // 6. Restaurant Edit Menu page
 router.get("/edit-menu", (req, res) => {
-    restaurantID = req.session.restaurantID;
+    restaurantID = req.session.restaurant_id;
 
     //Define the query for Menu List
     menuListQuery = "SELECT * FROM menu_list WHERE restaurant_id = ?";
@@ -364,7 +364,7 @@ router.get("/edit-menu", (req, res) => {
 })
 
 router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
-    restaurantID = req.session.restaurantID;
+    restaurantID = req.session.restaurant_id;
     const buttonClicked = req.body.submitButton;
 
     if (buttonClicked.includes("addMenu")) {
