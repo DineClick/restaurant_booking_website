@@ -5,7 +5,7 @@ const reservationController = require("../controllers/reservation");
 // Middleware for authentication
 const authenticateCustomer = (req, res, next) => {
     if (!req.session.customer_id) {
-        return res.redirect("/customers/login"); // Redirect if not authenticated
+        return res.status(401).json({ message: "User not authenticated" });
     }
     next();
 };
