@@ -51,7 +51,7 @@
                 <td><%= reservation.special_request || "N/A" %></td>
                 <td>
                   <% if (reservation.status === "pending") { %>
-                    <form action="/reservations/<%= reservation.reservation_id %>?_method=DELETE" method="POST">
+                    <form action="/reservations/<%= reservation.reservation_id %>/delete" method="POST">
                       <button type="submit">Cancel</button>
                     </form>
                   <% } %>
