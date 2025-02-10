@@ -106,6 +106,24 @@ const scheduleReminder = (email, restaurantId, date, booking_time, reservationId
     }
 };
 
+// Function to get reservations formatted for EJS rendering
+exports.getReservationsForEjs = (userId) => {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT r.reservation_id, r.reservation_date, r.slot, r.status, 
+                   r.num_guests, r.special_request, t.restaurant_name
+            FROM reservations r
+            JOIN restaurant t ON r.rest_id = t.restaurant_id
+            WHERE r.customer_id = ?;
+        `;
+
+        global.db.all(query, [userId], (err, reservations) => {
+            if (err) reject(err);
+            else resolve(reservations);
+        });
+    });
+};
+
 // Delete a reservation
 exports.deleteReservation = (req, res) => {
     const { id: resId } = req.params;
