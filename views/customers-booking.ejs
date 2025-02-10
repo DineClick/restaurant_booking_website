@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Reservations</title>
+  </head>
+
+  <body>
+    <header>
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+        </div>
+        <ul class="nav-buttons">
+          <li><a href="/customers/homepage">Home</a></li>
+          <li><a href="/customers/about-us">About</a></li>
+          <li><a href="/customers/list">Restaurants</a></li>
+          <li><a href="/customers/my-bookings">My Bookings</a></li>
+          <li><a href="/customers/account">Account</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <h1>My Reservations</h1>
+    <h2>Welcome, <%= customer_data.customer_name %>!</h2>
+
+    <div class="reservations">
+      <% if (reservations.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Restaurant</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Guests</th>
+              <th>Special Request</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% reservations.forEach(reservation => { %>
+              <tr>
+                <td><%= reservation.restaurant_name %></td>
+                <td><%= reservation.reservation_date %></td>
+                <td><%= reservation.slot %></td>
+                <td><%= reservation.status %></td>
+                <td><%= reservation.num_guests %></td>
+                <td><%= reservation.special_request || "N/A" %></td>
+                <td>
+                  <% if (reservation.status === "pending") { %>
+                    <form action="/reservations/<%= reservation.reservation_id %>?_method=DELETE" method="POST">
+                      <button type="submit">Cancel</button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p>You have no reservations yet.</p>
+      <% } %>
+    </div>
+
+    <a href="/customers/sign-out">Sign out</a>
+  </body>
+</html>
