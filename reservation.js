@@ -124,6 +124,23 @@ exports.getReservationsForEjs = (userId) => {
     });
 };
 
+exports.getReservationsForRestaurant = (restaurantId) => {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT r.reservation_id, r.reservation_date, r.slot, r.status, 
+                   r.num_guests, r.special_request, c.customer_name
+            FROM reservations r
+            JOIN customer c ON r.customer_id = c.customer_id
+            WHERE r.rest_id = ?;
+        `;
+
+        global.db.all(query, [restaurantId], (err, reservations) => {
+            if (err) reject(err);
+            else resolve(reservations);
+        });
+    });
+};
+
 // Delete a reservation
 exports.deleteReservation = (req, res) => {
     const { id: resId } = req.params;
