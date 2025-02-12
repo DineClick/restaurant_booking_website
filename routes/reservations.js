@@ -33,6 +33,21 @@ router.get("/my-bookings", authenticateCustomer, async (req, res) => {
     }
 });
 
+router.get("/restaurant/bookings", authenticateRestaurant, async (req, res) => {
+    try {
+        const restaurantId = req.session.restaurant_id;
+        const reservations = await reservationController.getReservationsForRestaurant(restaurantId);
+        
+        res.render("restaurant-bookings", { 
+            restaurant_data: { restaurant_name: req.session.restaurant_name }, 
+            reservations 
+        });
+    } catch (error) {
+        console.error("Error fetching reservations:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 // API Routes for Frontend or AJAX Calls
 router.get("/available/:date/:id", reservationController.checkAvailableSlots);
 router.post("/create", authenticateCustomer, reservationController.createReservation);
