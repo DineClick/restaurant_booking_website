@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Reservations</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Link to CSS -->
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+            </div>
+            <ul class="nav-buttons">
+                <li><a href="/restaurant/dashboard">Dashboard</a></li>
+                <li><a href="/restaurant/menu">Menu</a></li>
+                <li><a href="/restaurant/bookings">Reservations</a></li>
+                <li><a href="/restaurant/account">Account</a></li>
+                <li><a href="/restaurant/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1>Restaurant Reservations</h1>
+    <h2>Welcome, <%= restaurant_data.restaurant_name %>!</h2>
+
+    <div class="reservations">
+        <% if (reservations.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Guests</th>
+                        <th>Special Request</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% reservations.forEach(reservation => { %>
+                        <tr>
+                            <td><%= reservation.customer_name %></td>
+                            <td><%= reservation.reservation_date %></td>
+                            <td><%= reservation.slot %></td>
+                            <td><%= reservation.num_guests %></td>
+                            <td><%= reservation.special_request || "N/A" %></td>
+                            <td><%= reservation.status %></td>
+                            <td>
+                                <% if (reservation.status === "pending") { %>
+                                    <form action="/reservations/update-status/<%= reservation.reservation_id %>" method="POST">
+                                        <input type="hidden" name="status" value="confirmed">
+                                        <button type="submit">Confirm</button>
+                                    </form>
+                                <% } %>
+                                
+                                <% if (reservation.status === "confirmed") { %>
+                                    <form action="/reservations/update-status/<%= reservation.reservation_id %>" method="POST">
+                                        <input type="hidden" name="status" value="completed">
+                                        <button type="submit">Mark as Completed</button>
+                                    </form>
+                                <% } %>
+
+                                <% if (reservation.status !== "completed") { %>
+                                    <form action="/reservations/<%= reservation.reservation_id %>/delete" method="POST">
+                                        <button type="submit">Cancel</button>
+                                    </form>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No reservations found.</p>
+        <% } %>
+    </div>
+
+</body>
+</html>
