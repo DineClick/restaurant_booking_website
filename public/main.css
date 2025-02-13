@@ -1,6 +1,6 @@
 /* Styling for website*/
 /* Home page styling */
-body.homepage, body.about-page, body.sign-in-page{
+body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page{
     font-family: sans-serif;
     padding:0;
     margin:0;
@@ -330,3 +330,309 @@ body.homepage, body.about-page, body.sign-in-page{
 .sign-in-box button:hover {
     background-color: #4a9872;
 }
+
+/* ============================================================ */
+/* Account Page Styling */
+
+.account-profile {
+    padding: 10px 5%;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.account-profile-sections {
+    font-size: 16px; 
+    display: inline-flex; 
+    justify-content: space-between;
+    gap: 100px;
+}
+
+.account-profile-left {
+    width: 300px; 
+    height: auto; 
+    line-height: 2;
+    font-size: 16px; 
+    text-align: left;
+}
+
+.account-profile h2 {
+    font-size: 24px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.account-image {
+    width: 250px;       
+    height: 350px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.account-browse-file {
+    display: inline-block; 
+    width: 100%;
+    height: 100%;
+    line-height: 2;
+}
+
+.account-browse-image-button {
+    display: none;
+}
+
+.custom-account-image-file-upload {
+    background-color: rgba(0, 173, 143, 0.75); 
+    text-align: center;
+    color: #fff;
+    padding: 0px 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex; 
+}
+  
+.custom-account-image-file-upload:hover {
+    background-color: #7fc1a1;
+}
+  
+.account-browse-image-button:focus + .custom-account-image-file-upload {
+    background-color: rgba(0, 173, 143, 0.75); 
+}
+
+.account-image-file-name {
+    font-size: 16px;
+    color: #333;
+    display: inline;
+}
+
+.account-button {
+    background-color: rgba(0, 173, 143, 0.75); 
+    text-align: center;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+
+.account-button:hover {
+    background-color: #7fc1a1;
+}
+
+.account-restaurant-profile-right {
+    padding: 10px 5%;
+    height: 650px;
+    line-height: 2.5; 
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    text-align: left;
+    min-width: 400px;
+}
+
+.account-customer-profile-right {
+    padding: 10px 5%;
+    height: 550px;
+    line-height: 2.5; 
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    text-align: left;
+    min-width: 400px;
+}
+
+.account-input {
+    width: 93%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.account-update-delete-button {
+    display: flex; 
+    justify-content: space-evenly; 
+    gap: 20px;
+}
+
+.restaurant-profile-bottom {
+    font-size: 16px; 
+    display: block; 
+    text-align: left;
+    padding: 0 19%;
+}
+
+.restaurant-profile-bottom h3{
+    font-size: 20px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.account-profile h3 {
+    font-size: 20px; 
+    font-weight: bold;
+    text-align: left;
+    margin: 0 auto;
+}
+
+.restaurant-profile-floorplan {
+    line-height: 2;
+    font-size: 16px; 
+    text-align: left;
+    padding-bottom: 20px;
+}
+
+.floorplan-image {
+    width: 100;       
+    height: 50vh;  
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.restaurant-profile-menu{
+    line-height: 2;
+    font-size: 16px; 
+    text-align: left;
+}
+
+.menu-item-image-wrapper {
+    position: relative;
+    width: 300px;    
+    height: 200px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    background-color: #ccc;
+    text-align: center; 
+    align-content: center;
+    color: #505050;  
+}
+
+.menu-item-image{
+    width: 100%;         
+    height: 100%;        
+    object-fit: cover;
+}
+
+.account-sign-out-button{
+    background-color:#7fc1a1;
+    text-align: center;
+    color: #fff;
+    padding: 5px 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.account-sign-out-button:hover {
+    background-color: #4a9872;
+}
+
+.edit-menu {
+    padding: 10px 20%;
+    display: block;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    text-align: left;
+}
+
+.edit-menu h1 {
+    font-size: 24px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.edit-menu h3 {
+    font-size: 16px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.menu-input {
+    width: 250px; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.add-menu {
+    padding: 10px 0;
+}
+
+.edit-menu h2 {
+    font-size: 20px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.menu-list {
+    padding: 10px 0;
+}
+
+.edit-menu p {
+    font-size: 16px; 
+    text-align: left;
+    margin: 0;
+}
+
+.edit-menu-done-button{
+    background-color: rgba(0, 173, 143, 0.75); 
+    text-align: center;
+    color: #fff;
+    padding: 5px 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.edit-menu-done-button:hover {
+    background-color: #7fc1a1;
+}
+
+  
+/*
+
+<label for = "fileUpload" class = "custom-restuarant-image-file-upload">Choose a file</label>
+                <div class = "restuarant-image-file-name" id = "fileName">No file chosen</div>
+
+                class = "restaurant-browse-image-button" onchange = "displayFileName()"
+
+
+.restaurant-profile-bottom {
+    align-items: left;
+    justify-content: left;
+    padding-top: 0px;
+    padding: 50px;
+    gap: 20px;
+    text-align: left;
+}
+
+.restaurant-profile-floorplan {
+    padding: 20px;
+}
+
+.restaurant-profile-menu {
+    padding: 20px;
+    width: 50%; 
+    height: auto; 
+    border-radius: 10px;
+}
+*/
