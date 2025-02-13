@@ -1,11 +1,12 @@
+<!-- Edit Menu Page -->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Edit Menu</title>
-        <link rel="stylesheet" href="/main.css" />
-
+        <title>Edit Menu Page</title>
+        <link rel="stylesheet" href="/main.css">
     </head>
 
     <body class="edit-menu-page">
@@ -18,47 +19,73 @@
 
                 <ul class="nav-buttons">
                     
-                    <li><a href="/restaurants/homepage">Home</a></li>
-                    <li><a href="/restaurants/about-us">About</a></li>
+                    <li><a href="/restaurants">Home</a></li>
+                    <li><a href="/restaurants/about">About</a></li>
                     <li><a href="/restaurants/list">Restaurants</a></li>
-                    <li><a href="/restaurants/homepage">My Bookings</a></li>
-                    <li><a href="/restaurants/account">Account</a></li>
+                    <li><a href="/restaurants">My Bookings</a></li>
+                    <li><a href="/restaurants/sign-in">Sign In</a></li>
                 </ul>
             </nav>
         </header>
 
-        <div class="edit-menu">
+        <script>
+            // Function to display the chosen file name
+            function displayFileName() {
+                var fileUpload = document.getElementById('fileUpload');
+                var fileName = document.getElementById('fileName');
+                if (fileUpload.files.length > 0) {
+                    fileName.textContent = fileUpload.files[0].name;
+                } else {
+                    fileName.textContent = 'No file chosen';
+                }
+            }
+        </script>
+
+        <div class = "edit-menu">
             <h1>Edit Menu</h1>
-
+            
+            <!-- Go back to Restaurant Account Page -->
+            <form action="/restaurants/account" method="GET">
+                <button type="submit" class = "edit-menu-done-button">Done</button>
+            </form>
+            
             <ul>
-                Add Menu:
-                <form action="/restaurants/edit-menu" method="POST">
-                    Name: <input id="menu_name" type="text" name="menu_name" required/> <br>
-                    <button id = "addMenu" name = "submitButton" type = "submit" value = "addMenu">Add</button>
-                </form>
-                <h3>Menu:</h3>
-                <% menu_list.forEach((menu, index) => { %>
-                    <li>
-                        Name: <%= menu.menu_name %> <br>
-                    </form>
-                        Image:
-                        <br>
-                        <img src= "<%= menu.menu_image %>" alt="Menu">
-                        <br>
-                    
-                    <form action="/restaurants/edit-menu" method="POST" enctype="multipart/form-data">
-                        <input type = "file" name = "menu_image" />
-                        <button id = "updateImage" name = "submitButton" type = "submit" value = "<%= 'updateImage' + menu.menu_id %>">Update Image</button>
-                    </form>
-                    <br>
-
+                <!-- Add Menu -->
+                <div class = "add-menu">
+                    <h3>Add Menu:</h3>
                     <form action="/restaurants/edit-menu" method="POST">
-                        <button id = "deleteMenu" name = "submitButton" type = "submit" value = "<%= 'deleteMenu' + menu.menu_id %>">Delete</button>
+                        Name: <input id="menu_name" type="text" name="menu_name" class = "menu-input" required/> <br>
+                        <br>
+                        <button id = "addMenu" name = "submitButton" type = "submit" value = "addMenu" class = "account-button">Add</button>
                     </form>
-                    <br>
+                </div>
 
-                    </li>
-                <% }) %>
+                <!-- Menu List -->
+                <div class = "menu-list">
+                    <h2>Menu:</h2>
+                    <% menu_list.forEach((menu, index) => { %>
+                        <li>
+                            <p> <%= menu.menu_name %> </p> <br>
+                        </form>
+                        <div class = menu-item-image-wrapper>
+                            <img src = "<%= menu.menu_image %>" alt = "Missing Menu Image" class = "menu-item-image">
+                        </div>
+                        <form action="/restaurants/edit-menu" method="POST" enctype="multipart/form-data">
+                            <div class = "account-browse-file">
+                                <input type = "file" id = "fileUpload" name = "menu_image" class = "account-browse-image-button" onchange = "displayFileName()" required/> 
+                                <label for = "fileUpload" class = "custom-account-image-file-upload">Choose a file</label>
+                                <div class = "account-image-file-name" id = "fileName">No file chosen</div>
+                                <button id = "updateImage" name = "submitButton" type = "submit" value = "<%= 'updateImage' + menu.menu_id %>" class = "account-button">Update Image</button>
+                            </div>
+                        </form>
+                        <form action="/restaurants/edit-menu" method="POST">
+                            <button id = "deleteMenu" name = "submitButton" type = "submit" value = "<%= 'deleteMenu' + menu.menu_id %>" class = "account-button">Delete</button>
+                        </form>
+                        <br>
+
+                        </li>
+                    <% }) %>
+                </div>
             </ul>
         </div>
     </body>
