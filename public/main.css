@@ -332,7 +332,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 /* ============================================================ */
-/* Account Page Styling */
+/* Account + Edit Menu Page Styling */
 
 .account-profile {
     padding: 10px 5%;
@@ -606,33 +606,3 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 .edit-menu-done-button:hover {
     background-color: #7fc1a1;
 }
-
-  
-/*
-
-<label for = "fileUpload" class = "custom-restuarant-image-file-upload">Choose a file</label>
-                <div class = "restuarant-image-file-name" id = "fileName">No file chosen</div>
-
-                class = "restaurant-browse-image-button" onchange = "displayFileName()"
-
-
-.restaurant-profile-bottom {
-    align-items: left;
-    justify-content: left;
-    padding-top: 0px;
-    padding: 50px;
-    gap: 20px;
-    text-align: left;
-}
-
-.restaurant-profile-floorplan {
-    padding: 20px;
-}
-
-.restaurant-profile-menu {
-    padding: 20px;
-    width: 50%; 
-    height: auto; 
-    border-radius: 10px;
-}
-*/
