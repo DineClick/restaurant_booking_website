@@ -263,7 +263,6 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
             } else {
                 //Delete Previous Image
                 prevCustomerImage = "public/" + customerAccountResult[0].customer_image;
-                console.log(prevCustomerImage);
                 fs.unlink(prevCustomerImage, (err) => {
                     //Define the query to Update New Customer Image
                     customerImagePath = "/customers-images/" + req.file.filename;
