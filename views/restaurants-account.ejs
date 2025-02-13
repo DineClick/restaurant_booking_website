@@ -1,4 +1,4 @@
-<!-- Account Page for Restaurants -->
+<!-- Account Page for Restaurants --> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +81,9 @@
                 <!-- Edit Floorplan -->
                 <div class = "restaurant-profile-floorplan">
                     <h3> Floorplan: </h3>
-                    <img src= "<%= restaurant_data.restaurant_floorplan_image %>" alt="Missing Floorplan Picture" class = floorplan-image> <br>
+                    <div class = floorplan-image-wrapper>
+                        <img src= "<%= restaurant_data.restaurant_floorplan_image %>" alt="Missing Floorplan Picture" class = floorplan-image> <br>
+                    </div>
                     Edit Floorplan:
                     <form action="/restaurants/account" method="POST" enctype="multipart/form-data">
                         <div class = "account-browse-file">
