@@ -1,5 +1,5 @@
 /* Styling for website*/
-/* Home page styling */
+/* Home page styling */ 
 body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page{
     font-family: sans-serif;
     padding:0;
@@ -493,12 +493,21 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     padding-bottom: 20px;
 }
 
-.floorplan-image {
-    width: 100;       
-    height: 50vh;  
-    object-fit: cover;
+.floorplan-image-wrapper {
+    position: relative;
+    width: 500px;
+    border-radius: 16px;
+    text-align: center; 
+    align-content: center;
+    color: #505050;  
+}
+
+.floorplan-image{
+    width: 100%;         
+    height: 100%;
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
 }
 
 .restaurant-profile-menu{
@@ -511,9 +520,9 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     position: relative;
     width: 300px;    
     height: 200px;
+    margin-bottom: 20px;
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
     background-color: #ccc;
     text-align: center; 
     align-content: center;
@@ -522,7 +531,9 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 
 .menu-item-image{
     width: 100%;         
-    height: 100%;        
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     object-fit: cover;
 }
 
