@@ -5,15 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Restaurant Profile</title>
   </head>
+  
+        <header>
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    
+                    <li><a href="/restaurants/homepage">Home</a></li>
+                    <li><a href="/restaurants/about-us">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants/homepage">My Bookings</a></li>
+                    <li><a href="/restaurants/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+       
   <body>
     <h1>Restaurant Profile</h1>
-    <p>Welcome, <%= restaurant.restaurant_name %>!</p>
+    <p>Welcome, <%= restaurant_data.restaurant_name %>!</p>
 
+    <body class="account-page">
+        
+        <div class="customer-profile">           
+            Profile Picture:  <br>
+            <img src= "<%= restaurant_data.restaurant_image %>" alt="Missing Profile Picture"> <br>
+            <br>
+
+            Edit Profile Picture:
+                <form action="/restaurants/account" method="POST" enctype="multipart/form-data">
+                    <input type = "file" name = "restaurant_image" />
+                    <button id = "updateRestaurantImage" name = "submitButton" type = "submit" value = "updateRestaurantImage">Update Profile Picture</button>
+                </form>
+            <br>
+
+            <form action="/restaurants/account" method="POST">
+                Name: <input id="restaurant_name" type="text" name="restaurant_name" value= "<%= restaurant_data.restaurant_name %>" required/> <br>
+                Description: <input id="restaurant_description" type="text" name="restaurant_description" value= "<%= restaurant_data.restaurant_description %>"/> <br>
+                Email: <input id="restaurant_email" type="text" name="restaurant_email" value= "<%= restaurant_data.restaurant_email %>" required/> <br>
+                Phone Number: +65 <input id="restaurant_phone_number" type="text" name="restaurant_phone_number" value= "<%= restaurant_data.restaurant_phone_number %>" required/> <br>
+                Password: <input id="restaurant_password" type="password" name="restaurant_password" value= "<%= restaurant_data.restaurant_password %>" required/> <br>
+                Address: <input id="restaurant_address" type="text" name="restaurant_address" value= "<%= restaurant_data.restaurant_address %>" required/> <br>
+                <br>
+                <button id = "updateRestaurantAccount" name = "submitButton" type = "submit" value = "updateRestaurantAccount">Update</button>
+                <button id = "deleteRestaurantAccount" name = "submitButton" type = "submit" value = "deleteRestaurantAccount">Delete</button>
+            </form>
+            <br>
+            Floorplan: <br>
+            <img src= "<%= restaurant_data.restaurant_floorplan_image %>" alt="Missing Floorplan Picture"> <br>
+            <br>
+
+            Edit Floorplan:
+                <form action="/restaurants/account" method="POST" enctype="multipart/form-data">
+                    <input type = "file" name = "restaurant_floorplan_image" />
+                    <button id = "updateFloorplanImage" name = "submitButton" type = "submit" value = "updateFloorplanImage">Update Floorplan</button>
+                </form>
+            <br>
+            Menu:
+                <form action="/restaurants/edit-menu" method="GET">
+                    <button name = "editMenu" type="submit">Edit Menu</button>
+                </form>
+                <br>
+                <ul>
+                    <% menu_list.forEach((menu, index) => { %> 
+                        <%= index + 1%>. <%= menu.menu_name %> <br>
+                        <img src= "<%= menu.menu_image %>" alt="Missing Menu Image"> <br>
+                        <br>
+                    <% }) %>
+                </ul> 
+            <br>
+        </div>
+    </body>
+    
     <!-- Log Out Button -->
     <form action="/restaurants/sign-out" method="GET">
-      <button type="submit">Log Out</button>
+      <button type="submit">Sign Out</button>
     </form>
-
-    <!-- You can add more profile details here -->
+    
   </body>
 </html>

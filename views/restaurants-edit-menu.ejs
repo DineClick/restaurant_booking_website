@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Edit Menu</title>
+        <link rel="stylesheet" href="/main.css" />
+
+    </head>
+
+    <body class="edit-menu-page">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    
+                    <li><a href="/restaurants/homepage">Home</a></li>
+                    <li><a href="/restaurants/about-us">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants/homepage">My Bookings</a></li>
+                    <li><a href="/restaurants/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="edit-menu">
+            <h1>Edit Menu</h1>
+
+            <ul>
+                Add Menu:
+                <form action="/restaurants/edit-menu" method="POST">
+                    Name: <input id="menu_name" type="text" name="menu_name" required/> <br>
+                    <button id = "addMenu" name = "submitButton" type = "submit" value = "addMenu">Add</button>
+                </form>
+                <h3>Menu:</h3>
+                <% menu_list.forEach((menu, index) => { %>
+                    <li>
+                        Name: <%= menu.menu_name %> <br>
+                    </form>
+                        Image:
+                        <br>
+                        <img src= "<%= menu.menu_image %>" alt="Menu">
+                        <br>
+                    
+                    <form action="/restaurants/edit-menu" method="POST" enctype="multipart/form-data">
+                        <input type = "file" name = "menu_image" />
+                        <button id = "updateImage" name = "submitButton" type = "submit" value = "<%= 'updateImage' + menu.menu_id %>">Update Image</button>
+                    </form>
+                    <br>
+
+                    <form action="/restaurants/edit-menu" method="POST">
+                        <button id = "deleteMenu" name = "submitButton" type = "submit" value = "<%= 'deleteMenu' + menu.menu_id %>">Delete</button>
+                    </form>
+                    <br>
+
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+    </body>
+</html>
+ 

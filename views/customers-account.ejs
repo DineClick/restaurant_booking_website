@@ -5,12 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Customer Account</title>
   </head>
+  
+        <header>
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    
+                    <li><a href="/customers/homepage">Home</a></li>
+                    <li><a href="/customers/about-us">About</a></li>
+                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/homepage">My Bookings</a></li>
+                    <li><a href="/customers/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+        
   <body>
-    <h1>Welcome, <%= customer.customer_name %>!</h1>
-    <p>Email: <%= customer.customer_email %></p>
-    <p>Phone Number: <%= customer.customer_phone_number %></p>
-    <p>Image: <%= customer.customer_image || 'No image uploaded' %></p>
+    <h1>Customer Profile</h1>
+    <h1>Welcome, <%= customer_data.customer_name %>!</h1>
+    
+    </head>
+    <body class="account-page">
+        
+        <div class="customer-profile">
+            Profile Picture:  <br>
+            <img src= "<%= customer_data.customer_image %>" alt="Missing Profile Picture"> <br>
+
+            Edit Profile Picture:
+                <form action="/customers/account" method="POST" enctype="multipart/form-data">
+                    <input type= "file" name="customer_image" />
+                    <button id = "updateCustomerImage" name = "submitButton" type = "submit" value = "updateCustomerImage">Update Profile Picture</button>
+                </form>
+            <br>
+
+            <form action="/customers/account" method="POST">
+                Name: <input id="customer_name" type="text" name="customer_name" value= "<%= customer_data.customer_name %>" required/> <br>
+                Email: <input id="customer_email" type="text" name="customer_email" value= "<%= customer_data.customer_email %>" required/> <br>
+                Phone Number: +65 <input id="customer_phone_number" type="text" name="customer_phone_number" value= "<%= customer_data.customer_phone_number %>" required/> <br>
+                Password: <input id="customer_password" type="password" name="customer_password" value= "<%= customer_data.customer_password %>" required/> <br>
+                <br>
+                <button id = "updateCustomerAccount" name = "submitButton" type = "submit" value = "updateCustomerAccount">Update</button>
+                <button id = "deleteCustomerAccount" name = "submitButton" type = "submit" value = "deleteCustomerAccount">Delete</button>
+            </form>
+        </div>
+    </body>
 
     <a href="/customers/sign-out">Sign out</a>
+    
   </body>
 </html>

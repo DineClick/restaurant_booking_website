@@ -6,29 +6,55 @@
     <title>Customer Sign Up Page</title>
     <link rel="stylesheet" href="/main.css" />
   </head>
+
   <body>
+    <header>
+      <!-- navigation part -->
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/images/dine_click_logo.png" alt="Dine Click Logo" />
+        </div>
+
+        <ul class="nav-buttons">
+          <li><a href="/customers">Home</a></li>
+          <li><a href="/customers/about">About</a></li>
+          <li><a href="/customers/list">Restaurants</a></li>
+          <li><a href="/customers">My Bookings</a></li>
+          <li class="dropdown-signIn">
+            <a href="#">Sign In</a>
+            <ul class="dropdown-signIn-option">
+              <li><a href="/customers/sign-in">Sign In as Customer</a></li>
+              <li><a href="/restaurants/sign-in">Sign In as Restaurant</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
     <div>
-      <h1>Customer Sign Up page</h1>
-
-      <!-- Customers sign up form -->
-      <form action="/customers/registration" method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required /><br /><br />
-
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-        /><br /><br />
-
+      <h1>Customer registration</h1>
+      <form
+        action="/customers/registration"
+        method="POST"
+        enctype="multipart/form-data"
+        class="registration-form"
+      >
         <label for="full_name">Full Name:</label>
         <input
           type="text"
           id="full_name"
           name="full_name"
           required
+          placeholder="Enter your full name"
+        /><br /><br />
+
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="Enter your email"
         /><br /><br />
 
         <label for="phone_number">Phone Number:</label>
@@ -37,30 +63,105 @@
           id="phone_number"
           name="phone_number"
           required
+          placeholder="Enter phone number"
         /><br /><br />
 
-        <button type="submit">Sign Up</button>
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          placeholder="Choose a password"
+        /><br /><br />
+
+        <label for="customer_image">Profile Picture:</label><br />
+        <input
+          type="file"
+          id="customer_image"
+          name="customer_image"
+          accept="image/*"
+        /><br /><br />
+        <img
+          id="imagePreview"
+          style="max-width: 300px; display: none"
+          alt="Profile Picture Preview"
+        /><br /><br />
+
+        <button type="submit" class="register-button">Register</button>
       </form>
 
-      <br /><br />
-      <p>
-        Already have an account? <a href="/customers/sign-in">Login Here</a>
-      </p>
+      <script>
+        // <!-- Used to preview image when customer upload their profile picture -->
+        document
+          .getElementById("customer_image")
+          .addEventListener("change", function (event) {
+            const file = event.target.files[0]; // Get the selected file
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                const imgPreview = document.getElementById("imagePreview");
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = "block"; // Show the image preview
+              };
+              reader.readAsDataURL(file);
+            }
+          });
 
-      <form style="display: inline">
-        <button type="button" onclick="location.href='/customers/registration'">
-          Customer
-        </button>
-      </form>
+        // This is used to manage the sign in options (sign in as customer or restaurant)
+        document.addEventListener("DOMContentLoaded", function () {
+          // This is used to manage the sign in options (sign in as customer or restaurant)
+          const dropdown = document.querySelector(".dropdown-signIn");
+          const dropdownMenu = document.querySelector(
+            ".dropdown-signIn-option"
+          );
 
-      <form style="display: inline">
-        <button
-          type="button"
-          onclick="location.href='/restaurants/registration'"
-        >
-          Restaurant
-        </button>
-      </form>
+          // Toggle the dropdown on click of "Sign In"
+          dropdown.addEventListener("click", function (event) {
+            // Check if the clicked element have link inside
+            if (
+              event.target.tagName === "A" &&
+              event.target.closest(".dropdown-signIn-option")
+            ) {
+              return; // stop further execution of this function
+            }
+            event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
+            // use to toggle the dropdown
+            dropdownMenu.style.display =
+              dropdownMenu.style.display === "block" ? "none" : "block";
+          });
+
+          // Close the dropdown if clicked outside
+          document.addEventListener("click", function (event) {
+            if (!dropdown.contains(event.target)) {
+              dropdownMenu.style.display = "none";
+            }
+          });
+        });
+      </script>
+      <div class="login-container">
+        <p>
+          Already have an account? <a href="/customers/sign-in">Login Here</a>
+        </p>
+        <div class="button-container">
+          <form>
+            <button
+              type="button"
+              onclick="location.href='/customers/registration'"
+            >
+              Customer
+            </button>
+          </form>
+          <form>
+            <button
+              type="button"
+              onclick="location.href='/restaurants/registration'"
+            >
+              Restaurant
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   </body>
 </html>
