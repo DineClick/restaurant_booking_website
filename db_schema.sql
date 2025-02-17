@@ -38,18 +38,20 @@ CREATE TABLE IF NOT EXISTS seating_list (
 );
 
 CREATE TABLE IF NOT EXISTS reservations (
-    reservation_id INTEGER PRIMARY KEY AUTOINCREMENT, -- Unique reservation ID
+    reservation_id INTEGER PRIMARY KEY AUTOINCREMENT,
     customer_id INT NOT NULL,
     rest_id INT NOT NULL,
     reservation_date TEXT NOT NULL,
     booking_time TEXT NOT NULL,
     slot TEXT NOT NULL,
-    num_guests INTEGER DEFAULT 1,
-    special_request TEXT, -- Any customer special request
-    table_id INT NOT NULL, -- Table assigned for the reservation
-    status TEXT DEFAULT 'pending', -- Status of the reservation
+    num_of_adult INTEGER DEFAULT 0,
+    num_of_child INTEGER DEFAULT 0, 
+    special_request TEXT, 
+    table_id INT NOT NULL, 
+    status TEXT DEFAULT 'pending',
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id)
+    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id),
+    FOREIGN KEY (table_id) REFERENCES seating_list(table_id)
 );
 
 CREATE TABLE IF NOT EXISTS menu_list (
@@ -63,8 +65,10 @@ CREATE TABLE IF NOT EXISTS menu_list (
 CREATE TABLE IF NOT EXISTS pre_order_menu (
     booking_id INT NOT NULL,
     menu_id INT NOT NULL,
-    menu_quantity INT NOT NULL,
-    PRIMARY KEY (booking_id, menu_id)
+    menu_quantity INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (booking_id, menu_id),
+    FOREIGN KEY (booking_id) REFERENCES reservations(reservation_id),
+    FOREIGN KEY (menu_id) REFERENCES menu_list(menu_id)
 );
 
 COMMIT;
