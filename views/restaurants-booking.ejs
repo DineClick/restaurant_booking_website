@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign In Page</title>
+        <link rel="stylesheet" href="/main.css">
+
+    </head>
+
+    <body class="restaurants-booking-page">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    
+                    <li><a href="/restaurants">Home</a></li>
+                    <li><a href="/restaurants/about">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants">My Bookings</a></li>
+                    <li><a href="/restaurants/sign-in">Sign In</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <h1>Restaurant Reservations</h1>
+        <h2>Welcome, <%= restaurant_data.restaurant_name || "Restaurant" %>!</h2>
+    
+        <div class="reservations">
+            <% if (reservations.length > 0) { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Adults</th>
+                            <th>Children</th>
+                            <th>Special Request</th>
+                            <th>Pre-Order Items</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservations.forEach(reservation => { %>
+                            <tr>
+                                <td><%= reservation.customer_name %></td>
+                                <td><%= reservation.reservation_date %></td>
+                                <td><%= reservation.slot %></td>
+                                <td><%= reservation.num_of_adult %></td>
+                                <td><%= reservation.num_of_child %></td>
+                                <td><%= reservation.special_request || "N/A" %></td>
+                                <td>
+                                    <% if (Array.isArray(reservation.pre_order_items) && reservation.pre_order_items.length > 0) { %>
+                                        <ul>
+                                            <% reservation.pre_order_items.forEach(item => { %>
+                                                <li><%= item.menu_name %> (x<%= item.menu_quantity %>)</li>
+                                            <% }) %>
+                                        </ul>
+                                    <% } else { %>
+                                        None
+                                    <% } %>
+                                </td>
+                                <td><%= reservation.status %></td>
+                                <td>
+                                    <% if (reservation.status === "pending") { %>
+                                        <form action="/reservations/update-status/<%= reservation.reservation_id %>" method="POST">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <input type="hidden" name="status" value="confirmed">
+                                            <button type="submit" class="btn btn-success">Confirm</button>
+                                        </form>
+                                    <% } %>
+                                    
+                                    <% if (reservation.status === "confirmed") { %>
+                                        <form action="/reservations/update-status/<%= reservation.reservation_id %>" method="POST">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <input type="hidden" name="status" value="completed">
+                                            <button type="submit" class="btn btn-primary">Mark as Completed</button>
+                                        </form>
+                                    <% } %>
+    
+                                    <% if (reservation.status !== "completed") { %>
+                                        <form action="/reservations/<%= reservation.reservation_id %>/delete" method="POST">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="btn btn-danger">Cancel</button>
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>No reservations found.</p>
+            <% } %>
+        </div>
+    </body>
+</html>
