@@ -157,25 +157,29 @@
         });
       </script>
 
-      <br /><br />
-      <p>
-        Already have an account? <a href="/restaurants/sign-in">Login Here</a>
-      </p>
-
-      <form style="display: inline">
-        <button type="button" onclick="location.href='/customers/registration'">
-          Customer
-        </button>
-      </form>
-
-      <form style="display: inline">
-        <button
-          type="button"
-          onclick="location.href='/restaurants/registration'"
-        >
-          Restaurant
-        </button>
-      </form>
+      <div class="login-container">
+        <p>
+          Already have an account? <a href="/restaurants/sign-in">Login Here</a>
+        </p>
+        <div class="button-container">
+          <form>
+            <button
+              type="button"
+              onclick="location.href='/customers/registration'"
+            >
+              Customer
+            </button>
+          </form>
+          <form>
+            <button
+              type="button"
+              onclick="location.href='/restaurants/registration'"
+            >
+              Restaurant
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   </body>
 </html>
