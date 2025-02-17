@@ -1,0 +1,620 @@
+/* Styling for website*/
+/* Home page styling */ 
+body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page{
+    font-family: sans-serif;
+    padding:0;
+    margin:0;
+    background-color: #EFEFEF;
+    /* display: flex;  */
+}
+
+/* Navigation button */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center; /*Center the navigation buttons*/
+    background-color: rgba(0, 173, 143, 0.75);
+    /* background-color: #00AD8F; */
+    /* opacity: 75%; */
+    box-sizing: border-box;
+    position: static; /* Allow absolute positioning for the logo */
+    white-space: nowrap;
+    top:0;
+    width:100%;
+    z-index: 1000; /* Ensure the navbar is on top of other elements */
+}
+
+.logo {
+    left: 20px; /* Add space from the left edge */
+}
+
+.navbar .logo img {
+    height: 50px; /*logo size */
+    width:100px; 
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center; /* Center buttons in the navbar */
+    gap: 50px; /* Add space between buttons */
+    list-style: none; /* Remove bullets */
+    margin: 0;
+    padding: 0;
+    /* z-index: 1000; */
+}
+
+.nav-buttons li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 10px 20px; /* Add spacing inside buttons */
+    border-radius: 20px; /* Rounded corners for buttons */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.nav-buttons li a:hover {
+    background-color: black; /* Black background on hover */
+    color: white;
+}
+
+.dropdown-signIn{
+    position: relative;
+}
+
+.dropdown-signIn-option {
+    display: none;
+    position: absolute;
+    top: 100%; /* Place below the parent menu item */
+    /* right: 10;  Align to the right */
+    background: #efefef;
+    min-width: 200px;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.dropdown-signIn-option li a {
+    color: #333; /* Black text for dropdown items */
+    padding: 12px 16px;
+    display: block;
+    font-size: 16px;
+}
+
+.dropdown-signIn-option li a:hover {
+    background: rgba(0, 173, 143, 0.75); /* Green background on hover */
+    color: white;
+}
+
+.dropdown-signIn:hover .dropdown-signIn-option {
+    display: block;
+}
+
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Stack logo and nav-buttons vertically */
+        align-items: center;
+    }
+
+    .nav-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 15px; /* Reduce gap between buttons */
+    }
+
+    .nav-buttons li a {
+        font-size: 14px;
+        padding: 8px 15px; /*Adjust padding for smaller screens */
+    }
+
+    .nav-buttons li a:hover {
+        padding: 10px 20px; 
+    }
+}
+
+.reserve-button {
+    background-color: rgba(0, 173, 143, 0.75); 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    display: inline-flex; 
+}
+
+.reserve-button:hover {
+    background-color: #7fc1a1;
+}
+
+/* Hero section */
+.hero-image {
+    /* margin-top: 26px; */
+    width:100%; 
+    height:50vh; 
+}
+
+/* Why Us section */
+.why-us{
+    font-size: 18px; 
+    padding: 60px 100px;; 
+    text-align: left; /* Center align the section header */
+}
+
+.reasons {
+    display: flex; 
+    justify-content: space-evenly; /* Distribute the blocks evenly */
+    /* align-items: flex-start; Align items at the top */
+    margin: 0 auto; 
+    max-width: 1200px; /* Limit the section width */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 150px;
+    padding: 20px 0; 
+}
+
+.reason {
+    width: 300px; /* Consistent block size */
+    text-align: center; /* Center align text inside the block */
+    /* margin: 20px; Add spacing between blocks */
+}
+
+.reason img {
+    border-radius: 30px;
+    max-width: 100%; /* Ensure images fit the block width */
+    height: auto; 
+    display: block; /* Avoid inline spacing issues */
+    margin: 0 auto; /* Center the image */
+}
+
+.reason h3 {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.reason p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.footer {
+    background-color: #20857A;
+    width:100%; 
+    padding: 5px 0;
+    display: flex; 
+    /* box-sizing: border-box; */
+    justify-content: center;
+}
+
+.contact-us {
+    /* align-text: left;  */
+    padding: 10px 80px; 
+}
+
+.icon {
+    width:20px;
+    height:20px; 
+    margin-right: 0px; 
+    vertical-align: middle;
+    cursor: pointer; 
+}
+
+.follow-us {
+    padding: 10px 80px; 
+}
+
+.follow-us a {
+    text-decoration: none;
+}
+
+.follow-us .icon{
+    margin-right: 10px; 
+    width: 30px; 
+    height: 30px; 
+}
+
+
+
+
+/* ========================================================================= */
+/* About page styling setting */
+/* body.aboutpage{
+    font-family: sans-serif;
+    padding:0;
+    margin:0;
+    background-color: #EFEFEF;
+} */
+
+/* About section */
+.about-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 40px;
+    /* gap: 0px; */
+    text-align: left;
+}
+
+/* About logo */
+.dine-click-logo img {
+    height: 400px;
+    width: auto;
+}
+
+/* About content */
+.about-content {
+    max-width: 800px;
+    font-size: 18px;
+}
+
+.about-content h1 {
+    color: #62b5a8;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.about-content p {
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* ============================================================ */
+/* Sign In page styling  */
+/* body.sign-in-page{ */
+    /* background-color: #efefef; */
+    /* margin:0;  */
+    /* padding:0;  */
+    /* display: flex; Use flexbox for centering */
+    /* align-items: center; Center vertically */
+    /* height: 100vh; Set the height of the body to fill the entire viewport */
+/* } */
+
+.sign-in-container{
+    display: flex; /* Use Flexbox for centering */
+    justify-content: center; /*Center horizontally*/
+    align-items: center; /*Center vertically*/
+    height: 90vh; /* Full viewport height for centering */
+
+}
+
+.sign-in-box {
+    background-color: #fff;
+    /* justify-content: center; */
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    width: 300px;
+    margin-top: auto;
+    margin-bottom: auto;
+
+}
+
+
+.sign-in-box h1 {
+    margin-bottom: 20px;
+}
+
+.sign-in-box label{
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.sign-in-box input{
+    width: 93%; 
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.sign-in-box button {
+    background-color:#7fc1a1;
+    width: 40%;
+    padding: 10px;
+    border-radius: 4px; 
+    font-size: 16px; 
+    cursor: pointer; 
+}
+
+.sign-in-box button:hover {
+    background-color: #4a9872;
+}
+
+/* ============================================================ */
+/* Account + Edit Menu Page Styling */
+
+.account-profile {
+    padding: 10px 5%;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.account-profile-sections {
+    font-size: 16px; 
+    display: inline-flex; 
+    justify-content: space-between;
+    gap: 100px;
+}
+
+.account-profile-left {
+    width: 300px; 
+    height: auto; 
+    line-height: 2;
+    font-size: 16px; 
+    text-align: left;
+}
+
+.account-profile h2 {
+    font-size: 24px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.account-image {
+    width: 250px;       
+    height: 350px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.account-browse-file {
+    display: inline-block; 
+    width: 100%;
+    height: 100%;
+    line-height: 2;
+}
+
+.account-browse-image-button {
+    display: none;
+}
+
+.custom-account-image-file-upload {
+    background-color: rgba(0, 173, 143, 0.75); 
+    text-align: center;
+    color: #fff;
+    padding: 0px 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex; 
+}
+  
+.custom-account-image-file-upload:hover {
+    background-color: #7fc1a1;
+}
+  
+.account-browse-image-button:focus + .custom-account-image-file-upload {
+    background-color: rgba(0, 173, 143, 0.75); 
+}
+
+.account-image-file-name {
+    font-size: 16px;
+    color: #333;
+    display: inline;
+}
+
+.account-button {
+    background-color: rgba(0, 173, 143, 0.75); 
+    text-align: center;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+
+.account-button:hover {
+    background-color: #7fc1a1;
+}
+
+.account-restaurant-profile-right {
+    padding: 10px 5%;
+    height: 650px;
+    line-height: 2.5; 
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    text-align: left;
+    min-width: 400px;
+}
+
+.account-customer-profile-right {
+    padding: 10px 5%;
+    height: 550px;
+    line-height: 2.5; 
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    text-align: left;
+    min-width: 400px;
+}
+
+.account-input {
+    width: 93%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.account-update-delete-button {
+    display: flex; 
+    justify-content: space-evenly; 
+    gap: 20px;
+}
+
+.restaurant-profile-bottom {
+    font-size: 16px; 
+    display: block; 
+    text-align: left;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.restaurant-profile-bottom h3{
+    font-size: 20px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.account-profile h3 {
+    font-size: 20px; 
+    font-weight: bold;
+    text-align: left;
+    margin: 0 auto;
+}
+
+.restaurant-profile-floorplan {
+    line-height: 2;
+    font-size: 16px; 
+    text-align: left;
+    padding-bottom: 20px;
+}
+
+.floorplan-image-wrapper {
+    position: relative;
+    width: 500px;
+    border-radius: 16px;
+    text-align: center; 
+    align-content: center;
+    color: #505050;  
+}
+
+.floorplan-image{
+    width: 100%;         
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
+}
+
+.restaurant-profile-menu{
+    line-height: 2;
+    font-size: 16px; 
+    text-align: left;
+}
+
+.menu-item-image-wrapper {
+    position: relative;
+    width: 300px;    
+    height: 200px;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: #ccc;
+    text-align: center; 
+    align-content: center;
+    color: #505050;  
+}
+
+.menu-item-image{
+    width: 100%;         
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
+}
+
+.account-sign-out-button{
+    background-color:#7fc1a1;
+    text-align: center;
+    color: #fff;
+    padding: 5px 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.account-sign-out-button:hover {
+    background-color: #4a9872;
+}
+
+.edit-menu {
+    padding: 10px 20%;
+    display: block;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    text-align: left;
+}
+
+.edit-menu h1 {
+    font-size: 24px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.edit-menu h3 {
+    font-size: 16px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.menu-input {
+    width: 250px; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.add-menu {
+    padding: 10px 0;
+}
+
+.edit-menu h2 {
+    font-size: 20px; 
+    font-weight: bold;
+    text-align: left;
+}
+
+.menu-list {
+    padding: 10px 0;
+}
+
+.edit-menu p {
+    font-size: 16px; 
+    text-align: left;
+    margin: 0;
+}
+
+.edit-menu-done-button{
+    background-color: rgba(0, 173, 143, 0.75); 
+    text-align: center;
+    color: #fff;
+    padding: 5px 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.edit-menu-done-button:hover {
+    background-color: #7fc1a1;
+}
