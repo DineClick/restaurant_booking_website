@@ -470,7 +470,8 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     font-size: 16px; 
     display: block; 
     text-align: left;
-    padding: 0 19%;
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
 .restaurant-profile-bottom h3{
