@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Registration Page</title>
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+
+  <body>
+    <header>
+      <!-- navigation part -->
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/images/dine_click_logo.png" alt="Dine Click Logo" />
+        </div>
+
+        <ul class="nav-buttons">
+          <li><a href="/restaurants">Home</a></li>
+          <li><a href="/restaurants/about">About</a></li>
+          <li><a href="/restaurants/list">Restaurants</a></li>
+          <li><a href="/restaurants">My Bookings</a></li>
+          <li class="dropdown-signIn">
+            <a href="#">Sign In</a>
+            <ul class="dropdown-signIn-option">
+              <li><a href="/customers/sign-in">Sign In as Customer</a></li>
+              <li><a href="/restaurants/sign-in">Sign In as Restaurant</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div>
+      <h1>Restaurant Registration</h1>
+
+      <!-- Restaurant Registration Form -->
+      <form
+        action="/restaurants/registration"
+        method="POST"
+        enctype="multipart/form-data"
+        class="registration-form"
+      >
+        <label for="restaurant_name">Restaurant Name:</label>
+        <input
+          type="text"
+          id="restaurant_name"
+          name="restaurant_name"
+          required
+          placeholder="Enter restaurant name"
+        /><br /><br />
+
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="Enter email"
+        /><br /><br />
+
+        <label for="restaurant_phone_number">Phone Number:</label>
+        <input
+          type="text"
+          id="restaurant_phone_number"
+          name="restaurant_phone_number"
+          placeholder="Enter phone number"
+        /><br /><br />
+
+        <label for="restaurant_address">Address:</label>
+        <input
+          type="text"
+          id="restaurant_address"
+          name="restaurant_address"
+          placeholder="Enter address"
+        /><br /><br />
+
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          placeholder="Choose a password"
+        /><br /><br />
+
+        <label for="restaurant_description">Description:</label>
+        <input
+          type="text"
+          id="restaurant_description"
+          name="restaurant_description"
+          placeholder="Enter a description"
+        /><br /><br />
+
+        <label for="restaurant_image">Profile Picture:</label><br />
+        <input
+          type="file"
+          id="restaurant_image"
+          name="restaurant_image"
+          accept="image/*"
+        /><br /><br />
+        <img
+          id="imagePreview"
+          style="max-width: 300px; display: none"
+          alt="Profile Picture Preview"
+        /><br /><br />
+
+        <button type="submit" class="register-button">Register</button>
+      </form>
+
+      <script>
+        // <!-- Used to preview image when restaurant upload their profile picture -->
+        document
+          .getElementById("restaurant_image")
+          .addEventListener("change", function (event) {
+            const file = event.target.files[0]; // Get the selected file
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                const imgPreview = document.getElementById("imagePreview");
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = "block"; // Show the image preview
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+
+        // This is used to manage the sign in options (sign in as customer or restaurant)
+        document.addEventListener("DOMContentLoaded", function () {
+          // This is used to manage the sign in options (sign in as customer or restaurant)
+          const dropdown = document.querySelector(".dropdown-signIn");
+          const dropdownMenu = document.querySelector(
+            ".dropdown-signIn-option"
+          );
+
+          // Toggle the dropdown on click of "Sign In"
+          dropdown.addEventListener("click", function (event) {
+            // Check if the clicked element have link inside
+            if (
+              event.target.tagName === "A" &&
+              event.target.closest(".dropdown-signIn-option")
+            ) {
+              return; // stop further execution of this function
+            }
+            event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
+            // use to toggle the dropdown
+            dropdownMenu.style.display =
+              dropdownMenu.style.display === "block" ? "none" : "block";
+          });
+
+          // Close the dropdown if clicked outside
+          document.addEventListener("click", function (event) {
+            if (!dropdown.contains(event.target)) {
+              dropdownMenu.style.display = "none";
+            }
+          });
+        });
+      </script>
+
+      <div class="login-container">
+        <p>
+          Already have an account? <a href="/restaurants/sign-in">Login Here</a>
+        </p>
+        <div class="button-container">
+          <form>
+            <button
+              type="button"
+              onclick="location.href='/customers/registration'"
+            >
+              Customer
+            </button>
+          </form>
+          <form>
+            <button
+              type="button"
+              onclick="location.href='/restaurants/registration'"
+            >
+              Restaurant
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
