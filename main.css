@@ -332,7 +332,7 @@ h1 {
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
-  white-space: nowrap; /* 줄바꿈 방지 */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -380,4 +380,52 @@ h1 {
 
 .sign-in-box button:hover {
   background-color: #007c64;
+}
+
+/* login container style */
+.login-container {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+/* login link */
+.login-container p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.login-container a {
+  color: #007c64;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-container a:hover {
+  text-decoration: underline;
+}
+
+/* button container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* button style */
+.button-container button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #007c64;
+  background-color: #fff;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-size: 16px;
+}
+
+.button-container button:hover {
+  background-color: #007c64;
+  color: white;
 }
