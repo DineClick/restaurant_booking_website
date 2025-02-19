@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS seating_list (
     available_date DATE NOT NULL, -- YYYY-MM-DD
     available_time TIME NOT NULL, -- HH:MM:SS 
     table_status TEXT NOT NULL DEFAULT "UNBOOKED", -- "UNBOOKED" or "BOOKED" 
-    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id)
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS reservations (
@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS reservations (
     special_request TEXT, -- Any customer special request
     table_id INT NOT NULL, -- Table assigned for the reservation
     status TEXT DEFAULT 'pending', -- Status of the reservation
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id)
+    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE, 
+    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS menu_list (
@@ -57,15 +57,19 @@ CREATE TABLE IF NOT EXISTS menu_list (
     menu_name TEXT NOT NULL,
     restaurant_id INT NOT NULL,
     menu_image TEXT, -- Store pathing, example: "/restaurant-images/example.jpg"
-    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id)
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS pre_order_menu (
-    booking_id INT NOT NULL,
+    reservation_id INT NOT NULL,
     menu_id INT NOT NULL,
     menu_quantity INT NOT NULL,
-    PRIMARY KEY (booking_id, menu_id)
+    PRIMARY KEY (reservation_id, menu_id),
+    FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_id) REFERENCES menu_list(menu_id) ON DELETE CASCADE
 );
+
+
 
 COMMIT;
 
