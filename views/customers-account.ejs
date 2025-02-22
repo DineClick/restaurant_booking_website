@@ -19,14 +19,24 @@
 
                 <ul class="nav-buttons">
                     
-                    <li><a href="/restaurants">Home</a></li>
-                    <li><a href="/restaurants/about">About</a></li>
-                    <li><a href="/restaurants/list">Restaurants</a></li>
-                    <li><a href="/restaurants">My Bookings</a></li>
-                    <li><a href="/restaurants/account">Account</a></li>
+                    <li><a href="/customers/homepage">Home</a></li>
+                    <li><a href="/customers/about-us">About</a></li>
+                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/homepage">My Bookings</a></li>
+                    <li><a href="/customers/account">Account</a></li>
                 </ul>
             </nav>
         </header>
+
+        <!-- Show alert message -->
+        <% if (typeof alertMessage !== 'undefined') { %>
+            <div class="alert-overlay">
+                <div class="alert-box">
+                    <p><%= alertMessage %></p>
+                    <button onclick="closeAlert()">OK</button>
+                </div>
+            </div>
+        <% } %>
         
         <script>
             // Function to display the chosen file name
@@ -38,6 +48,11 @@
                 } else {
                     fileName.textContent = 'No file chosen';
                 }
+            }
+
+            // Close the alert box
+            function closeAlert() {
+                document.querySelector('.alert-overlay').style.display = 'none';
             }
         </script>
 
