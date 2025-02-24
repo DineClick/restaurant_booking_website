@@ -263,6 +263,7 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
             } else {
                 //Delete Previous Image
                 prevCustomerImage = "public/" + customerAccountResult[0].customer_image;
+                console.log(prevCustomerImage);
                 fs.unlink(prevCustomerImage, (err) => {
                     //Define the query to Update New Customer Image
                     customerImagePath = "/customers-images/" + req.file.filename;
@@ -288,7 +289,6 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
     }
 })
 
-// Customer List of Restaurants page
 router.get("/list", (req, res) => {
     //Define the query for List of Restaurants
     restaurantListQuery = "SELECT * FROM restaurant";
@@ -310,7 +310,6 @@ router.get("/list", (req, res) => {
     })
 })
 
-// Customer Booking page
 router.get("/book", (req, res) => {
     //Define the query for Restaurant Information
     restaurantDataQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
@@ -331,7 +330,99 @@ router.get("/book", (req, res) => {
                     window.location.href = "/customers/list";
                 </script>`);
         } else {
-            res.render("customers-book.ejs", {restaurant_data: restaurantDataResult[0]});
+            //Get time (per hour) restaurant is open from opening time to closing time
+            hoursOpen = [];
+
+            restaurantOpeningTime = restaurantDataResult[0].restaurant_opening_time;
+            hourOT = restaurantOpeningTime.split(":")[0];
+            minuteOT = restaurantOpeningTime.split(":")[1];
+
+            restaurantClosingTime = restaurantDataResult[0].restaurant_closing_time;
+            hourCT = restaurantClosingTime.split(":")[0];
+            minuteCT = restaurantClosingTime.split(":")[1];
+
+            intHourOT = parseInt(hourOT);
+            intHourCT = parseInt(hourCT);
+
+            if (minuteOT == "00") {
+                hoursOpen.push(hourOT + ":00");
+            }
+
+            intHourOT = intHourOT + 1;
+
+            while (intHourOT < intHourCT) {
+                if (intHourOT < 10) {
+                    strHourOT = "0" + intHourOT.toString();
+                } else {
+                    strHourOT = intHourOT.toString();
+                }
+                hoursOpen.push(strHourOT + ":00");
+                intHourOT = intHourOT + 1;
+            }
+
+            if (minuteCT != "00") {
+                hoursOpen.push(hourCT + ":00");
+            }
+            res.render("customers-book.ejs", {restaurant_data: restaurantDataResult[0], opening_hours: hoursOpen});
+        }
+    });
+})
+
+router.post("/book", (req, res) => {
+    var currentUTCDatetime = new Date();
+    dateString = currentUTCDatetime.toISOString().slice(0, 10);
+    timeString = currentUTCDatetime.toISOString().slice(11, 19);
+    datetimeString = dateString + " " + timeString;
+
+    restaurantID = req.session.selected_restaurant_id;
+    customerID = req.session.customer_id;
+    reservationDate = req.body.booking_date;
+    diningTime = req.body.dining_time; //undefined
+    bookingTime = datetimeString;
+    guestsNum = req.body.num_guests;
+    specialRequest = req.body.special_request;
+    tableID = req.body.table_id; //set to 1 for now (since seat selection is not done)
+
+    //Define the query to book the selected restaurant
+    bookingQuery = "INSERT INTO reservations (customer_id, rest_id, reservation_date, dining_time, booking_time, num_guests, special_request, table_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+    //Execute the query and render the page with the results
+    global.db.all(bookingQuery, [customerID, restaurantID, reservationDate, diningTime, bookingTime, guestsNum, specialRequest, tableID], (err) => {
+        if (err) {
+            console.error("Database error (Customer - Book):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/customers/list";
+                </script>`);
+        } else {
+            res.send(`
+                <script>
+                    alert("Booking successful. You can check the details in the My Bookings Page"); 
+                    window.location.href = "/customers/list";
+                </script>`);
+        }
+    });
+})
+
+router.get("/view-menu", (req, res) => { //This should change to Pre-Order Menu Feature
+    //Define the query for Menu of Selected Restaurant
+    restaurantMenuQuery = "SELECT * FROM menu_list WHERE restaurant_id = ?";
+
+    //Get Restaurant ID 
+    restaurantID = req.session.selected_restaurant_id;
+                    
+    //Execute the query and render the page with the results
+    global.db.all(restaurantMenuQuery, [restaurantID], (err, restaurantMenuResult) => {
+        if (err) {
+            console.error("Database error (Customer - View Menu):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/customers/book";
+                </script>`);
+        } else {
+            res.render("customers-view-menu.ejs", {restaurant_menu: restaurantMenuResult, restaurant_id: restaurantID});
         }
     });
 })

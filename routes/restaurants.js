@@ -227,18 +227,23 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
 
     if (buttonClicked === "updateRestaurantAccount") {
         //Define the query to Update Restaurant Account
-        updateRestaurantAccount = [req.body.restaurant_name, req.body.restaurant_email, req.body.restaurant_phone_number, req.body.restaurant_address, req.body.restaurant_password, req.body.restaurant_description, restaurantID];
-        updateRestaurantAccountQuery = "UPDATE restaurant SET restaurant_name = ?, restaurant_email = ?, restaurant_phone_number = ?, restaurant_address = ?, restaurant_password = ?, restaurant_description = ? WHERE restaurant_id = ?";
+        restaurantOpeningTime = req.body.restaurant_opening_time + ":00";
+        restaurantClosingTime = req.body.restaurant_closing_time + ":00";
+        updateRestaurantAccount = [req.body.restaurant_name, req.body.restaurant_email, req.body.restaurant_phone_number, req.body.restaurant_address, req.body.restaurant_password, req.body.restaurant_description, restaurantOpeningTime, restaurantClosingTime, restaurantID];
+        updateRestaurantAccountQuery = "UPDATE restaurant SET restaurant_name = ?, restaurant_email = ?, restaurant_phone_number = ?, restaurant_address = ?, restaurant_password = ?, restaurant_description = ?, restaurant_opening_time = ?, restaurant_closing_time = ? WHERE restaurant_id = ?";
 
         //Execute the query and render the page with the results
         global.db.run(updateRestaurantAccountQuery, updateRestaurantAccount, (err) => {
             if (err) {
+                next(err);
+                /*
                 return res.send(`
                     <script>
                         alert("Update Failed");
                         window.location.href = "/restaurants/account";
                     </script>
                 `);
+                */
             } else {
                 res.redirect("/restaurants/account");
             }
