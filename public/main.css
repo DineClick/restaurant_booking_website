@@ -1,6 +1,6 @@
 /* Styling for website*/
 /* Home page styling */ 
-body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page{
+body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page, body.restaurants-list-page, body.booking-page, body.view-menu-page{
     font-family: sans-serif;
     padding:0;
     margin:0;
@@ -470,7 +470,8 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     font-size: 16px; 
     display: block; 
     text-align: left;
-    padding: 0 19%;
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
 .restaurant-profile-bottom h3{
@@ -616,4 +617,36 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 
 .edit-menu-done-button:hover {
     background-color: #7fc1a1;
+}
+
+/* ============================================================ */
+/* Restaurant List + Booking Page Styling */
+
+.restaurant-image {
+    width: 250px;       
+    height: 350px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dining-time-btn {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+  
+.dining-time-btn:hover {
+    background-color: #e0e0e0;
+}
+  
+.dining-time-btn.selected {
+    background-color: #4CAF50;
+    color: white;
+    transform: scale(1.1);  /* Make the button a little larger when selected */
+    border-color: #3e8e41;
 }
