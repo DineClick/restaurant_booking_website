@@ -289,8 +289,49 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
 })
 
 router.get("/list", (req, res) => {
-    // res.render("restaurant-listing.ejs");
-    res.send("List of restaurants (customers)");
+    //Define the query for List of Restaurants
+    restaurantListQuery = "SELECT * FROM restaurant";
+
+    //Execute the query and render the page with the results
+    global.db.all(restaurantListQuery, (err, restaurantListResult) => {
+        if (err) {
+            next(err);
+        } else {
+            //Get the Searched Keywords
+            if (req.query.searchedKeywords) {
+                keywords = req.query.searchedKeywords.toLowerCase(); 
+                restaurantList = restaurantListResult.filter(restaurant => restaurant.restaurant_name.toLowerCase().includes(keywords));
+                res.render("customers-list.ejs", {restaurant_list: restaurantList});
+            } else {
+                res.render("customers-list.ejs", {restaurant_list: restaurantListResult});
+            } 
+        }
+    })
+})
+
+router.get("/book", (req, res) => {
+    //Define the query for Restaurant Information
+    restaurantDataQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+
+    //Get Restaurant ID 
+    const buttonClicked = req.query.bookRestaurant;
+    restaurantData = buttonClicked.match(/(\d+)/);
+    restaurantID = restaurantData[0];
+    req.session.selected_restaurant_id = restaurantID;  
+                    
+    //Execute the query and render the page with the results
+    global.db.all(restaurantDataQuery, [restaurantID], (err, restaurantDataResult) => {
+        if (err) {
+            console.error("Database error (Customer - Book):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/customers/list";
+                </script>`);
+        } else {
+            res.render("customers-book.ejs", {restaurant_data: restaurantDataResult[0]});
+        }
+    });
 })
 
 // Customer logout route
