@@ -451,10 +451,26 @@ router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
     }
 })
 
-// 7. list of the Restaurant (when click on restaurant button)
-// book button cannot be clicked because is restaurant account
+// 7. list of the Restaurant
 router.get("/list", (req, res) => {
-    res.send("List of the Restaurant");
+    //Define the query for List of Restaurants
+    restaurantListQuery = "SELECT * FROM restaurant";
+
+    //Execute the query and render the page with the results
+    global.db.all(restaurantListQuery, (err, restaurantListResult) => {
+        if (err) {
+            next(err);
+        } else {
+            //Get the Searched Keywords
+            if (req.query.searchedKeywords) {
+                keywords = req.query.searchedKeywords.toLowerCase(); 
+                restaurantList = restaurantListResult.filter(restaurant => restaurant.restaurant_name.toLowerCase().includes(keywords));
+                res.render("restaurants-list.ejs", {restaurant_list: restaurantList});
+            } else {
+                res.render("restaurants-list.ejs", {restaurant_list: restaurantListResult});
+            } 
+        }
+    })
 })
 
 // Restaurant logout route
