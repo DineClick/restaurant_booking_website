@@ -18,12 +18,11 @@
                 </div>
 
                 <ul class="nav-buttons">
-                    
                     <li><a href="/restaurants">Home</a></li>
                     <li><a href="/restaurants/about">About</a></li>
                     <li><a href="/restaurants/list">Restaurants</a></li>
                     <li><a href="/restaurants">My Bookings</a></li>
-                    <li><a href="/restaurants/sign-in">Sign In</a></li>
+                    <li><a href="/restaurants/account">Account</a></li>
                 </ul>
             </nav>
         </header>
@@ -40,9 +39,9 @@
 
         <script>
             // Function to display the chosen file name
-            function displayFileName() {
-                var fileUpload = document.getElementById('fileUpload');
-                var fileName = document.getElementById('fileName');
+            function displayFileName(fileUploadID, fileNameID) {
+                var fileUpload = document.getElementById(fileUploadID);
+                var fileName = document.getElementById(fileNameID);
                 if (fileUpload.files.length > 0) {
                     fileName.textContent = fileUpload.files[0].name;
                 } else {
@@ -87,9 +86,11 @@
                         </div>
                         <form action="/restaurants/edit-menu" method="POST" enctype="multipart/form-data">
                             <div class = "account-browse-file">
-                                <input type = "file" id = "fileUpload" name = "menu_image" class = "account-browse-image-button" onchange = "displayFileName()" required/> 
-                                <label for = "fileUpload" class = "custom-account-image-file-upload">Choose a file</label>
-                                <div class = "account-image-file-name" id = "fileName">No file chosen</div>
+                                <% fileUploadID = 'fileUpload' + menu.menu_id; %>
+                                <% fileNameID = 'fileName' + menu.menu_id; %>
+                                <input type = "file" id = "<%= fileUploadID %>" name = "menu_image" class = "account-browse-image-button" onchange = "displayFileName('<%= fileUploadID %>',  '<%= fileNameID %>')" required/> 
+                                <label for = "<%= fileUploadID %>" class = "custom-account-image-file-upload">Choose a file</label>
+                                <div class = "account-image-file-name" id = "<%= fileNameID %>">No file chosen</div>
                                 <button id = "updateImage" name = "submitButton" type = "submit" value = "<%= 'updateImage' + menu.menu_id %>" class = "account-button">Update Image</button>
                             </div>
                         </form>
