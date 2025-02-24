@@ -48,6 +48,11 @@ router.get("/sign-in", (req, res) => {
     res.render("restaurants-sign-in.ejs")
 })
 
+/* The data inputted in the sign in form will be compared with the data in the database, 
+   if the email and password match, the restaurant will be redirected to the restaurant account page.
+   If the email and password do not match, the restaurant will be redirected to the sign in page with an alert message.
+   It will redirect back to the sign in page after user clicks the "OK" button in the alert message.
+*/
 router.post('/sign-in', async (req, res) => {
     const { email, password } = req.body;
 
@@ -55,12 +60,9 @@ router.post('/sign-in', async (req, res) => {
     global.db.get(restaurantSignInQuery, [email], async (err, restaurantData) => {
         if (err) {
             console.error('Database error (Restaurant):', err);
-            return res.send(`
-                <script>
-                    alert("Internal Server Error");
-                    window.location.href = "/restaurants/sign-in";
-                </script>
-            `);
+            return res.render("restaurants-sign-in.ejs", {
+                alertMessage: "Internal Server Error"
+            });
         }
 
         if (restaurantData) {
@@ -73,20 +75,14 @@ router.post('/sign-in', async (req, res) => {
                 return res.redirect('/restaurants/account');
             } else {
                 // Invalid password for Restaurant
-                return res.send(`
-                    <script>
-                        alert("Invalid email or password.");
-                        window.location.href = "/restaurants/sign-in";
-                    </script>
-                `);
+                return res.render("restaurants-sign-in.ejs", {
+                    alertMessage: "Invalid email or password."
+                });
             }
         } else {
-            return res.send(`
-                <script>
-                    alert("Invalid email or password.");
-                    window.location.href = "/restaurants/sign-in";
-                </script>
-            `);
+            return res.render("restaurants-sign-in.ejs", {
+                alertMessage: "Invalid email or password."
+            });
         }
     });     
 });
@@ -101,11 +97,9 @@ router.post("/registration", upload.single('restaurant_image'), async (req, res)
     
     // Check if the image was uploaded
     if(!req.file){
-        return res.send(`
-            <script>
-                alert("Please upload a profile picture.");
-                window.location.href = "/restaurants/registration";
-            </script>`);
+        return res.render("restaurants-registration.ejs", {
+            alertMessage: "Please upload a profile picture."
+        });
     }
 
     // Store the image path to the database
@@ -117,64 +111,52 @@ router.post("/registration", upload.single('restaurant_image'), async (req, res)
     global.db.get(checkCustomerEmailQuery, [email], async (err, customerData) => {
         if (err) {
             console.error("Database error during insertion:", err);
-            return res.send(`
-                <script>
-                    alert("Error: Internal Server Error. Please try again later.");
-                    window.location.href = "/restaurants/registration";
-                </script>`);
+            return res.render("restaurants-registration.ejs", {
+                alertMessage: "Internal Server Error. Please try again later."
+            });
         }
 
         global.db.get(checkRestaurantEmailQuery, [email], async (err, restaurantData) => {
             if (err) {
                 console.error("Database error during insertion:", err);
-                return res.send(`
-                    <script>
-                        alert("Error: Internal Server Error. Please try again later.");
-                        window.location.href = "/restaurants/registration";
-                    </script>`);
+                return res.render("restaurants-registration.ejs", {
+                    alertMessage: "Internal Server Error. Please try again later."
+                });
             }
     
             if(customerData){
-                return res.send(`
-                    <script>
-                        alert("Error: This email is already registered as a customer. Please use a different email");
-                        window.location.href = "/restaurants/registration";
-                    </script>`);
+                return res.render("restaurants-registration.ejs", {
+                    alertMessage: "Error: This email is already registered as a customer. Please use a different email"
+                });
+
             } else if (restaurantData){
-                return res.send(`
-                    <script>
-                        alert("Error: This email is already registered as a restaurant. Please use a different email");
-                        window.location.href = "/restaurants/registration";
-                    </script>`);
+                return res.render("restaurants-registration.ejs", {
+                    alertMessage: "Error: This email is already registered as a restaurant. Please use a different email"
+                });
+
             // If the email is not registered as a customer or restaurant, hash the password and insert the new restaurant data
             } else {
                 bcrypt.hash(password, 10, (hashErr, hashedPassword) => {
                     if (hashErr) {
                         console.error("Error hashing password:", hashErr);
-                        return res.send(`
-                            <script>
-                                alert("Error: Internal Server Error. Please try again later.");
-                                window.location.href = "/restaurants/registration";
-                            </script>`);
+                        return res.render("restaurants-registration.ejs", {
+                            alertMessage: "Internal Server Error. Please try again later."
+                        });
                     }
     
                     // insert new customer data with the hashed password
                     const insertQuery = `INSERT INTO restaurant (restaurant_name, restaurant_email, restaurant_phone_number, restaurant_address,restaurant_password, restaurant_description, restaurant_image) VALUES (?, ?, ?, ?, ?, ?, ?)`;
                     global.db.run(insertQuery, [restaurant_name, email, restaurant_phone_number, restaurant_address, hashedPassword, restaurant_description, restaurantImgPath], (err) => {
-                        if (err) { // 쿼리 실행 중 오류 발생 시
+                        if (err) { 
                             console.error("Error inserting restaurant data:", err);
-                            return res.send(`
-                                <script>
-                                    alert("Error: Internal Server Error. Please try again later.");
-                                    window.location.href = "/restaurants/registration";
-                                </script>`);
+                            return res.render("restaurants-registration.ejs", {
+                                alertMessage: "Internal Server Error. Please try again later."
+                            });
                         }
-                        // 성공적으로 등록되었을 때
-                        res.send(`
-                            <script>
-                                alert("Registration successful. Please sign in to continue."); 
-                                window.location.href = "/restaurants/sign-in";
-                            </script>`)
+                        
+                        return res.render("restaurants-sign-in.ejs", {
+                            alertMessage: "Registration successful. Please sign in to continue."
+                        });
                     })
                 })            
             }
@@ -193,11 +175,9 @@ router.get("/account", (req, res) => {
     global.db.all(restaurantAccountQuery, [restaurantID], (err, restaurantAccountResult) => {
         if (err) {
             console.error("Database error (Restaurant):", err);
-            return res.send(`
-                <script>
-                    alert("Internal Server Error");
-                    window.location.href = "/restaurants/account";
-                </script>`);
+            return res.render("restaurants-account.ejs", {
+                alertMessage: "Internal Server Error"
+            });
         } else {
             restaurant_data = restaurantAccountResult[0];
 
@@ -208,11 +188,9 @@ router.get("/account", (req, res) => {
             global.db.all(menuListQuery, [restaurantID], (err, menuListResult) => {
                 if (err) {
                     console.error("Database error (Restaurant - Menu):", err);
-                    return res.send(`
-                        <script>
-                            alert("Internal Server Error");
-                            window.location.href = "/restaurants/account";
-                        </script>`);
+                    return res.render("restaurants-account.ejs", {
+                        alertMessage: "Internal Server Error"
+                    });
                 } else {
                     res.render("restaurants-account.ejs", {restaurant_data: restaurant_data, menu_list: menuListResult});
                 }
@@ -233,12 +211,9 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
         //Execute the query and render the page with the results
         global.db.run(updateRestaurantAccountQuery, updateRestaurantAccount, (err) => {
             if (err) {
-                return res.send(`
-                    <script>
-                        alert("Update Failed");
-                        window.location.href = "/restaurants/account";
-                    </script>
-                `);
+                return res.render("restaurants-account.ejs", {
+                    alertMessage: "Update Failed"
+                });
             } else {
                 res.redirect("/restaurants/account");
             }
@@ -250,12 +225,9 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
         //Execute the query and render the page with the results
         global.db.run(deleteRestaurantAccountQuery, [restaurantID], (err) => {
             if (err) {
-                return res.send(`
-                    <script>
-                        alert("Delete Failed");
-                        window.location.href = "/restaurants/account";
-                    </script>
-                `);
+                return res.render("restaurants-account.ejs", {
+                    alertMessage: "Delete Failed"
+                });
             } else {
                 res.redirect("/restaurants/homepage");
             }
@@ -268,11 +240,9 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
         global.db.all(restaurantAccountQuery, [restaurantID], (err, restaurantAccountResult) => {
             if (err) {
                 console.error("Database error (Restaurant - Update Profile Picture):", err);
-                return res.send(`
-                    <script>
-                        alert("Internal Server Error");
-                        window.location.href = "/restaurants/account";
-                    </script>`);
+                return res.render("restaurants-account.ejs", {
+                    alertMessage: "Internal Server Error"
+                });
             } else {
                 //Delete Previous Image
                 prevRestaurantImage = "public/" + restaurantAccountResult[0].restaurant_image;
@@ -286,12 +256,9 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
                     //Execute the query and render the page with the results
                     global.db.run(updateRestaurantImageQuery, updateRestaurantImage, (err) => {
                         if (err) {
-                            return res.send(`
-                                <script>
-                                    alert("Update New Profile Picture Failed");
-                                    window.location.href = "/restaurants/account";
-                                </script>
-                            `);
+                            return res.render("restaurants-account.ejs", {
+                                alertMessage: "Update New Profile Picture Failed"
+                            });
                         } else {
                             res.redirect("/restaurants/account");
                         }
@@ -307,11 +274,9 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
         global.db.all(restaurantAccountQuery, [restaurantID], (err, restaurantAccountResult) => {
             if (err) {
                 console.error("Database error (Restaurant - Update Floorplan Image):", err);
-                return res.send(`
-                    <script>
-                        alert("Internal Server Error");
-                        window.location.href = "/restaurants/account";
-                    </script>`);
+                return res.render("restaurants-account.ejs", {
+                    alertMessage: "Internal Server Error"
+                });
             } else {
                 //Delete Previous Image
                 prevFloorplanImage = "public/" + restaurantAccountResult[0].restaurant_floorplan_image;
@@ -325,12 +290,9 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
                     //Execute the query and render the page with the results
                     global.db.run(updateFloorplanImageQuery, updateFloorplanImage, (err) => {
                         if (err) {
-                            return res.send(`
-                                <script>
-                                    alert("Update New Floorplan Image Failed");
-                                    window.location.href = "/restaurants/account";
-                                </script>
-                            `);
+                            return res.render("restaurants-account.ejs", {
+                                alertMessage: "Update New Floorplan Image Failed"
+                            });
                         } else {
                             res.redirect("/restaurants/account");
                         }
@@ -352,11 +314,9 @@ router.get("/edit-menu", (req, res) => {
     global.db.all(menuListQuery, [restaurantID], (err, menuListResult) => {
         if (err) {
             console.error("Database error (Menu List):", err);
-            return res.send(`
-                <script>
-                    alert("Internal Server Error");
-                    window.location.href = "/restaurants/edit-menu";
-                </script>`);
+            return res.render("restaurants-edit-menu.ejs", {
+                alertMessage: "Internal Server Error"
+            });
         } else {
             res.render("restaurants-edit-menu.ejs", {menu_list: menuListResult});
         }
@@ -374,12 +334,9 @@ router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
 
         global.db.run(addMenuQuery, addMenu, (err, next) => {
             if (err) {
-                return res.send(`
-                    <script>
-                        alert("Add Failed");
-                        window.location.href = "/restaurants/edit-menu";
-                    </script>
-                `);
+                return res.render("restaurants-edit-menu.ejs", {
+                    alertMessage: "Add Failed"
+                });
             } else { 
                 res.redirect("/restaurants/edit-menu");
             }
@@ -396,11 +353,10 @@ router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
         global.db.all(menuQuery, [menuID], (err, menuResult) => {
             if (err) {
                 console.error("Database error (Update Image - Menu List):", err);
-                return res.send(`
-                    <script>
-                        alert("Internal Server Error");
-                        window.location.href = "/restaurants/edit-menu";
-                    </script>`);
+                return res.render("restaurants-edit-menu.ejs", {
+                    alertMessage: "Internal Server Error"
+                });
+
             } else {
                 //Delete Previous Image
                 prevMenuImage = "public/" + menuResult[0].menu_image;
@@ -414,12 +370,9 @@ router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
                     //Execute the query and render the page with the results
                     global.db.run(uploadMenuImageQuery, uploadMenuImage, (err) => {
                         if (err) {
-                            return res.send(`
-                                <script>
-                                    alert("Update New Menu Image Failed");
-                                    window.location.href = "/restaurants/edit-menu";
-                                </script>
-                            `);
+                            return res.render("restaurants-edit-menu.ejs", {
+                                alertMessage: "Update New Menu Image Failed"
+                            });
                         } else {
                             res.redirect("/restaurants/edit-menu");
                         }
@@ -438,12 +391,9 @@ router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
         //Execute the query and render the page with the results
         global.db.run(deleteMenuQuery, [menuID], (err) => {
             if (err) {
-                return res.send(`
-                    <script>
-                        alert("Delete Failed");
-                        window.location.href = "/restaurants/edit-menu";
-                    </script>
-                `);
+                return res.render("restaurants-edit-menu.ejs", {
+                    alertMessage: "Delete Failed"
+                });
             } else {
                 res.redirect("/restaurants/edit-menu");
             }

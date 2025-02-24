@@ -1,23 +1,21 @@
 /* Styling for website*/
+
 /* Home page styling */ 
-body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page{
+body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page, body.customer-registration-page, body.restaurant-registration-page {
     font-family: sans-serif;
     padding:0;
     margin:0;
     background-color: #EFEFEF;
-    /* display: flex;  */
 }
 
-/* Navigation button */
+/* Navigation part */
 .navbar {
     display: flex;
     align-items: center;
-    justify-content: center; /*Center the navigation buttons*/
+    justify-content: center; /* Center the navigation buttons */
     background-color: rgba(0, 173, 143, 0.75);
-    /* background-color: #00AD8F; */
-    /* opacity: 75%; */
     box-sizing: border-box;
-    position: static; /* Allow absolute positioning for the logo */
+    position: static; /* absolute positioning for the logo */
     white-space: nowrap;
     top:0;
     width:100%;
@@ -25,7 +23,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .logo {
-    left: 20px; /* Add space from the left edge */
+    left: 20px; 
 }
 
 .navbar .logo img {
@@ -40,7 +38,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     list-style: none; /* Remove bullets */
     margin: 0;
     padding: 0;
-    /* z-index: 1000; */
 }
 
 .nav-buttons li a {
@@ -64,8 +61,8 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 .dropdown-signIn-option {
     display: none;
     position: absolute;
-    top: 100%; /* Place below the parent menu item */
-    /* right: 10;  Align to the right */
+    top: 150%; /* Place below the parent menu item */
+    right: -1%; 
     background: #efefef;
     min-width: 200px;
     list-style: none;
@@ -113,7 +110,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .reserve-button {
-    background-color: rgba(0, 173, 143, 0.75); 
+    background-color: #00AD8F; 
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -127,12 +124,11 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .reserve-button:hover {
-    background-color: #7fc1a1;
+    background-color: #007C64;
 }
 
 /* Hero section */
 .hero-image {
-    /* margin-top: 26px; */
     width:100%; 
     height:50vh; 
 }
@@ -141,24 +137,22 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 .why-us{
     font-size: 18px; 
     padding: 60px 100px;; 
-    text-align: left; /* Center align the section header */
+    text-align: left; 
 }
 
 .reasons {
     display: flex; 
-    justify-content: space-evenly; /* Distribute the blocks evenly */
-    /* align-items: flex-start; Align items at the top */
+    justify-content: space-evenly; 
     margin: 0 auto; 
-    max-width: 1200px; /* Limit the section width */
+    max-width: 1200px; 
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
     gap: 150px;
     padding: 20px 0; 
 }
 
 .reason {
-    width: 300px; /* Consistent block size */
-    text-align: center; /* Center align text inside the block */
-    /* margin: 20px; Add spacing between blocks */
+    width: 300px; /* block size */
+    text-align: center; 
 }
 
 .reason img {
@@ -186,12 +180,10 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     width:100%; 
     padding: 5px 0;
     display: flex; 
-    /* box-sizing: border-box; */
     justify-content: center;
 }
 
 .contact-us {
-    /* align-text: left;  */
     padding: 10px 80px; 
 }
 
@@ -217,17 +209,8 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     height: 30px; 
 }
 
-
-
-
 /* ========================================================================= */
 /* About page styling setting */
-/* body.aboutpage{
-    font-family: sans-serif;
-    padding:0;
-    margin:0;
-    background-color: #EFEFEF;
-} */
 
 /* About section */
 .about-section {
@@ -236,7 +219,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     justify-content: center;
     flex-wrap: wrap;
     padding: 40px;
-    /* gap: 0px; */
     text-align: left;
 }
 
@@ -266,26 +248,16 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 
 /* ============================================================ */
 /* Sign In page styling  */
-/* body.sign-in-page{ */
-    /* background-color: #efefef; */
-    /* margin:0;  */
-    /* padding:0;  */
-    /* display: flex; Use flexbox for centering */
-    /* align-items: center; Center vertically */
-    /* height: 100vh; Set the height of the body to fill the entire viewport */
-/* } */
 
 .sign-in-container{
-    display: flex; /* Use Flexbox for centering */
-    justify-content: center; /*Center horizontally*/
+    display: flex;
+    justify-content: center;
     align-items: center; /*Center vertically*/
     height: 90vh; /* Full viewport height for centering */
-
 }
 
 .sign-in-box {
     background-color: #fff;
-    /* justify-content: center; */
     padding: 30px 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -296,7 +268,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     margin-bottom: auto;
 
 }
-
 
 .sign-in-box h1 {
     margin-bottom: 20px;
@@ -319,16 +290,18 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .sign-in-box button {
-    background-color:#7fc1a1;
+    background-color:#00ad8f;
     width: 40%;
     padding: 10px;
     border-radius: 4px; 
     font-size: 16px; 
     cursor: pointer; 
+    border: none; 
+    color: white; 
 }
 
 .sign-in-box button:hover {
-    background-color: #4a9872;
+    background-color: #007c64;
 }
 
 /* ============================================================ */
@@ -384,7 +357,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .custom-account-image-file-upload {
-    background-color: rgba(0, 173, 143, 0.75); 
+    background-color: #00AD8F; 
     text-align: center;
     color: #fff;
     padding: 0px 10px;
@@ -396,7 +369,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
   
 .custom-account-image-file-upload:hover {
-    background-color: #7fc1a1;
+    background-color: #007C64;
 }
   
 .account-browse-image-button:focus + .custom-account-image-file-upload {
@@ -410,7 +383,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .account-button {
-    background-color: rgba(0, 173, 143, 0.75); 
+    background-color: #00AD8F; 
     text-align: center;
     color: #fff;
     padding: 5px 10px;
@@ -423,7 +396,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .account-button:hover {
-    background-color: #7fc1a1;
+    background-color: #007C64;
 }
 
 .account-restaurant-profile-right {
@@ -538,7 +511,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .account-sign-out-button{
-    background-color:#7fc1a1;
+    background-color:#00AD8F;
     text-align: center;
     color: #fff;
     padding: 5px 30px;
@@ -550,7 +523,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .account-sign-out-button:hover {
-    background-color: #4a9872;
+    background-color: #007C64;
 }
 
 .edit-menu {
@@ -616,4 +589,151 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 
 .edit-menu-done-button:hover {
     background-color: #7fc1a1;
+}
+
+/* ============================================================ */
+/* Customer and Restaurant Registration Page Styling */
+.registration h1{
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* customer and restaurant registration form */
+.registration-form {
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+.registration-form label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    display: block;
+}
+  
+.registration-form input {
+    width: 96%;
+    padding: 12px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+  
+.registration-form input[type="file"] {
+    padding: 8px;
+}
+  
+.registration-form button {
+    width: 100%;
+    padding: 15px;
+    background-color: #00ad8f;
+    border: none;
+    color: white;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+  
+.registration-form button:hover {
+    background-color: #007c64;
+}
+
+/* login container style */
+.login-container {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+/* login link */
+.login-container p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.login-container a {
+    color: #007c64;
+    text-decoration: none;
+    font-weight: bold;
+}
+  
+.login-container a:hover {
+    text-decoration: underline;
+}
+  
+/* button container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* button style */
+.button-container button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #007c64;
+    background-color: #fff;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-size: 16px;
+}
+  
+.button-container button:hover {
+    background-color: #007c64;
+    color: white;
+}
+
+/* ============================================================ */
+/* Alert Box */
+/* Alert Overlay */
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /*Dark transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure the alert box is on top of other elements */
+}
+
+/* Alert Box Styling */
+.alert-box {
+    background-color: #fff;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+}
+
+/* OK Button Styling */
+.alert-box button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #00AD8F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.alert-box button:hover {
+    background-color: #007c64;
+
 }

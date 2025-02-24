@@ -47,8 +47,13 @@ router.get("/sign-in", (req, res) => {
     res.render("customers-sign-in.ejs")
 })
 
+/* The data inputted in the sign in form will be compared with the data in the database, 
+   if the email and password match, the customer will be redirected to the customer account page.
+   If the email and password do not match, the customer will be redirected to the sign in page with an alert message.
+   It will redirect back to the sign in page after user clicks the "OK" button in the alert message.
+*/
 router.post("/sign-in", (req, res) => {
-    // check the email and password against the database
+    // check the email and password with the data inside database
     const {email, password} = req.body; 
 
     // Query to validate the customer credentials
@@ -57,11 +62,9 @@ router.post("/sign-in", (req, res) => {
     global.db.get(customerSignInQuery, [email], async (err, customerData) =>{
         if(err){
             console.error("Database error (Customer):", err);
-            return res.send(`
-                <script>
-                    alert("Internal Server Error");
-                    window.location.href = "/customers/sign-in";
-                    </script>`);
+            // set the alert message
+            return res.render("customers-sign-in.ejs", { 
+                alertMessage: "Internal Server Error" });
         }
 
         if (customerData) {
@@ -73,21 +76,15 @@ router.post("/sign-in", (req, res) => {
                 req.session.customer_name = customerData.customer_name;
                 return res.redirect('/customers/account');
             } else {
-                // Invalid password for Customer
-                return res.send(`
-                    <script>
-                        alert("Invalid email or password.");
-                        window.location.href = "/customers/sign-in";
-                    </script>
-                `);
+                // Invalid password
+                return res.render("customers-sign-in.ejs", {
+                    alertMessage: "Invalid email or password."
+                });
             }
         } else {
-            return res.send(`
-                <script>
-                    alert("Invalid email or password.");
-                    window.location.href = "/customers/sign-in";
-                </script>
-            `);
+            return res.render("customers-sign-in.ejs", {
+                alertMessage: "Invalid email or password."
+            });
         }
     })
 })
@@ -103,11 +100,9 @@ router.post("/registration", upload.single('customer_image'), async (req, res) =
 
     // Check if the image was uploaded
     if(!req.file){
-        return res.send(`
-            <script>
-                alert("Please upload a profile picture.");
-                window.location.href = "/customers/registration";
-            </script>`);
+        return res.render("customers-registration.ejs", {
+            alertMessage: "Please upload a profile picture."
+        });
     }
 
     // Store image path in the database
@@ -120,64 +115,51 @@ router.post("/registration", upload.single('customer_image'), async (req, res) =
     global.db.get(checkRestaurantEmailQuery, [email], async (err, restaurantData) => {
         if (err) {
             console.error("Database error during insertion:", err);
-            return res.send(`
-                <script>
-                    alert("Error: Internal Server Error. Please try again later.");
-                    window.location.href = "/customers/registration";
-                </script>`);
+            return res.render("customers-registration.ejs", {
+                alertMessage: "Internal Server Error. Please try again later."
+            });
         }
 
         global.db.get(checkCustomerEmailQuery, [email], async (err, customerData) => {
             if (err) {
                 console.error("Database error during insertion:", err);
-                return res.send(`
-                    <script>
-                        alert("Error: Internal Server Error. Please try again later.");
-                        window.location.href = "/customers/registration";
-                    </script>`);
+                return res.render("customers-registration.ejs", {
+                    alertMessage: "Internal Server Error. Please try again later."
+                });
             }
     
             if(restaurantData){
-                return res.send(`
-                    <script>
-                        alert("Error: This email is already registered as a restaurant. Please use a different email");
-                        window.location.href = "/customers/registration";
-                    </script>`);
+                return res.render("customers-registration.ejs", {
+                    alertMessage: "Error: This email is already registered as a restaurant. Please use a different email."
+                });
             } else if (customerData){
-                return res.send(`
-                    <script>
-                        alert("Error: This email is already registered as a customer. Please use a different email");
-                        window.location.href = "/customers/registration";
-                    </script>`);
+                return res.render("customers-registration.ejs", {
+                    alertMessage: "Error: This email is already registered as a customer. Please use a different email."
+                });
+
             // If the email is not registered as a restaurant or customer, hash the password and insert the new customer data 
             } else {
                 bcrypt.hash(password, 10, (hashErr, hashedPassword) => {
                     if (hashErr) {
                         console.error("Error hashing password:", hashErr);
-                        return res.send(`
-                            <script>
-                                alert("Error: Internal Server Error. Please try again later.");
-                                window.location.href = "/customers/registration";
-                            </script>`);
+                        return res.render("customers-registration.ejs", {
+                            alertMessage: "Internal Server Error. Please try again later."
+                        });
                     }
     
                     // insert new customer data with the hashed password
                     const insertQuery = `INSERT INTO customer (customer_name, customer_email, customer_phone_number, customer_password, customer_image) VALUES (?, ?, ?, ?, ?)`;
                     global.db.run(insertQuery, [full_name, email, phone_number, hashedPassword, customerImgPath], (err) => {
-                        if (err) { // 쿼리 실행 중 오류 발생 시
+                        if (err) { 
                             console.error("Error inserting customer data:", err);
-                            return res.send(`
-                                <script>
-                                    alert("Error: Internal Server Error. Please try again later.");
-                                    window.location.href = "/customers/registration";
-                                </script>`);
+                            return res.render("customers-registration.ejs", {
+                                alertMessage: "Internal Server Error. Please try again later."
+                            });
                         }
-                        // 성공적으로 등록되었을 때
-                        res.send(`
-                            <script>
-                                alert("Registration successful. Please sign in to continue."); 
-                                window.location.href = "/customers/sign-in";
-                            </script>`)
+                        
+                        res.render("customers-sign-in.ejs", {
+                            alertMessage: "Registration successful. Please sign in to continue."
+                        });
                     })
                 })            
             }
@@ -196,11 +178,9 @@ router.get("/account", (req, res, next) => {
     global.db.all(customerAccountQuery, [customerID], (err, customerAccountResult) => {
         if (err) {
             console.error("Database error (Customer):", err);
-            return res.send(`
-                <script>
-                    alert("Internal Server Error");
-                    window.location.href = "/customers/account";
-                    </script>`);
+            return res.render("customers-account.ejs", {
+                alertMessage: "Internal Server Error"
+            }); 
         } else {
             customer_data = customerAccountResult[0];
             res.render("customers-account.ejs", {customer_data: customer_data});
@@ -220,12 +200,9 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
         //Execute the query and render the page with the results
         global.db.run(updateCustomerAccountQuery, updateCustomerAccount, (err) => {
             if (err) {
-                return res.send(`
-                    <script>
-                        alert("Update Failed");
-                        window.location.href = "/customers/account";
-                    </script>
-                `);
+                return res.render("customers-account.ejs", {
+                    alertMessage: "Update Failed"
+                });
             } else {
                 res.redirect("/customers/account");
             }
@@ -237,12 +214,9 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
         //Execute the query and render the page with the results
         global.db.run(deleteCustomerAccountQuery, [customerID], (err) => {
             if (err) {
-                return res.send(`
-                    <script>
-                        alert("Delete Failed");
-                        window.location.href = "/customers/account";
-                    </script>
-                `);
+                return res.render("customers-account.ejs", {
+                    alertMessage: "Delete Failed"
+                });
             } else {
                 res.redirect("/customers/");
             }
@@ -255,11 +229,9 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
         global.db.all(customerAccountQuery, [customerID], (err, customerAccountResult) => {
             if (err) {
                 console.error("Database error (Customer):", err);
-                return res.send(`
-                    <script>
-                        alert("Internal Server Error - Update Image Failed");
-                        window.location.href = "/customers/account";
-                    </script>`);
+                return res.render("customers-account.ejs", {
+                    alertMessage: "Internal Server Error - Update Image Failed"
+                });
             } else {
                 //Delete Previous Image
                 prevCustomerImage = "public/" + customerAccountResult[0].customer_image;
@@ -272,12 +244,9 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
                     //Execute the query and render the page with the results
                     global.db.run(updateCustomerImageQuery, updateCustomerImage, (err) => {
                         if (err) {
-                            return res.send(`
-                                <script>
-                                    alert("Update New Image Failed");
-                                    window.location.href = "/customers/account";
-                                </script>
-                            `);
+                            return res.render("customers-account.ejs", {
+                                alertMessage: "Update New Image Failed"
+                            });
                         } else {
                             res.redirect("/customers/account");
                         }

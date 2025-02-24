@@ -33,6 +33,15 @@
                 </ul>
             </nav>
         </header>
+
+        <% if (typeof alertMessage !== 'undefined') { %>
+            <div class="alert-overlay">
+                <div class="alert-box">
+                    <p><%= alertMessage %></p>
+                    <button onclick="closeAlert()">OK</button>
+                </div>
+            </div>
+        <% } %>
         
         <div class="sign-in-container">
             <div class="sign-in-box">
@@ -52,9 +61,8 @@
                 <br><br>
     
                 <div class="registration-page"></div>
-                    <p>Don't have an account ? <a href="/customers/registration">Register here</a></p>
+                    <p>Don't have an account ? <a href="/restaurants/registration">Register here</a></p>
                 </div>
-    
             </div>
         </div>
        
@@ -66,11 +74,10 @@
 
                 // Toggle the dropdown on click of "Sign In"
                 dropdown.addEventListener('click', function (event) {
-                    // Check if the clicked element have link inside 
                     if (event.target.tagName === 'A' && event.target.closest('.dropdown-signIn-option')) {
                         return; // stop further execution of this function
                     }
-                    event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
+                    event.preventDefault(); // Prevent default behaviour (avoid browsers jump to the top of the page)
                     // use to toggle the dropdown
                     dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });
@@ -82,6 +89,11 @@
                     }
                 });
             });
+
+            // Close the alert box
+            function closeAlert() {
+                document.querySelector('.alert-overlay').style.display = 'none';
+            }
         </script>
     </body>
 </html>

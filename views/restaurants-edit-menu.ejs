@@ -26,6 +26,16 @@
                 </ul>
             </nav>
         </header>
+        
+        <!-- show alert message -->
+        <% if (typeof alertMessage !== 'undefined') { %>
+            <div class="alert-overlay">
+                <div class="alert-box">
+                    <p><%= alertMessage %></p>
+                    <button onclick="closeAlert()">OK</button>
+                </div>
+            </div>
+        <% } %>
 
         <script>
             // Function to display the chosen file name
@@ -37,6 +47,11 @@
                 } else {
                     fileName.textContent = 'No file chosen';
                 }
+            }
+
+            // close the alert box
+            function closeAlert() {
+                document.querySelector('.alert-overlay').style.display = 'none';
             }
         </script>
 
