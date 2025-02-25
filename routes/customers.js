@@ -257,9 +257,57 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
     }
 })
 
+router.get("/search", (req, res) => {
+    //Define the query for List of Restaurants
+    restaurantListQuery = "SELECT * FROM restaurant";
+
+    //Execute the query and render the page with the results
+    global.db.all(restaurantListQuery, (err, restaurantListResult) => {
+        if (err) {
+            next(err);
+        } else {
+            //Get the Searched Keywords
+            if (req.query.searchedKeywords) {
+                keywords = req.query.searchedKeywords.toLowerCase(); 
+                restaurantList = restaurantListResult.filter(restaurant => restaurant.restaurant_name.toLowerCase().includes(keywords));
+                res.render("customers-list-restaurants.ejs", {restaurant_list: restaurantList});
+            } else {
+                res.render("customers-list-restaurants.ejs", {restaurant_list: restaurantListResult});
+            } 
+        }
+    })
+})
+
 router.get("/list", (req, res) => {
-    // res.render("restaurant-listing.ejs");
-    res.send("List of restaurants (customers)");
+    restaurantList = "SELECT * FROM restaurant";    
+
+    global.db.all(restaurantList, (err, restaurants) => {
+        if (err){
+            return res.render("customers-list-restaurants.ejs", {
+                alertMessage: "Internal Server Error"
+            });
+        }
+        res.render("customers-list-restaurants.ejs", {restaurant_list: restaurants});
+    });
+})
+
+router.post("/book/:restaurant_id", (req, res) => {
+    const restaurantID = req.params.restaurant_id;
+    const customerID = req.session.customer_id;
+
+    //Define the query for Restaurant Data
+    restaurantDataQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+    global.db.all(restaurantDataQuery, [restaurantID], (err, restaurantDataResult) => {
+        if (err) {
+            console.error("Database error (Restaurant):", err);
+            return res.render("customers-book.ejs", {
+                alertMessage: "Internal Server Error"
+            });
+        } else {
+            restaurantData = restaurantDataResult[0];
+            res.render("customers-book.ejs", {restaurant_data: restaurantData, customer_id: customerID});
+        }
+    });
 })
 
 // Customer logout route

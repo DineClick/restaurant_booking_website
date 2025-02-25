@@ -1,7 +1,7 @@
 /* Styling for website*/
 
 /* Home page styling */ 
-body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page, body.customer-registration-page, body.restaurant-registration-page {
+body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page, body.customer-registration-page, body.restaurant-registration-page, body.restaurants-list-restaurants, body.customers-list-restaurants {
     font-family: sans-serif;
     padding:0;
     margin:0;
@@ -736,4 +736,108 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 .alert-box button:hover {
     background-color: #007c64;
 
+}
+
+/* List of restaurants page */
+/*  */
+.restaurant-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 40px;
+    padding: 50px;
+}
+
+/* Show all restaurants in card style */
+.restaurant-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Styling for restaurant image inside the card */
+.restaurant-list-image {
+    width: 100%;
+    height: 180px;
+    /* object-fit: cover; */
+}
+
+/* Info section styling */
+.restaurant-details {
+    padding: 15px;
+    text-align: center;
+}
+
+.restaurant-details h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.restaurant-details p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Book button styling */
+.book-button {
+    background-color: #62b5a8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.book-button:hover {
+    background-color: #4a9872;
+}
+
+/* Searching restaurant box*/
+.search-restaurants {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.search-restaurant-form {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Search Box */
+.search-restaurant-box {
+    position: relative;
+    width: 250px;
+}
+
+/* Search Input */
+.search-restaurant-input {
+    width: 80%;
+    padding: 10px 40px 10px 15px; /* Add space for the icon */
+    border: 2px solid #62b5a8;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Search Icon Button */
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #62b5a8;
+    font-size: 18px;
+}
+
+.search-icon:hover {
+    color: #4a9872;
 }

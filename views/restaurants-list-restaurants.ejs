@@ -1,0 +1,65 @@
+<!-- Restaurants List of Restaurants Page --> 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Restaurants - Restaurant Page</title>
+        <link rel="stylesheet" href="/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    </head>
+
+    <body class="restaurants-list-restaurants">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    <li><a href="/restaurants/homepage">Home</a></li>
+                    <li><a href="/restaurants/about-us">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants/homepage">My Bookings</a></li>
+                    <li><a href="/restaurants/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <br><br>
+        
+        <!-- Search box for searching restaurant using name-->
+        <div class = "search-restaurants">
+            <form action="/restaurants/search" method="GET" class="search-restaurant-form">
+                <div class="search-restaurant-box">
+                    <input type = "text" name = "searchedKeywords" placeholder = "Search..." class="search-restaurant-input">
+                    <button type="submit" class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Show all restaurants -->
+        <div class="restaurant-list">
+            <% if (restaurant_list && restaurant_list.length > 0) { %>
+                <% restaurant_list.forEach((restaurant) => { %>
+                    <div class="restaurant-card">
+                        <img src="<%= restaurant.restaurant_image %>" alt="<%= restaurant.restaurant_name %>" class="restaurant-list-image">
+                        <div class="restaurant-details">
+                            <h3><%= restaurant.restaurant_name %></h3>
+                            <p><%= restaurant.restaurant_description %></p>
+                            <button class="book-button" onclick="window.location.href='/restaurants/book/<%= restaurant.restaurant_id %>'">Book</button>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No restaurants found.</p>
+            <% } %>
+        </div>
+    </body>
+</html>
+
