@@ -37,21 +37,28 @@ CREATE TABLE IF NOT EXISTS seating_list (
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
+-- Used if set up table capacity, can be deleted if the choosing seat feature works
+/* CREATE TABLE IF NOT EXISTS tables ( 
+    table_id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Unique table identifier
+    restaurant_id INTEGER NOT NULL,              -- Links table to a restaurant
+    table_number TEXT NOT NULL,                  -- Identifies the table (e.g., "T1", "T2")
+    capacity INTEGER NOT NULL,                    -- Maximum number of guests
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
+); */
+
 CREATE TABLE IF NOT EXISTS reservations (
-    reservation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reservation_id INTEGER PRIMARY KEY AUTOINCREMENT, -- Unique reservation ID
     customer_id INT NOT NULL,
     rest_id INT NOT NULL,
     reservation_date TEXT NOT NULL,
     booking_time TEXT NOT NULL,
     slot TEXT NOT NULL,
-    num_of_adult INTEGER DEFAULT 0,
-    num_of_child INTEGER DEFAULT 0, 
-    special_request TEXT, 
-    table_id INT NOT NULL, 
-    status TEXT DEFAULT 'pending',
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE,
-    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE,
-    FOREIGN KEY (table_id) REFERENCES seating_list(table_id) ON DELETE CASCADE
+    num_guests INTEGER DEFAULT 1,
+    special_request TEXT, -- Any customer special request
+    table_id INT NOT NULL, -- Table assigned for the reservation
+    status TEXT DEFAULT 'pending', -- Status of the reservation
+    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE, 
+    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS menu_list (
@@ -65,12 +72,12 @@ CREATE TABLE IF NOT EXISTS menu_list (
 CREATE TABLE IF NOT EXISTS pre_order_menu (
     reservation_id INT NOT NULL,
     menu_id INT NOT NULL,
-    menu_quantity INT NOT NULL DEFAULT 1,
+    menu_quantity INT NOT NULL,
     PRIMARY KEY (reservation_id, menu_id),
     FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE,
     FOREIGN KEY (menu_id) REFERENCES menu_list(menu_id) ON DELETE CASCADE
+);
 
 
 
 COMMIT;
-
