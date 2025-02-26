@@ -1,0 +1,124 @@
+<!-- Edit Table Page --> 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Edit Table Page</title>
+        <link rel="stylesheet" href="/main.css">
+    </head>
+
+    <body class="edit-table-page">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    <li><a href="/restaurants">Home</a></li>
+                    <li><a href="/restaurants/about">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants">My Bookings</a></li>
+                    <li><a href="/restaurants/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class = "edit-menu">
+            <h1>Edit Table Arrangment</h1>
+            
+            <!-- Go back to Restaurant Account Page -->
+            <form action="/restaurants/account" method="GET">
+                <button type="submit" class = "edit-menu-done-button">Done</button>
+            </form>
+            
+            <!-- Floorplan and Table Display-->
+            <h3> Table Arrangement: </h3>
+                <div class = edit-table-container>
+                    <img id = 'floorplanImage' src= "<%= restaurant_data.restaurant_floorplan_image %>" alt="Missing Floorplan Picture" class = edit-table-image> <br>
+
+                    <% tableSize = restaurant_data.restaurant_table_size; %>
+
+                    <% table_list.forEach((table, index) => { %>
+                        <% tableCoordinates = table.table_coordinates.split(","); %>
+                        <% tableCoordinateX = (parseInt(tableCoordinates[0]) - (parseInt(tableSize)/2)).toString(); %>
+                        <% tableCoordinateY = (parseInt(tableCoordinates[1]) - (parseInt(tableSize)/2)).toString(); %>
+
+                        <div id = "<%= 'tableSquares' + table.table_id %>" class="tableSquares" style="left: <%= tableCoordinateX %>px; top: <%= tableCoordinateY %>px; width: <%= tableSize %>px; height: <%= tableSize %>px;">
+                            <span><%= index + 1 %></span>
+                        </div>
+                    <% }) %>
+                </div>
+
+                <!-- Update Table Size-->
+                <form action="/restaurants/edit-table" method="POST">
+                    Table Size (Only Even Number): <input id="restaurant_table_size" type="text" name="restaurant_table_size" value= "<%= restaurant_data.restaurant_table_size %>" required/> <br>
+                    <button id = "updateTableSize" name = "submitButton" type = "submit" value = "updateTableSize" class = "account-button">Update</button> 
+                    <br>
+                </form>
+
+                <!-- Add Table -->
+                <div class = "add-menu">
+                <!-- Trigger the mouse click capture on floorplan image-->
+                <button id="addTableButton">Add Table</button>
+
+                <!-- Submit the captured mouse click coordinates -->
+                <form id="tableCoordinatesForm" action="/restaurants/edit-table" method="POST">
+                    <input type="hidden" id="clickedX" name="clickedX" required>
+                    <input type="hidden" id="clickedY" name="clickedY" required>
+                    <input type="hidden" id="tableCoordinates" name="tableCoordinates" required>
+                    <input type="hidden" id="submitButton" name="submitButton" value = "saveTable">
+                </form>
+
+                <script>
+                    // Button click event to start capturing mouse click
+                    document.getElementById('addTableButton').addEventListener('click', function() {
+                        //display notif to add - hidden text turn on and off?
+                        // Notify the user that the mouse click on the image will be captured
+    
+                        // Wait for a click event on the image
+                        document.getElementById('floorplanImage').addEventListener('click', function(event) {
+                            // Get the position of the mouse click relative to the image
+                            const image = document.getElementById('floorplanImage');
+
+                            // Calculate the mouse click position relative to the image
+                            const mouseX = event.offsetX;
+                            const mouseY = event.offsetY;
+    
+                            // Set the values of the hidden input fields in the form
+                            document.getElementById('clickedX').value = mouseX;
+                            document.getElementById('clickedY').value = mouseY;
+    
+                            // Automatically submit the form
+                            document.getElementById('submitButton').value = "saveTable"; 
+                            document.getElementById('tableCoordinatesForm').submit();
+                        });
+                    });
+                </script>
+            </div>
+
+            <ul>
+                <!-- Table List -->
+                <div class = "menu-list">
+                    <h2>Table List:</h2>
+                    <ol>
+                    <% table_list.forEach((table, index) => { %>
+                        <li>
+                            <p> <%= table.table_coordinates %> </p> <br>
+
+                        <form action="/restaurants/edit-table" method="POST">
+                            <button id = "deleteTable" name = "submitButton" type = "submit" value = "<%= 'deleteTable' + table.table_id %>" class = "account-button">Delete</button>
+                        </form>
+                        <br>
+                        </li>
+                    <% }) %>
+                    </ol>
+                </div>
+            </ul>
+        </div>
+    </body>
+</html>
+ 
