@@ -27,16 +27,26 @@ CREATE TABLE IF NOT EXISTS restaurant (
     restaurant_image TEXT, -- Store pathing, example: "/restaurant-images/example.jpg"
     restaurant_floorplan_image TEXT, -- Store pathing, example: "/restaurant-images/example.jpg"
     restaurant_opening_time TIME NOT NULL DEFAULT "00:00:00", -- HH:MM:SS 
-    restaurant_closing_time TIME NOT NULL DEFAULT "23:59:00" -- HH:MM:SS 
+    restaurant_closing_time TIME NOT NULL DEFAULT "23:59:00", -- HH:MM:SS 
+    restaurant_table_size TEXT NOT NULL DEFAULT "50" -- size of squares representing tables in px
 );
 
-CREATE TABLE IF NOT EXISTS seating_list (
-    table_id INTEGER PRIMARY KEY AUTOINCREMENT, -- unique for a specific table in a specific restaurant at a specific time
+CREATE TABLE IF NOT EXISTS restaurant_table_list (
+    table_id INTEGER PRIMARY KEY AUTOINCREMENT,
     restaurant_id INT NOT NULL,
+    table_coordinates TEXT NOT NULL, -- coordinates of table in relation to the floorplan image - "x,y"
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS reserved_seating_list (
+    seating_id INTEGER PRIMARY KEY AUTOINCREMENT, -- unique for a specific table in a specific restaurant at a specific time
+    restaurant_id INT NOT NULL,
+    table_id INT NOT NULL,
     available_date DATE NOT NULL, -- YYYY-MM-DD
     available_time TIME NOT NULL, -- HH:MM:SS 
     table_status TEXT NOT NULL DEFAULT "UNBOOKED", -- "UNBOOKED" or "BOOKED" 
-    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE,
+    FOREIGN KEY (table_id) REFERENCES restaurant_table_list(table_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS reservations (
@@ -71,7 +81,4 @@ CREATE TABLE IF NOT EXISTS pre_order_menu (
     FOREIGN KEY (menu_id) REFERENCES menu_list(menu_id) ON DELETE CASCADE
 );
 
-
-
 COMMIT;
-
