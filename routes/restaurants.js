@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express"); 
 const router = express.Router();
 
 // For hashing passwords
@@ -235,15 +235,12 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
         //Execute the query and render the page with the results
         global.db.run(updateRestaurantAccountQuery, updateRestaurantAccount, (err) => {
             if (err) {
-                next(err);
-                /*
                 return res.send(`
                     <script>
                         alert("Update Failed");
                         window.location.href = "/restaurants/account";
                     </script>
                 `);
-                */
             } else {
                 res.redirect("/restaurants/account");
             }
@@ -456,7 +453,120 @@ router.post("/edit-menu", upload.single('menu_image'), (req, res, next) => {
     }
 })
 
-// 7. list of the Restaurant
+// 7. Restaurant Edit Table page
+router.get("/edit-table", (req, res) => {
+    restaurantID = req.session.restaurant_id;
+
+    //Define the query for Restaurant Data
+    restaurantDataQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+       
+    //Execute the query and render the page with the results
+    global.db.all(restaurantDataQuery, [restaurantID], (err, restaurantDataResult) => {
+        if (err) {
+            console.error("Database error (Edit Table):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/restaurants/edit-table";
+                </script>`);
+        } else {
+            restaurant_data = restaurantDataResult[0];
+
+            //Define the query for List of Tables in the Specific Restaurant
+            tableListQuery = "SELECT * FROM restaurant_table_list WHERE restaurant_id = ?";
+
+            //Execute the query and render the page with the results
+            global.db.all(tableListQuery, [restaurantID], (err, tableListResult) => {
+                if (err) {
+                    console.error("Database error (Edit Table - Table List):", err);
+                    return res.send(`
+                        <script>
+                            alert("Internal Server Error");
+                            window.location.href = "/restaurants/edit-table";
+                        </script>`);
+                } else {
+                    res.render("restaurants-edit-table.ejs", {restaurant_data: restaurant_data, table_list: tableListResult});
+                }
+            });
+        }
+    })
+})
+
+router.post("/edit-table", (req, res, next) => {
+    restaurantID = req.session.restaurant_id;
+    const buttonClicked = req.body.submitButton;
+
+    if (buttonClicked.includes("updateTableSize")) {
+        //Define the query to Update Restaurant Table Size
+        tableSizeInput = parseInt(req.body.restaurant_table_size);
+        if (tableSizeInput % 2 === 0) {
+            restaurantTableSize = tableSizeInput.toString();
+        } else {
+            restaurantTableSize = (tableSizeInput + 1).toString();
+        }
+        updateTableSize = [restaurantTableSize, restaurantID];
+        updateTableSizeQuery = "UPDATE restaurant SET restaurant_table_size = ? WHERE restaurant_id = ?";
+
+        //Execute the query and render the page with the results
+        global.db.run(updateTableSizeQuery, updateTableSize, (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Update Table Size Failed");
+                        window.location.href = "/restaurants/edit-table";
+                    </script>
+                `);
+            } else {
+                res.redirect("/restaurants/edit-table");
+            }
+        });
+    } else if (buttonClicked.includes("saveTable")) {
+        //Get coordinates of mouse clicked
+        tableCoordinatesX = req.body.clickedX;
+        tableCoordinatesY = req.body.clickedY;
+        tableCoordinates = tableCoordinatesX + "," + tableCoordinatesY;
+
+        //Define the query for Add Table
+        addTableQuery = "INSERT INTO restaurant_table_list (restaurant_id, table_coordinates) VALUES (?,?)";
+        addTable = [restaurantID, tableCoordinates]
+
+        global.db.run(addTableQuery, addTable, (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Edit Table - Add Failed");
+                        window.location.href = "/restaurants/edit-table";
+                    </script>
+                `);
+            } else { 
+                res.redirect("/restaurants/edit-table");
+            }
+        })
+    } else if (buttonClicked.includes("deleteTable")) {
+        //Get Table ID 
+        tableData = buttonClicked.match(/(\d+)/);
+        tableID = tableData[0];
+
+        //Define the query to Delete Table
+        deleteTableQuery = "DELETE FROM restaurant_table_list WHERE table_id = ?";
+
+        //Execute the query and render the page with the results
+        global.db.run(deleteTableQuery, [tableID], (err) => {
+            if (err) {
+                return res.send(`
+                    <script>
+                        alert("Edit Table - Delete Failed");
+                        window.location.href = "/restaurants/edit-table";
+                    </script>
+                `);
+            } else {
+                res.redirect("/restaurants/edit-table");
+            }
+        });
+    }
+})
+
+// 8. list of the Restaurant
 router.get("/list", (req, res) => {
     //Define the query for List of Restaurants
     restaurantListQuery = "SELECT * FROM restaurant";
