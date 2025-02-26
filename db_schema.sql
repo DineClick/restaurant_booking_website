@@ -37,6 +37,15 @@ CREATE TABLE IF NOT EXISTS seating_list (
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
+-- Used if set up table capacity, can be deleted if the choosing seat feature works
+/* CREATE TABLE IF NOT EXISTS tables ( 
+    table_id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Unique table identifier
+    restaurant_id INTEGER NOT NULL,              -- Links table to a restaurant
+    table_number TEXT NOT NULL,                  -- Identifies the table (e.g., "T1", "T2")
+    capacity INTEGER NOT NULL,                    -- Maximum number of guests
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
+); */
+
 CREATE TABLE IF NOT EXISTS reservations (
     reservation_id INTEGER PRIMARY KEY AUTOINCREMENT, -- Unique reservation ID
     customer_id INT NOT NULL,
@@ -72,4 +81,3 @@ CREATE TABLE IF NOT EXISTS pre_order_menu (
 
 
 COMMIT;
-
