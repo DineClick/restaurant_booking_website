@@ -53,7 +53,7 @@ router.get("/sign-in", (req, res) => {
    It will redirect back to the sign in page after user clicks the "OK" button in the alert message.
 */
 router.post("/sign-in", (req, res) => {
-    // check the email and password with the data inside database
+    // check the email and password against the database
     const {email, password} = req.body; 
 
     // Query to validate the customer credentials
@@ -62,7 +62,6 @@ router.post("/sign-in", (req, res) => {
     global.db.get(customerSignInQuery, [email], async (err, customerData) =>{
         if(err){
             console.error("Database error (Customer):", err);
-            // set the alert message
             return res.render("customers-sign-in.ejs", { 
                 alertMessage: "Internal Server Error" });
         }
@@ -76,7 +75,7 @@ router.post("/sign-in", (req, res) => {
                 req.session.customer_name = customerData.customer_name;
                 return res.redirect('/customers/account');
             } else {
-                // Invalid password
+                // Invalid password for Customer
                 return res.render("customers-sign-in.ejs", {
                     alertMessage: "Invalid email or password."
                 });
@@ -130,13 +129,12 @@ router.post("/registration", upload.single('customer_image'), async (req, res) =
     
             if(restaurantData){
                 return res.render("customers-registration.ejs", {
-                    alertMessage: "Error: This email is already registered as a restaurant. Please use a different email."
+                    alertMessage: "This email is already registered. Please use a different email."
                 });
             } else if (customerData){
                 return res.render("customers-registration.ejs", {
-                    alertMessage: "Error: This email is already registered as a customer. Please use a different email."
+                    alertMessage: "This email is already registered. Please use a different email."
                 });
-
             // If the email is not registered as a restaurant or customer, hash the password and insert the new customer data 
             } else {
                 bcrypt.hash(password, 10, (hashErr, hashedPassword) => {
@@ -150,7 +148,7 @@ router.post("/registration", upload.single('customer_image'), async (req, res) =
                     // insert new customer data with the hashed password
                     const insertQuery = `INSERT INTO customer (customer_name, customer_email, customer_phone_number, customer_password, customer_image) VALUES (?, ?, ?, ?, ?)`;
                     global.db.run(insertQuery, [full_name, email, phone_number, hashedPassword, customerImgPath], (err) => {
-                        if (err) { 
+                        if (err) {
                             console.error("Error inserting customer data:", err);
                             return res.render("customers-registration.ejs", {
                                 alertMessage: "Internal Server Error. Please try again later."
@@ -258,8 +256,151 @@ router.post("/account", upload.single('customer_image'), (req, res, next) => {
 })
 
 router.get("/list", (req, res) => {
-    // res.render("restaurant-listing.ejs");
-    res.send("List of restaurants (customers)");
+    //Define the query for List of Restaurants
+    restaurantListQuery = "SELECT * FROM restaurant";
+
+    //Execute the query and render the page with the results
+    global.db.all(restaurantListQuery, (err, restaurantListResult) => {
+        if (err) {
+            next(err);
+        } else {
+            //Get the Searched Keywords
+            if (req.query.searchedKeywords) {
+                keywords = req.query.searchedKeywords.toLowerCase(); 
+                restaurantList = restaurantListResult.filter(restaurant => restaurant.restaurant_name.toLowerCase().includes(keywords));
+                res.render("customers-list.ejs", {restaurant_list: restaurantList});
+            } else {
+                res.render("customers-list.ejs", {restaurant_list: restaurantListResult});
+            } 
+        }
+    })
+})
+
+router.get("/book", (req, res) => {
+    //Define the query for Restaurant Information
+    restaurantDataQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+
+    //Get Restaurant ID 
+    const buttonClicked = req.query.bookRestaurant;
+    restaurantData = buttonClicked.match(/(\d+)/);
+    restaurantID = restaurantData[0];
+    req.session.selected_restaurant_id = restaurantID;  
+                    
+    //Execute the query and render the page with the results
+    global.db.all(restaurantDataQuery, [restaurantID], (err, restaurantDataResult) => {
+        if (err) {
+            console.error("Database error (Customer - Book):", err);
+            // return res.render("customers-list", {
+            //     alertMessage: "Internal Server Error",
+            // })
+            
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/customers/list";
+                </script>`);
+        } else {
+            //Get time (per hour) restaurant is open from opening time to closing time
+            hoursOpen = [];
+
+            restaurantOpeningTime = restaurantDataResult[0].restaurant_opening_time;
+            hourOT = restaurantOpeningTime.split(":")[0];
+            minuteOT = restaurantOpeningTime.split(":")[1];
+
+            restaurantClosingTime = restaurantDataResult[0].restaurant_closing_time;
+            hourCT = restaurantClosingTime.split(":")[0];
+            minuteCT = restaurantClosingTime.split(":")[1];
+
+            intHourOT = parseInt(hourOT);
+            intHourCT = parseInt(hourCT);
+
+            if (minuteOT == "00") {
+                hoursOpen.push(hourOT + ":00");
+            }
+
+            intHourOT = intHourOT + 1;
+
+            while (intHourOT < intHourCT) {
+                if (intHourOT < 10) {
+                    strHourOT = "0" + intHourOT.toString();
+                } else {
+                    strHourOT = intHourOT.toString();
+                }
+                hoursOpen.push(strHourOT + ":00");
+                intHourOT = intHourOT + 1;
+            }
+
+            if (minuteCT != "00") {
+                hoursOpen.push(hourCT + ":00");
+            }
+            res.render("customers-book.ejs", {restaurant_data: restaurantDataResult[0], opening_hours: hoursOpen});
+        }
+    });
+})
+
+// THIS ONE CANNOT USE ALERTMESSAGE 
+router.post("/book", (req, res) => {
+    var currentUTCDatetime = new Date();
+    dateString = currentUTCDatetime.toISOString().slice(0, 10);
+    timeString = currentUTCDatetime.toISOString().slice(11, 19);
+    datetimeString = dateString + " " + timeString;
+
+    restaurantID = req.session.selected_restaurant_id;
+    customerID = req.session.customer_id;
+    reservationDate = req.body.booking_date;
+    diningTime = req.body.dining_time; //undefined
+    bookingTime = datetimeString;
+    guestsNum = req.body.num_guests;
+    specialRequest = req.body.special_request;
+    tableID = req.body.table_id; //set to 1 for now (since seat selection is not done)
+
+    //Define the query to book the selected restaurant
+    bookingQuery = "INSERT INTO reservations (customer_id, rest_id, reservation_date, dining_time, booking_time, num_guests, special_request, table_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+    //Execute the query and render the page with the results
+    global.db.all(bookingQuery, [customerID, restaurantID, reservationDate, diningTime, bookingTime, guestsNum, specialRequest, tableID], (err) => {
+        if (err) {
+            console.error("Database error (Customer - Book):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/customers/list";
+                </script>`);
+        } else {
+            res.send(`
+                <script>
+                    alert("Booking successful. You can check the details in the My Bookings Page"); 
+                    window.location.href = "/customers/list";
+                </script>`);
+
+            // return res.render("customers-list", {
+            //     alertMessage: "Booking successful. You can check the details in the My Bookings Page",
+            // })
+            
+        }
+    });
+})
+
+router.get("/view-menu", (req, res) => { //This should change to Pre-Order Menu Feature
+    //Define the query for Menu of Selected Restaurant
+    restaurantMenuQuery = "SELECT * FROM menu_list WHERE restaurant_id = ?";
+
+    //Get Restaurant ID 
+    restaurantID = req.session.selected_restaurant_id;
+                    
+    //Execute the query and render the page with the results
+    global.db.all(restaurantMenuQuery, [restaurantID], (err, restaurantMenuResult) => {
+        if (err) {
+            console.error("Database error (Customer - View Menu):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/customers/book";
+                </script>`);
+        } else {
+            res.render("customers-view-menu.ejs", {restaurant_menu: restaurantMenuResult, restaurant_id: restaurantID});
+        }
+    });
 })
 
 // Customer logout route

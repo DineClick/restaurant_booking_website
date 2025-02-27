@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/main.css" />
     </head>
     
-    <body class="customer-registration-page">
+    <body class="customers-registration-page">
         <header >
             <!-- navigation part -->
             <nav class="navbar">
@@ -33,23 +33,23 @@
         </header>
 
         <div class="registration">
-            <h1 >Customer registration</h1>
+            <h1>Customer registration</h1>
             <form action="/customers/registration" method="POST" enctype="multipart/form-data" class="registration-form">
                 <label for="full_name">Full Name:</label>
-                <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name"/> <br /><br />
+                <input type="text" id="full_name" name="full_name" required/> <br /><br />
 
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email"/><br /><br />
+                <input type="email" id="email" name="email" required /><br /><br />
 
                 <label for="phone_number">Phone Number:</label>
-                <input type="text" id="phone_number" name="phone_number" required placeholder="Enter phone number"/><br /><br />
+                <input type="text" id="phone_number" name="phone_number" required/><br /><br />
 
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required placeholder="Choose a password"/><br /><br />
+                <input type="password" id="password" name="password" required/><br /><br />
 
                 <label for="customer_image">Profile Picture: </label><br>
-                <input type="file" id="customer_image" name="customer_image" accept="image/*"/><br><br>
-                <img id="imagePreview" style="max-width: 300px; display: none;" alt="Profile Picture Preview"><br><br>
+                <input type="file" id="customer_image" name="customer_image" /><br><br>
+                <img id="imagePreview" style="max-width: 300px; display: none;"><br><br>
                 <button type="submit">Register</button>
             </form>
 
@@ -80,33 +80,36 @@
 
                 // This is used to manage the sign in options (sign in as customer or restaurant)
                 document.addEventListener("DOMContentLoaded", function () {
-                    const dropdown = document.querySelector('.dropdown-signIn');
-                    const dropdownMenu = document.querySelector('.dropdown-signIn-option');
+                // This is used to manage the sign in options (sign in as customer or restaurant)
+                const dropdown = document.querySelector('.dropdown-signIn');
+                const dropdownMenu = document.querySelector('.dropdown-signIn-option');
 
-                    // Toggle the dropdown on click of "Sign In"
-                    dropdown.addEventListener('click', function (event) {
-                        if (event.target.tagName === 'A' && event.target.closest('.dropdown-signIn-option')) {
-                            return; // stop further execution of this function
-                        }
-                        event.preventDefault(); // Prevent default behaviour (avoid browsers jump to the top of the page)
-                        // use to toggle the dropdown
-                        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-                    });
-
-                    // Close the dropdown if clicked outside
-                    document.addEventListener('click', function (event) {
-                        if (!dropdown.contains(event.target)) {
-                            dropdownMenu.style.display = 'none';
-                        }
-                    });
+                // Toggle the dropdown on click of "Sign In"
+                dropdown.addEventListener('click', function (event) {
+                    // Check if the clicked element have link inside 
+                    if (event.target.tagName === 'A' && event.target.closest('.dropdown-signIn-option')) {
+                        return; // stop further execution of this function
+                    }
+                    event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
+                    // use to toggle the dropdown
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });
 
-                // Close the alert box
-                function closeAlert() {
-                    document.querySelector('.alert-overlay').style.display = 'none';
-                }
+                // Close the dropdown if clicked outside
+                document.addEventListener('click', function (event) {
+                    if (!dropdown.contains(event.target)) {
+                        dropdownMenu.style.display = 'none';
+                    }
+                });
+            });
+
+            // Close the alert box
+            function closeAlert() {
+                document.querySelector('.alert-overlay').style.display = 'none';
+            }
+
             </script>
-            
+
             <div class="login-container">
                 <p>Already have an account? <a href="/customers/sign-in">Login Here</a></p>
                 <div class="button-container">

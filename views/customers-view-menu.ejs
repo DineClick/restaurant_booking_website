@@ -1,0 +1,51 @@
+<!-- View Menu Page for Selected Restaurant --> 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>View Menu Page</title>
+        <link rel="stylesheet" href="/main.css">
+    </head>
+
+    <body class="view-menu-page">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    <li><a href="/customers/homepage">Home</a></li>
+                    <li><a href="/customers/about-us">About</a></li>
+                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/homepage">My Bookings</a></li>
+                    <li><a href="/customers/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+      
+            
+            
+            <!-- Menu List -->
+            <div class = "menu-list">
+                <h2>Menu:</h2>
+                <ul>
+                    <% restaurant_menu.forEach((menu, index) => { %> 
+                        <%= index + 1%>. <%= menu.menu_name %> <br>
+                        <div class = menu-item-image-wrapper>
+                            <img src= "<%= menu.menu_image %>" alt = "Missing Menu Image" class = "menu-item-image"> <br>
+                        </div>
+                        <br>
+                    <% }) %>
+                </ul> 
+            </div>
+
+            <!-- Go back to Booking Page--> 
+            <form action="/customers/book" method="GET" class="back-to-booking-button">
+                <button name = "bookRestaurant" type="submit" value = "<%= restaurant_id %>" class="book-button">Back to Booking</button>
+            </form>
+    </body>
+</html>

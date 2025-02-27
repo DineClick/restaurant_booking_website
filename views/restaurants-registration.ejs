@@ -16,6 +16,7 @@
                 </div>
 
                 <ul class="nav-buttons">
+                    
                     <li><a href="/restaurants">Home</a></li>
                     <li><a href="/restaurants/about">About</a></li>
                     <li><a href="/restaurants/list">Restaurants</a></li>
@@ -46,28 +47,28 @@
             <!-- Restaurant Registration Form -->
             <form action="/restaurants/registration" method="POST" enctype="multipart/form-data" class="registration-form">
                 <label for="restaurant_name">Restaurant Name:</label>
-                <input type="text" id="restaurant_name" name="restaurant_name" required placeholder="Enter restaurant name"/><br /><br />
+                <input type="text" id="restaurant_name" name="restaurant_name" required/><br /><br />
 
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter email"/><br /><br />
+                <input type="email" id="email" name="email" required /><br /><br />
 
                 <label for="restaurant_phone_number">Phone Number:</label>
-                <input type="text" id="restaurant_phone_number" name="restaurant_phone_number" required placeholder="Enter phone number"/><br /><br />
+                <input type="text" id="restaurant_phone_number" name="restaurant_phone_number"/><br /><br />
 
                 <label for="restaurant_address">Address:</label>
-                <input type="text" id="restaurant_address" name="restaurant_address" required placeholder="Enter address"/><br /><br />
+                <input type="text" id="restaurant_address" name="restaurant_address"/><br /><br />
 
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required placeholder="Choose a password"/><br /><br />
+                <input type="password" id="password" name="password" required/><br /><br />
 
                 <label for="restaurant_description">Description:</label>
-                <input type="text" id="restaurant_description" name="restaurant_description" placeholder="Enter a description"/><br /><br />
+                <input type="text" id="restaurant_description" name="restaurant_description"/><br /><br />
     
                 <label for="restaurant_image">Profile Picture: </label><br>
-                <input type="file" id="restaurant_image" name="restaurant_image" accept="image/*"/><br><br>
-                <img id="imagePreview" style="max-width: 300px; display: none;" alt="Profile Picture Preview"> <br><br>
+                <input type="file" id="restaurant_image" name="restaurant_image"/><br><br>
+                <img id="imagePreview" style="max-width: 250px; max-height:350px; border-radius: 16px; display: none;"> <br><br>
                 
-                <button type="submit" class="register-button">Register</button>
+                <button type="submit">Register</button>
             </form>
 
             <script>
@@ -93,10 +94,11 @@
 
                 // Toggle the dropdown on click of "Sign In"
                 dropdown.addEventListener('click', function (event) {
+                    // Check if the clicked element have link inside 
                     if (event.target.tagName === 'A' && event.target.closest('.dropdown-signIn-option')) {
                         return; // stop further execution of this function
                     }
-                    event.preventDefault(); // Prevent default behaviour (avoid browsers jump to the top of the page)
+                    event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
                     // use to toggle the dropdown
                     dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });

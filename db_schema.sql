@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS restaurant (
     restaurant_password TEXT NOT NULL,
     restaurant_description TEXT,
     restaurant_image TEXT, -- Store pathing, example: "/restaurant-images/example.jpg"
-    restaurant_floorplan_image TEXT -- -- Store pathing, example: "/restaurant-images/example.jpg"
+    restaurant_floorplan_image TEXT, -- Store pathing, example: "/restaurant-images/example.jpg"
+    restaurant_opening_time TIME NOT NULL DEFAULT "00:00:00", -- HH:MM:SS 
+    restaurant_closing_time TIME NOT NULL DEFAULT "23:59:00" -- HH:MM:SS 
 );
 
 CREATE TABLE IF NOT EXISTS seating_list (
@@ -42,9 +44,9 @@ CREATE TABLE IF NOT EXISTS reservations (
     customer_id INT NOT NULL,
     rest_id INT NOT NULL,
     reservation_date TEXT NOT NULL,
-    booking_time TEXT NOT NULL,
-    slot TEXT NOT NULL,
-    num_guests INTEGER DEFAULT 1,
+    dining_time TIME NOT NULL, --HH:MM:SS from text (from slot)
+    booking_time DATETIME NOT NULL, --YYYY-MM-DD HH:MM:SS from text
+    num_guests INT DEFAULT 1,
     special_request TEXT, -- Any customer special request
     table_id INT NOT NULL, -- Table assigned for the reservation
     status TEXT DEFAULT 'pending', -- Status of the reservation
