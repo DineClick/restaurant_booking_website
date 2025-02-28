@@ -38,13 +38,12 @@ CREATE TABLE IF NOT EXISTS restaurant_table_list (
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS reserved_seating_list (
+CREATE TABLE IF NOT EXISTS reserved_seating_list ( -- Table of already reserved seats
     seating_id INTEGER PRIMARY KEY AUTOINCREMENT, -- unique for a specific table in a specific restaurant at a specific time
     restaurant_id INT NOT NULL,
     table_id INT NOT NULL,
-    available_date DATE NOT NULL, -- YYYY-MM-DD
-    available_time TIME NOT NULL, -- HH:MM:SS 
-    table_status TEXT NOT NULL DEFAULT "UNBOOKED", -- "UNBOOKED" or "BOOKED" 
+    dining_date DATE NOT NULL, -- YYYY-MM-DD
+    dining_time TIME NOT NULL, -- HH:MM:SS 
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE,
     FOREIGN KEY (table_id) REFERENCES restaurant_table_list(table_id) ON DELETE CASCADE
 );
@@ -58,7 +57,7 @@ CREATE TABLE IF NOT EXISTS reservations (
     booking_time DATETIME NOT NULL, --YYYY-MM-DD HH:MM:SS from text
     num_guests INT DEFAULT 1,
     special_request TEXT, -- Any customer special request
-    table_id INT NOT NULL, -- Table assigned for the reservation
+    table_id INT, -- Table assigned for the reservation // add foregin key here too
     status TEXT DEFAULT 'pending', -- Status of the reservation
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE, 
     FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
@@ -70,15 +69,6 @@ CREATE TABLE IF NOT EXISTS menu_list (
     restaurant_id INT NOT NULL,
     menu_image TEXT, -- Store pathing, example: "/restaurant-images/example.jpg"
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS pre_order_menu (
-    reservation_id INT NOT NULL,
-    menu_id INT NOT NULL,
-    menu_quantity INT NOT NULL,
-    PRIMARY KEY (reservation_id, menu_id),
-    FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE,
-    FOREIGN KEY (menu_id) REFERENCES menu_list(menu_id) ON DELETE CASCADE
 );
 
 COMMIT;
