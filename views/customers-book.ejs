@@ -1,0 +1,140 @@
+<!-- Booking Page for Selected Restaurant --> 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Booking Page</title>
+        <link rel="stylesheet" href="/main.css">
+    </head>
+
+    <body class="booking-page">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    <li><a href="/customers/homepage">Home</a></li>
+                    <li><a href="/customers/about-us">About</a></li>
+                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/homepage">My Bookings</a></li>
+                    <li><a href="/customers/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+
+        <% // Reservation is available for next day until one month later %>
+        <% // Get Current Date(YYYY-MM-DD) and Time(HH:MM) in Universal Coordinated Time (UTC) %>
+        <% var currentUTCDatetime = new Date(); %>
+        <% currentUTCDatetime.setDate(currentUTCDatetime.getDate() + 1); %>
+        <% var dateString = currentUTCDatetime.toISOString().slice(0, 10); %>
+        <% var timeString = currentUTCDatetime.toISOString().slice(11, 16); %>
+        <% // Calculate one month later %>
+        <% let aMonthLaterDateTime = new Date(); %>
+        <% aMonthLaterDateTime.setMonth(aMonthLaterDateTime.getMonth() + 1); // Add one month %>
+        <% var maxDateString = aMonthLaterDateTime.toISOString().slice(0, 10); %>
+
+        <section class = "account-booking-profile">
+            <div class = "account-booking-profile-sections">
+                <!-- Profile Picture (Left Side) -->
+                <div class = "account-booking-profile-left">
+                    <h2> <%= restaurant_data.restaurant_name %> </h2>
+                    <img src = "<%= restaurant_data.restaurant_image %>" alt = "Missing Profile Picture" class = "account-image"> <br>
+                </div>
+
+                <!-- Restaurant Data (Right Side) -->
+                <div class="account-restaurant-booking-profile-right">
+                    <!-- Description: <br> -->
+                    <%= restaurant_data.restaurant_description %> <br>
+                    Email: <%= restaurant_data.restaurant_email %> <br>
+                    Phone Number: +65 <%= restaurant_data.restaurant_phone_number %> <br>
+                    Address: <%= restaurant_data.restaurant_address %> <br>
+                    <form action="/customers/view-menu" method="GET">
+                        <button name = "viewMenu" type="submit" value = "<%= restaurant_data.restaurant_id %>" class="book-button">View Menu</button>
+                    </form>
+
+                    <form action="/customers/book" method="POST" id="bookingForm">
+                        
+                        Date: <input id="booking_date" type="date" name="booking_date" value="<%= inputted.inputtedDate %>" min="<%= dateString %>" max="<%= maxDateString %>" required/> <br>
+
+                        Dining Time: 
+                        <div class="opening_hours">
+                            <ul>
+                                <% opening_hours.forEach((hour, index) => { %>
+                                    <button id="<%= 'dining_time' + index %>" type="button" class="dining-time-btn" name="dining_time" value="<%= hour %>"><%= hour %></button>
+                                <% }) %>
+                            </ul>
+                        </div>
+
+                        <!-- Hidden Input to store the selected dining time -->
+                        <input type="hidden" id="selected_dining_time" name="dining_time" value="<%= inputted.inputtedTime %>">
+
+                        <script>
+                            const buttons = document.querySelectorAll('.dining-time-btn');
+                            selected_time = document.getElementById('selected_dining_time').value;
+                            
+                            buttons.forEach(button => {
+                                if (button.value == selected_time) {
+                                    button.classList.add('selected');
+                                }
+
+                                button.addEventListener('click', function() { 
+                                    // Deselect all buttons
+                                    buttons.forEach(btn => btn.classList.remove('selected'));
+
+                                    // Select the clicked button
+                                    this.classList.add('selected');
+                                    
+                                    // Set the value of the hidden input field to the selected choice
+                                    document.getElementById('selected_dining_time').value = this.value;
+
+                                    document.getElementById('select_table_dining_time').value = document.getElementById('selected_dining_time').value;
+                                });
+                            });
+
+                            dining_date_input = document.getElementById('booking_date');
+                            dining_date_input.addEventListener('input', function(event) {
+                                document.getElementById('select_table_dining_date').value = document.getElementById('booking_date').value;
+                            });
+                        </script>
+
+                        Number of Guests: <input id="num_guests" type="number" name="num_guests" value = "<%= inputted.inputtedNumGuests %>" min="1" required/> <br>
+                        Special Request: <input id="special_request" type="text" name="special_request" value = "<%= inputted.inputtedSpecialRequest %>"/> <br>
+                        <!-- Table Number: <strong><%= selected_table %></strong> -->
+                        <input id="table_id" type="hidden" name="table_id" value = "<%= selected_table %>"/>
+                        <!-- <button id = "bookRestaurant" name = "submitButton" type = "submit">Book</button>  -->
+                        <button id = "bookRestaurant" name = "submitButton" type = "submit" class="book-button">Confirm Booking</button> 
+                    </form>
+                    
+                    <script>
+                        num_guests_input = document.getElementById('num_guests');
+                        num_guests_input.addEventListener('input', function() {
+                            document.getElementById('select_table_num_guests').value = document.getElementById('num_guests').value;
+                        })
+
+                        special_request_input = document.getElementById('special_request');
+                        special_request_input.addEventListener('input', function() {
+                            document.getElementById('select_table_special_request').value = document.getElementById('special_request').value;
+                        })
+                    </script>
+
+                    <!-- <br> -->
+                    <form action="/customers/select-table" method="GET" class="seat-selection-btn">
+                        <p>Please choose your prefered seat:</p>
+                        <input type="hidden" id="select_table_dining_date" name="select_table_dining_date" value="<%= inputted.inputtedDate %>" required>
+                        <input type="hidden" id="select_table_dining_time" name="select_table_dining_time" value="<%= inputted.inputtedTime %>" required>
+                        <input type="hidden" id="select_table_num_guests" name="select_table_num_guests" value = "<%= inputted.inputtedNumGuests %>"/> 
+                        <input type="hidden" id="select_table_special_request" name="select_table_special_request" value = "<%= inputted.inputtedSpecialRequest %>"/> 
+                        <input type="hidden" id="select_table_selected_table" name="select_table_selected_table" value="<%= selected_table %>">
+                        <button id = "selectTable" name = "selectTable" type="submit" class="book-button">Select Table</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

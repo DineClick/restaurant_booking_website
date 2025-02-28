@@ -1,0 +1,62 @@
+<!-- Customers List of Restaurants Page --> 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Customers - Restaurant Page</title>
+        <link rel="stylesheet" href="/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+
+    <body class="customers-list-page">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    <li><a href="/customers/homepage">Home</a></li>
+                    <li><a href="/customers/about-us">About</a></li>
+                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/homepage">My Bookings</a></li>
+                    <li><a href="/customers/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        
+        <div class = "restaurant-search">
+            <form action="/restaurants/list" method="GET">
+                <div class="search-restaurant-box">
+                <input type = "text" name = "searchedKeywords" placeholder = "Search..." class="search-restaurant-input">
+                <button type="submit" class="search-icon">
+                    <i class="fas fa-search"></i>
+                </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Restaurant List -->
+        <div class = "restaurant-list">
+            <% restaurant_list.forEach((restaurant) => { %>
+                <div class="restaurant-card">
+                    <img src= "<%= restaurant.restaurant_image %>" alt="Missing Restaurant Image" class = restaurant-list-image>
+                    <div class="restaurant-details">
+                    <h3><%= restaurant.restaurant_name %></h3>
+                    
+                    <p><%= restaurant.restaurant_description %></p>
+
+                    <form action="/customers/book" method="GET">
+                        <button name = "bookRestaurant" type="submit" value = "<%= restaurant.restaurant_id %>" class="book-button">Book</button>
+                    </form>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </body>
+</html>
+
