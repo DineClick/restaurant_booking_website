@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); 
 
 // For hashing passwords
 const bcrypt = require("bcrypt");
@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs'); 
-
+ 
 //Set the Storage for Customer-related Images Destination and Filename Format Using multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -317,8 +317,17 @@ router.get("/book", (req, res) => {
     const buttonClicked = req.query.bookRestaurant;
     restaurantData = buttonClicked.match(/(\d+)/);
     restaurantID = restaurantData[0];
-    req.session.selected_restaurant_id = restaurantID;  
-                    
+    req.session.selected_restaurant_id = restaurantID;
+
+    //Saved Inputs
+    inputtedDate = req.query.inputted_date;
+    inputtedTime = req.query.inputted_time;
+    inputtedNumGuests = req.query.inputted_num_guests;
+    inputtedSpecialRequest = req.query.inputted_special_request;
+    inputted = {inputtedDate: inputtedDate, inputtedTime: inputtedTime, inputtedNumGuests: inputtedNumGuests, inputtedSpecialRequest: inputtedSpecialRequest};
+
+    selectedTableID = req.query.book_selected_table;
+         
     //Execute the query and render the page with the results
     global.db.all(restaurantDataQuery, [restaurantID], (err, restaurantDataResult) => {
         if (err) {
@@ -362,7 +371,7 @@ router.get("/book", (req, res) => {
             if (minuteCT != "00") {
                 hoursOpen.push(hourCT + ":00");
             }
-            res.render("customers-book.ejs", {restaurant_data: restaurantDataResult[0], opening_hours: hoursOpen});
+            res.render("customers-book.ejs", {restaurant_data: restaurantDataResult[0], opening_hours: hoursOpen, inputted: inputted, selected_table: selectedTableID});
         }
     });
 })
@@ -376,11 +385,11 @@ router.post("/book", (req, res) => {
     restaurantID = req.session.selected_restaurant_id;
     customerID = req.session.customer_id;
     reservationDate = req.body.booking_date;
-    diningTime = req.body.dining_time; //undefined
+    diningTime = req.body.dining_time + ":00";
     bookingTime = datetimeString;
     guestsNum = req.body.num_guests;
     specialRequest = req.body.special_request;
-    tableID = req.body.table_id; //set to 1 for now (since seat selection is not done)
+    tableID = req.body.table_id;
 
     //Define the query to book the selected restaurant
     bookingQuery = "INSERT INTO reservations (customer_id, rest_id, reservation_date, dining_time, booking_time, num_guests, special_request, table_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
@@ -395,16 +404,32 @@ router.post("/book", (req, res) => {
                     window.location.href = "/customers/list";
                 </script>`);
         } else {
+            //If a seat is selected
+            if (tableID > 0) {
+                //Define the query for reserved table
+                reservedTableQuery = "INSERT INTO reserved_seating_list (restaurant_id, table_id, dining_date, dining_time) VALUES (?, ?, ?, ?)"
+
+                global.db.all(reservedTableQuery, [restaurantID, tableID, reservationDate, diningTime], (err) => {
+                    if (err) {
+                        console.error("Database error (Customer - Book, Reserved Table):", err);
+                        return res.send(`
+                            <script>
+                                alert("Internal Server Error");
+                                window.location.href = "/customers/list";
+                            </script>`);
+                    }
+                })
+            }
             res.send(`
                 <script>
                     alert("Booking successful. You can check the details in the My Bookings Page"); 
                     window.location.href = "/customers/list";
-                </script>`);
+                </script>`);  
         }
     });
 })
 
-router.get("/view-menu", (req, res) => { //This should change to Pre-Order Menu Feature
+router.get("/view-menu", (req, res) => { 
     //Define the query for Menu of Selected Restaurant
     restaurantMenuQuery = "SELECT * FROM menu_list WHERE restaurant_id = ?";
 
@@ -424,6 +449,66 @@ router.get("/view-menu", (req, res) => { //This should change to Pre-Order Menu 
             res.render("customers-view-menu.ejs", {restaurant_menu: restaurantMenuResult, restaurant_id: restaurantID});
         }
     });
+})
+
+router.get("/select-table", (req, res) => {
+    //Get RestaurantID and Inputs
+    restaurantID = req.session.selected_restaurant_id;
+    selectedDate = req.query.select_table_dining_date; 
+    selectedTimeDatabase = req.query.select_table_dining_time + ":00"; 
+    selectedTime = req.query.select_table_dining_time; 
+    inputtedNumGuests = req.query.select_table_num_guests;
+    inputtedSpecialRequest = req.query.select_table_special_request;
+    selectedTableID = req.query.select_table_selected_table;
+
+    inputted = {selectedDate: selectedDate, selectedTime: selectedTime, inputtedNumGuests: inputtedNumGuests, inputtedSpecialRequest: inputtedSpecialRequest};
+    
+    //Define the query for Restaurant Data
+    restaurantDataQuery = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+       
+    //Execute the query and render the page with the results
+    global.db.all(restaurantDataQuery, [restaurantID], (err, restaurantDataResult) => {
+        if (err) {
+            console.error("Database error (Select Table):", err);
+            return res.send(`
+                <script>
+                    alert("Internal Server Error");
+                    window.location.href = "/restaurants/select-table";
+                </script>`);
+        } else {
+            restaurant_data = restaurantDataResult[0];
+
+            //Define the query for List of Tables in the Specific Restaurant
+            tableListQuery = "SELECT * FROM restaurant_table_list WHERE restaurant_id = ?";
+
+            //Execute the query and render the page with the results
+            global.db.all(tableListQuery, [restaurantID], (err, tableListResult) => {
+                if (err) {
+                    console.error("Database error (Select Table - Table List):", err);
+                    return res.send(`
+                        <script>
+                            alert("Internal Server Error");
+                            window.location.href = "/restaurants/select-table";
+                        </script>`);
+                } else {
+                    //Define the query for List of Reserved Seatings in the Specific Restaurant, Date, and Time
+                    reservedSeatingQuery = "SELECT * FROM reserved_seating_list WHERE restaurant_id = ? AND dining_date = ? AND dining_time = ?";
+                    global.db.all(reservedSeatingQuery, [restaurantID, selectedDate, selectedTimeDatabase], (err, reservedSeatingResult) => {
+                        if (err) {
+                            console.error("Database error (Select Table - Reserved Seating List):", err);
+                            return res.send(`
+                                <script>
+                                    alert("Internal Server Error");
+                                    window.location.href = "/restaurants/select-table";
+                                </script>`);
+                        } else {
+                            res.render("customers-select-table.ejs", {restaurant_data: restaurant_data, table_list: tableListResult, reserved_seating: reservedSeatingResult, inputted: inputted, selected_table: selectedTableID});
+                        }
+                    });
+                }
+            });
+        }
+    })
 })
 
 // Customer logout route
