@@ -1,0 +1,125 @@
+<!-- Select Table Page --> 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Select Table Page</title>
+        <link rel="stylesheet" href="/main.css">
+    </head>
+
+    <body class="select-table-page">
+        <header >
+            <!-- navigation part -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+
+                <ul class="nav-buttons">
+                    <li><a href="/customers/homepage">Home</a></li>
+                    <li><a href="/customers/about-us">About</a></li>
+                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/homepage">My Bookings</a></li>
+                    <li><a href="/customers/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class = "edit-menu">
+            <h1>Select Table</h1>
+
+            <!-- Done with Selection, Back to Booking Page --> 
+            <form action="/customers/book" method="GET">
+                <input type="hidden" id="inputted_date" name="inputted_date" value="<%= inputted.selectedDate %>"/>
+                <input type="hidden" id="inputted_time" name="inputted_time" value="<%= inputted.selectedTime %>">
+                <input type="hidden" id="inputted_num_guests" name="inputted_num_guests" value = "<%= inputted.inputtedNumGuests %>"/> 
+                <input type="hidden" id="inputted_special_request" name="inputted_special_request" value = "<%= inputted.inputtedSpecialRequest %>"/> 
+                <input type="hidden" id="book_selected_table" name="book_selected_table" value="<%= selected_table %>">
+                <button id = "selectTableDone" name = "bookRestaurant" type="submit" value = "<%= restaurant_data.restaurant_id %>">Done</button>
+            </form>
+            
+            <!-- Floorplan and Table Display-->
+            <h3> Table Arrangement: </h3>
+            <div class = edit-table-container>
+                <img id = 'floorplanImage' src= "<%= restaurant_data.restaurant_floorplan_image %>" alt="Missing Floorplan Picture" class = edit-table-image> <br>
+
+                <% tableSize = restaurant_data.restaurant_table_size; %>
+                <% available_seating = table_list; %>
+
+                <% table_list.forEach((table, index) => { %>
+                    <% tableCoordinates = table.table_coordinates.split(","); %>
+                    <% tableCoordinateX = (parseInt(tableCoordinates[0]) - (parseInt(tableSize)/2)).toString(); %>
+                    <% tableCoordinateY = (parseInt(tableCoordinates[1]) - (parseInt(tableSize)/2)).toString(); %>
+
+                    <% reserved_seating.forEach((seating) => { %>
+                        <% if (table.table_id == seating.table_id) { %>
+                            <div id = "<%= 'reservedTableSquares' + seating.table_id %>" data-table-id="<%= seating.table_id %>" class="reservedTableSquares" style="left: <%= tableCoordinateX %>px; top: <%= tableCoordinateY %>px; width: <%= tableSize %>px; height: <%= tableSize %>px;">
+                                <span><%= index + 1 %></span>
+                            </div>
+                            <% available_seating = available_seating.filter(object => object.table_id !== seating.table_id); %>
+                        <% } %>
+                    <% }) %>
+                    
+                    <% available_seating.forEach((seating) => { %>
+                        <% if (table.table_id == seating.table_id) { %>
+                            <div id = "<%='availableTableSquares' + seating.table_id %>" data-table-id="<%= seating.table_id %>" class="availableTableSquares" style="left: <%= tableCoordinateX %>px; top: <%= tableCoordinateY %>px; width: <%= tableSize %>px; height: <%= tableSize %>px;">
+                                <span><%= index + 1 %></span>
+                            </div>
+                        <% } %>
+                    <% }) %>
+                <% }) %>
+
+                <!-- Hidden Input to store the selected dining time -->
+                <input type="hidden" id="selected_table" name="seating" value="<%= selected_table %>">
+
+                <script>
+                    // Get the Array of Available Tables 
+                    const availableTables = document.querySelectorAll('.availableTableSquares');
+
+                    // Get Selected Table ID (when already selected)
+                    selected_table = document.getElementById('selected_table').value;
+                
+                    availableTables.forEach(table => {
+                        if (table.getAttribute('data-table-id') == selected_table) {
+                            table.classList.add('selected-colour');
+                        }
+
+                        table.addEventListener('click', function() {
+                            // Remove colour from all
+                            availableTables.forEach(table => {
+                                table.classList.remove('selected-colour');
+                            })
+
+                            // Show selected table
+                            this.classList.add('selected-colour');
+
+                            // Set the value of the hidden input field to the selected choice
+                            const selectedTableId = this.getAttribute('data-table-id');
+                            document.getElementById('selected_table').value = selectedTableId;
+
+                            document.getElementById('book_selected_table').value = document.getElementById('selected_table').value;
+                        });
+                    })
+                </script>
+
+                <!-- Deselect --> 
+                <button id = "deselectTable" name = "deselectTable" type="submit">Deselect</button>
+                <script>
+                    deselect_table = document.getElementById('deselectTable');
+                    deselect_table.addEventListener('click', function() { 
+                        availableTables.forEach(table => { 
+                            table.classList.remove('selected-colour');
+                        })
+
+                        // Set the value of the hidden input field to the selected choice
+                            document.getElementById('selected_table').value = "";
+                            document.getElementById('book_selected_table').value = document.getElementById('selected_table').value;
+                    });
+                </script>
+            </div>
+        </div>
+    </body>
+</html>
+ 

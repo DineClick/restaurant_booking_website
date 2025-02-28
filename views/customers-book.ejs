@@ -1,4 +1,4 @@
-<!-- Booking Page for Selected Restaurant --> 
+<!-- Booking Page for Selected Restaurant -->  
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,46 +57,77 @@
                         <button name = "viewMenu" type="submit" value = "<%= restaurant_data.restaurant_id %>">View Menu</button>
                     </form>
                     <form action="/customers/book" method="POST" id="bookingForm">
-                        Date: <input id="booking_date" type="date" name="booking_date" value="<%= dateString %>" min="<%= dateString %>" max="<%= maxDateString %>" required/> <br>
+                        Date: <input id="booking_date" type="date" name="booking_date" value="<%= inputted.inputtedDate %>" min="<%= dateString %>" max="<%= maxDateString %>" required/> <br>
 
                         Dining Time: 
                         <div class="opening_hours">
                             <ul>
-                                <% opening_hours.forEach((hour) => { %>
-                                    <button type="button" class="dining-time-btn" name="dining_time" value="<%= hour %>"><%= hour %></button>
+                                <% opening_hours.forEach((hour, index) => { %>
+                                    <button id="<%= 'dining_time' + index %>" type="button" class="dining-time-btn" name="dining_time" value="<%= hour %>"><%= hour %></button>
                                 <% }) %>
                             </ul>
                         </div>
 
                         <!-- Hidden Input to store the selected dining time -->
-                        <input type="hidden" id="selected_dining_time" name="dining_time">
+                        <input type="hidden" id="selected_dining_time" name="dining_time" value="<%= inputted.inputtedTime %>">
 
                         <script>
                             const buttons = document.querySelectorAll('.dining-time-btn');
+                            selected_time = document.getElementById('selected_dining_time').value;
                             
                             buttons.forEach(button => {
-                                button.addEventListener('click', function() {
+                                if (button.value == selected_time) {
+                                    button.classList.add('selected');
+                                }
+
+                                button.addEventListener('click', function() { 
                                     // Deselect all buttons
                                     buttons.forEach(btn => btn.classList.remove('selected'));
-                                    
+
                                     // Select the clicked button
                                     this.classList.add('selected');
                                     
                                     // Set the value of the hidden input field to the selected choice
                                     document.getElementById('selected_dining_time').value = this.value;
+
+                                    document.getElementById('select_table_dining_time').value = document.getElementById('selected_dining_time').value;
                                 });
+                            });
+
+                            dining_date_input = document.getElementById('booking_date');
+                            dining_date_input.addEventListener('input', function(event) {
+                                document.getElementById('select_table_dining_date').value = document.getElementById('booking_date').value;
                             });
                         </script>
 
-                        Number of Guests: <input id="num_guests" type="number" name="num_guests" value = 1 required/> <br>
-                        specialRequest: <input id="special_request" type="text" name="special_request"/> <br>
-                        Table: <input id="table_id" type="number" name="table_id" value = 1 required/> <br>
-    
-                        <br>
-                        <button id = "bookRestaurant" name = "submitButton" type = "submit" value = "">Book</button> 
+                        Number of Guests: <input id="num_guests" type="number" name="num_guests" value = "<%= inputted.inputtedNumGuests %>" required/> <br>
+                        specialRequest: <input id="special_request" type="text" name="special_request" value = "<%= inputted.inputtedSpecialRequest %>"/> <br>
+                        <input id="table_id" type="hidden" name="table_id" value = "<%= selected_table %>"/>
+                        <button id = "bookRestaurant" name = "submitButton" type = "submit">Book</button> 
+                    </form>
+
+                    <script>
+                        num_guests_input = document.getElementById('num_guests');
+                        num_guests_input.addEventListener('input', function() {
+                            document.getElementById('select_table_num_guests').value = document.getElementById('num_guests').value;
+                        })
+
+                        special_request_input = document.getElementById('special_request');
+                        special_request_input.addEventListener('input', function() {
+                            document.getElementById('select_table_special_request').value = document.getElementById('special_request').value;
+                        })
+                    </script>
+
+                    <form action="/customers/select-table" method="GET">
+                        <input type="hidden" id="select_table_dining_date" name="select_table_dining_date" value="<%= inputted.inputtedDate %>" required>
+                        <input type="hidden" id="select_table_dining_time" name="select_table_dining_time" value="<%= inputted.inputtedTime %>" required>
+                        <input type="hidden" id="select_table_num_guests" name="select_table_num_guests" value = "<%= inputted.inputtedNumGuests %>"/> 
+                        <input type="hidden" id="select_table_special_request" name="select_table_special_request" value = "<%= inputted.inputtedSpecialRequest %>"/> 
+                        <input type="hidden" id="select_table_selected_table" name="select_table_selected_table" value="<%= selected_table %>">
+                        <button id = "selectTable" name = "selectTable" type="submit">Select Table</button>
                     </form>
                 </div>
             </div>
-        </div>
+        </section>
     </body>
 </html>
