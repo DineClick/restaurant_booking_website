@@ -549,7 +549,6 @@ body.edit-table-page{
 .floorplan-image-wrapper {
     position: relative;
     width: 450px;
-    height: 250px;
     border-radius: 16px;
     text-align: center; 
     align-content: center;
@@ -703,7 +702,6 @@ body.edit-table-page .menu-list ol li {
 
 .edit-table-image {
     width: 1000px;         
-    height: 600px;
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     object-fit: cover;
