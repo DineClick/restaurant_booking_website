@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS reservations (
     table_id INT, -- Table assigned for the reservation // add foregin key here too
     status TEXT DEFAULT 'pending', -- Status of the reservation
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE, 
-    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
+    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE,
+    FOREIGN KEY (table_id) REFERENCES reserved_seating_list(table_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS menu_list (
