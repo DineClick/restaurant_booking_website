@@ -4,9 +4,6 @@ PRAGMA foreign_keys=ON;
 
 BEGIN TRANSACTION;
 
--- Create tables with SQL commands 
--- Tables, attributes and insertion of entries are added
-
 CREATE TABLE IF NOT EXISTS customer (
     customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
     customer_name TEXT NOT NULL,
@@ -57,10 +54,11 @@ CREATE TABLE IF NOT EXISTS reservations (
     booking_time DATETIME NOT NULL, --YYYY-MM-DD HH:MM:SS from text
     num_guests INT DEFAULT 1,
     special_request TEXT, -- Any customer special request
-    table_id INT, -- Table assigned for the reservation // add foregin key here too
-    status TEXT DEFAULT 'pending', -- Status of the reservation
+    seating_id INT, -- Table assigned for the reservation 
+    status TEXT DEFAULT 'Pending', -- Status of the reservation ["Pending", "Confirmed", "Completed"]
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE, 
-    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
+    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE,
+    FOREIGN KEY (seating_id) REFERENCES reserved_seating_list(seating_id)
 );
 
 CREATE TABLE IF NOT EXISTS menu_list (
