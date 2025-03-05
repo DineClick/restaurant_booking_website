@@ -83,7 +83,7 @@ router.post('/sign-in', async (req, res) => {
             return res.render("restaurants-sign-in.ejs", {
                 alertMessage: "Invalid email or password."
             });
-        }
+        } 
     });     
 });
 
@@ -567,6 +567,132 @@ router.post("/edit-table", (req, res, next) => {
         });
     }
 })
+
+// 8. Restaurant My Bookings Page
+router.get("/my-bookings", (req, res) => {
+    restaurantID = req.session.restaurant_id;
+    restaurantReservationsQuery = `SELECT * FROM reservations
+                                   WHERE rest_id = ? AND 
+                                         reservation_date > DATE(CURRENT_DATE, '-1 day')
+                                   ORDER BY reservation_date ASC, 
+                                            dining_time ASC`;
+    global.db.all(restaurantReservationsQuery, [restaurantID], (err, restaurantReservationsResult) => {
+        if (err) {
+            console.error("Database error (Restaurant Reservations List)", err);
+            return res.render("restaurants-my-bookings.ejs", {
+                alertMessage: "Internal Server Error"
+            }); 
+        } else {
+            distinctDateQuery = `SELECT DISTINCT reservation_date FROM reservations 
+                                 WHERE rest_id = ? AND 
+                                       reservation_date > DATE(CURRENT_DATE, '-1 day')
+                                 ORDER BY reservation_date ASC,
+                                          dining_time ASC`;
+            global.db.all(distinctDateQuery, [restaurantID], (err, distinctDateResult) => {
+                if (err) {
+                    return res.send(`
+                        <script>
+                            alert("Database error (Restaurant Distinct Date List)");
+                            window.location.href = "/restaurants/my-bookings";
+                        </script>
+                    `);
+                } else {
+                    distinctDateTimeQuery = `SELECT DISTINCT reservation_date, dining_time FROM reservations 
+                                             WHERE rest_id = ? AND 
+                                                   reservation_date > DATE(CURRENT_DATE, '-1 day')
+                                             ORDER BY reservation_date ASC, 
+                                                      dining_time ASC`;
+                    global.db.all(distinctDateTimeQuery, [restaurantID], (err, distinctDateTimeResult) => {
+                        if (err) {
+                            return res.send(`
+                                <script>
+                                    alert("Database error (Restaurant Distinct Date Time List)");
+                                    window.location.href = "/restaurants/my-bookings";
+                                </script>
+                            `);
+                        } else {
+                            allCustomerQuery = "SELECT * FROM customer";
+                            global.db.all(allCustomerQuery, (err, allCustomerResult) => {
+                                if (err) {
+                                    return res.send(`
+                                        <script>
+                                            alert("Database error (Restaurant Customer List)");
+                                            window.location.href = "/restaurants/my-bookings";
+                                        </script>
+                                    `);
+                                } else {
+                                    res.render("restaurants-my-bookings.ejs", {reservations_list: restaurantReservationsResult, distinct_date: distinctDateResult, disctinct_datetime: distinctDateTimeResult, customers_list: allCustomerResult});
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    });  
+});
+
+router.post("/my-bookings", (req, res) => {
+    restaurantID = req.session.restaurant_id;
+    const buttonClicked = req.body.submitButton;
+    reservationData = buttonClicked.match(/(\d+)/);
+    reservationID = reservationData[0];
+
+    if (buttonClicked.includes("completeReservation")) {
+        confirmReservationQuery = "UPDATE reservations SET status = 'Completed' WHERE reservation_id = ?";
+        global.db.all(confirmReservationQuery, [reservationID], (err) => {
+            if (err) {
+                console.error("Database error (Restaurant Complete Reservations)", err);
+                return res.render("restaurants-my-bookings.ejs", {
+                    alertMessage: "Internal Server Error"
+                }); 
+            } else {
+                res.redirect("/restaurants/my-bookings");
+            }
+        })
+    } else if (buttonClicked.includes("cancelReservation")) {
+        reservationQuery = "SELECT * FROM reservations WHERE reservation_id = ?";
+        global.db.all(reservationQuery, [reservationID], (err, reservationResult) => {
+            if (err) {
+                console.error("Database error (Restaurant Delete Reservations - Get Reservation)", err);
+                return res.render("restaurants-my-bookings.ejs", {
+                    alertMessage: "Internal Server Error"
+                }); 
+            } else {
+                deleteReservationQuery = "DELETE FROM reservations WHERE reservation_id = ?";
+                global.db.all(deleteReservationQuery, [reservationID], (err) => {
+                    if (err) {
+                        console.error("Restaurant Delete Reservations", err);
+                        return res.send(`
+                            <script>
+                                alert("Internal Server Error");
+                                window.location.href = "/restaurants/my-bookings";
+                            </script>`);
+                    } else {
+                        reservation = reservationResult[0];
+                        if (reservation.seating_id) {
+                            deleteReservedSeating = "DELETE FROM reserved_seating_list WHERE seating_id = ?";
+                            global.db.run(deleteReservedSeating, [reservation.seating_id], (err) => {
+                                if (err) {
+                                    return res.send(`
+                                        <script>
+                                            alert("Restaurant Reservations - Delete Seating");
+                                            window.location.href = "/restaurants/my-bookings";
+                                        </script>
+                                    `);
+                                } else {
+                                    res.redirect("/restaurants/my-bookings");
+                                }
+                            })
+                        } else {
+                            res.redirect("/restaurants/my-bookings");
+                        }
+                    }
+                });
+            }
+        });  
+    }
+});
 
 // Restaurant logout route
 router.get("/sign-out", (req, res) => {
