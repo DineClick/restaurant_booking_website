@@ -1,0 +1,71 @@
+<!-- My Bookings Page --> 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Restaurant Reservations</title>
+        <link rel="stylesheet" href="/main.css">
+    </head>
+
+    <body class="restaurant-my-bookings-page"> 
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+                <ul class="nav-buttons">
+                    <li><a href="/restaurants/homepage">Home</a></li>
+                    <li><a href="/restaurants/about-us">About</a></li>
+                    <li><a href="/restaurants/list">Restaurants</a></li>
+                    <li><a href="/restaurants/my-bookings">My Bookings</a></li>
+                    <li><a href="/restaurants/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <% var currentUTCDatetime = new Date(); %>
+        <% currentUTCDatetime.setDate(currentUTCDatetime.getDate() + 1); %>
+        <% var dateString = currentUTCDatetime.toISOString().slice(0, 10); %>
+        <% var timeString = currentUTCDatetime.toISOString().slice(11, 16); %>
+
+        <div class="reservations">
+            <h1>My Bookings</h1>            
+            <% if (reservations_list.length > 0) { %>
+                <ul>
+                    <% distinct_date.forEach((date) => { %>
+                        <%= date.reservation_date %> <br>
+                        <% disctinct_datetime.forEach((datetime) => { %>
+                            <% if (datetime.reservation_date == date.reservation_date) { %>
+                                <%= datetime.dining_time %>
+                                <% reservations_list.forEach((reservation, index) => { %>
+                                    <% if (reservation.reservation_date == datetime.reservation_date && reservation.dining_time == datetime.dining_time) { %>
+                                        <% customers_list.forEach((customer) => { %> 
+                                            <% if (customer.customer_id == reservation.customer_id) { %> 
+                                                <form action="/restaurants/my-bookings" method="POST" class="restaurant-profile-form">
+                                                    Name: <%= customer.customer_name %> <br>
+                                                    Email: <%= customer.customer_email %> <br>
+                                                    Phone Number: <%= customer.customer_phone_number %> <br>
+                                                    Number of Guests: <%= reservation.num_guests %> <br>
+                                                    Special Request: <%= reservation.special_request %> <br>
+                                                    Status: <%= reservation.status %> <br>
+                                                    <br>
+                                                    <button id = "completeReservation" name = "submitButton" type = "submit" value = "<%= 'completeReservation' + reservation.reservation_id %>" class = "account-button">Complete</button> 
+                                                    <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "account-button">Cancel</button> 
+                                                </form>
+                                                <br>
+                                            <% } %>
+                                        <% }) %>
+                                    <% } %> 
+                                <% }) %> 
+                            <% } %> 
+                        <% }) %> 
+                    <% }) %> 
+                </ul>
+            <% } else { %>
+                No reservations have been made.
+            <% } %>
+        </div>
+    </body>
+</html>
