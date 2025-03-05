@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express"); 
 const router = express.Router();
 
 // For hashing passwords
@@ -359,44 +359,80 @@ router.post("/book", (req, res) => {
     specialRequest = req.body.special_request;
     tableID = req.body.table_id;
 
-    //Define the query to book the selected restaurant
-    bookingQuery = "INSERT INTO reservations (customer_id, rest_id, reservation_date, dining_time, booking_time, num_guests, special_request, table_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    //If a seat is selected
+    if (tableID > 0) {
+        //Define the query for reserved table
+        reservedTableQuery = "INSERT INTO reserved_seating_list (restaurant_id, table_id, dining_date, dining_time) VALUES (?, ?, ?, ?)";
 
-    //Execute the query and render the page with the results
-    global.db.all(bookingQuery, [customerID, restaurantID, reservationDate, diningTime, bookingTime, guestsNum, specialRequest, tableID], (err) => {
-        if (err) {
-            console.error("Database error (Customer - Book):", err);
-            return res.send(`
-                <script>
-                    alert("Internal Server Error");
-                    window.location.href = "/customers/list";
-                </script>`);
-        } else {
-            //If a seat is selected
-            if (tableID > 0) {
-                //Define the query for reserved table
-                reservedTableQuery = "INSERT INTO reserved_seating_list (restaurant_id, table_id, dining_date, dining_time) VALUES (?, ?, ?, ?)"
+        global.db.all(reservedTableQuery, [restaurantID, tableID, reservationDate, diningTime], (err) => {
+            if (err) {
+                console.error("Database error (Customer - Book, Reserved Table):", err);
+                return res.send(`
+                    <script>
+                        alert("Internal Server Error");
+                        window.location.href = "/customers/list";
+                    </script>`);
+            } else {
+                //Define the query for the added record of reserved_seating_list
+                addedReservedSeatQuery = "SELECT * FROM reserved_seating_list ORDER BY seating_id DESC LIMIT 1";
 
-                global.db.all(reservedTableQuery, [restaurantID, tableID, reservationDate, diningTime], (err) => {
+                global.db.all(addedReservedSeatQuery, (err, addedReservedSeatResult) => {
                     if (err) {
-                        console.error("Database error (Customer - Book, Reserved Table):", err);
+                        console.error("Database error (Customer - Book, Added Reserved Seat):", err);
                         return res.send(`
                             <script>
                                 alert("Internal Server Error");
                                 window.location.href = "/customers/list";
                             </script>`);
+                    } else {
+                        seatingID = addedReservedSeatResult[0].seating_id;
+
+                        //Define the query to book the selected restaurant
+                        bookingQuery = "INSERT INTO reservations (customer_id, rest_id, reservation_date, dining_time, booking_time, num_guests, special_request, seating_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+                        //Execute the query and render the page with the results
+                        global.db.all(bookingQuery, [customerID, restaurantID, reservationDate, diningTime, bookingTime, guestsNum, specialRequest, seatingID], (err) => {
+                            if (err) {
+                                console.error("Database error (Customer - Book, chosen seat):", err);
+                                return res.send(`
+                                    <script>
+                                        alert("Internal Server Error");
+                                        window.location.href = "/customers/list";
+                                    </script>`);
+                            } else {
+                                res.send(`
+                                    <script>
+                                        alert("Booking successful. You can check the details in the My Bookings Page"); 
+                                        window.location.href = "/customers/list";
+                                    </script>`);  
+                            }
+                        });
                     }
                 })
             }
-            
-            
-            res.send(`
-                <script>
-                    alert("Booking successful. You can check the details in the My Bookings Page"); 
-                    window.location.href = "/customers/list";
-                </script>`);  
-        }
-    });
+        })
+    } else { //No table selected, no seatingID
+        //Define the query to book the selected restaurant
+        bookingQuery = "INSERT INTO reservations (customer_id, rest_id, reservation_date, dining_time, booking_time, num_guests, special_request) VALUES (?, ?, ?, ?, ?, ?, ?)"
+
+        //Execute the query and render the page with the results
+        global.db.all(bookingQuery, [customerID, restaurantID, reservationDate, diningTime, bookingTime, guestsNum, specialRequest], (err) => {
+            if (err) {
+                console.error("Database error (Customer - Book, no chosen seat):", err);
+                return res.send(`
+                    <script>
+                        alert("Internal Server Error");
+                        window.location.href = "/customers/list";
+                    </script>`);
+            } else {
+                res.send(`
+                    <script>
+                        alert("Booking successful. You can check the details in the My Bookings Page"); 
+                        window.location.href = "/customers/list";
+                    </script>`);  
+            }
+        });
+    }
 })
 
 router.get("/view-menu", (req, res) => { //This should change to Pre-Order Menu Feature
@@ -481,6 +517,142 @@ router.get("/select-table", (req, res) => {
     })
 })
 
+//Customer My Bookings Page
+router.get("/my-bookings", (req, res) => {
+    customerID = req.session.customer_id;
+    customerReservationsQuery = "SELECT * FROM reservations WHERE customer_id = ? ORDER BY reservation_date ASC";
+    global.db.all(customerReservationsQuery, [customerID], (err, customerReservationsResult) => {
+        if (err) {
+            console.error("Database error (Customer Reservations List)", err);
+            return res.render("customers-my-bookings.ejs", {
+                alertMessage: "Internal Server Error"
+            }); 
+        } else {
+            allRestaurantQuery = "SELECT * FROM restaurant";
+            global.db.all(allRestaurantQuery, (err, allRestaurantResult) => {
+                if (err) {
+                    return res.send(`
+                        <script>
+                            alert("Database error (Customer Restaurant List)");
+                            window.location.href = "/customers/my-bookings";
+                        </script>
+                    `);
+                } else {
+                    res.render("customers-my-bookings.ejs", {reservations_list: customerReservationsResult, restaurants_list: allRestaurantResult});
+                }
+            })
+        }
+    });  
+});
+
+router.post("/my-bookings", (req, res) => {
+    customerID = req.session.customer_id;
+    const buttonClicked = req.body.submitButton;
+    reservationData = buttonClicked.match(/(\d+)/);
+    reservationID = reservationData[0];
+
+    if (buttonClicked.includes("confirmReservation")) {
+        confirmReservationQuery = "UPDATE reservations SET status = 'Confirmed' WHERE reservation_id = ?";
+        global.db.all(confirmReservationQuery, [reservationID], (err) => {
+            if (err) {
+                console.error("Database error (Customer Confirm Reservations)", err);
+                return res.render("customers-my-bookings.ejs", {
+                    alertMessage: "Internal Server Error"
+                }); 
+            } else {
+                res.redirect("/customers/my-bookings");
+            }
+        })
+    } else if (buttonClicked.includes("updateReservation")) {
+        newDate = req.body.reservation_date;
+        newTime = req.body.timeOptions + ':00';
+        newNumGuests = req.body.num_guests;
+        newSpecialRequest = req.body.special_request;
+
+        reservationQuery = "SELECT * FROM reservations WHERE reservation_id = ?";
+        global.db.all(reservationQuery, [reservationID], (err, reservationResult) => {
+            if (err) {
+                console.error("Database error (Customer Update Reservations - Get Reservation)", err);
+                return res.render("customers-my-bookings.ejs", {
+                    alertMessage: "Internal Server Error"
+                }); 
+            } else {
+                reservationUpdateQuery = "UPDATE reservations SET reservation_date = ?, dining_time = ?, num_guests = ?, special_request = ?, seating_id = NULL WHERE reservation_id = ?";
+                global.db.all(reservationUpdateQuery, [newDate, newTime, newNumGuests, newSpecialRequest, reservationID], (err) => {
+                    if (err) {
+                        console.error("Customer Update Reservations", err);
+                        return res.send(`
+                            <script>
+                                alert("Internal Server Error");
+                                window.location.href = "/customers/my-bookings";
+                            </script>`);
+                    } else {
+                        reservation = reservationResult[0];
+                        if (reservation.seating_id) {
+                            deleteReservedSeating = "DELETE FROM reserved_seating_list WHERE seating_id = ?";
+                            global.db.run(deleteReservedSeating, [reservation.seating_id], (err) => {
+                                if (err) {
+                                    return res.send(`
+                                        <script>
+                                            alert("Customer Update Reservations - Delete Seating");
+                                            window.location.href = "/customers/my-bookings";
+                                        </script>
+                                    `);
+                                } else {
+                                    res.redirect("/customers/my-bookings");
+                                }
+                            })
+                        } else {
+                            res.redirect("/customers/my-bookings");
+                        }
+                    }
+                });
+            }
+        });  
+    } else if (buttonClicked.includes("cancelReservation")) {
+        reservationQuery = "SELECT * FROM reservations WHERE reservation_id = ?";
+        global.db.all(reservationQuery, [reservationID], (err, reservationResult) => {
+            if (err) {
+                console.error("Database error (Customer Delete Reservations - Get Reservation)", err);
+                return res.render("customers-my-bookings.ejs", {
+                    alertMessage: "Internal Server Error"
+                }); 
+            } else {
+                deleteReservationQuery = "DELETE FROM reservations WHERE reservation_id = ?";
+                global.db.all(deleteReservationQuery, [reservationID], (err) => {
+                    if (err) {
+                        console.error("Customer Delete Reservations", err);
+                        return res.send(`
+                            <script>
+                                alert("Internal Server Error");
+                                window.location.href = "/customers/my-bookings";
+                            </script>`);
+                    } else {
+                        reservation = reservationResult[0];
+                        if (reservation.seating_id) {
+                            deleteReservedSeating = "DELETE FROM reserved_seating_list WHERE seating_id = ?";
+                            global.db.run(deleteReservedSeating, [reservation.seating_id], (err) => {
+                                if (err) {
+                                    return res.send(`
+                                        <script>
+                                            alert("Customer Update Reservations - Delete Seating");
+                                            window.location.href = "/customers/my-bookings";
+                                        </script>
+                                    `);
+                                } else {
+                                    res.redirect("/customers/my-bookings");
+                                }
+                            })
+                        } else {
+                            res.redirect("/customers/my-bookings");
+                        }
+                    }
+                });
+            }
+        });  
+    }
+});
+
 // Customer logout route
 router.get("/sign-out", (req, res) => {
     req.session.destroy((err) => {
@@ -490,7 +662,7 @@ router.get("/sign-out", (req, res) => {
       }
       res.redirect("/customers/sign-in"); // Redirect to login page after logout
     });
-  });
+});
 
 // Export the router object so index.js can access it
 module.exports = router;
