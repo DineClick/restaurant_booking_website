@@ -635,7 +635,7 @@ router.post("/my-bookings", (req, res) => {
                                 if (err) {
                                     return res.send(`
                                         <script>
-                                            alert("Customer Update Reservations - Delete Seating");
+                                            alert("Customer Delete Reservations - Delete Seating");
                                             window.location.href = "/customers/my-bookings";
                                         </script>
                                     `);
