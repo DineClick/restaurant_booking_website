@@ -1,21 +1,36 @@
-/* Styling for website*/
+/* Styling for dine click website*/
 
-/* Home page styling */ 
-body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-menu-page, body.customer-registration-page, body.restaurant-registration-page {
+/* Make sure all pages have the same styling for the navigation button */
+body.homepage, 
+body.about-page, 
+body.sign-in-page, 
+body.account-page, 
+body.edit-menu-page, 
+body.customers-registration-page,
+body.restaurant-registration-page,
+body.customers-list-page,
+body.restaurants-list-page, 
+body.booking-page, 
+body.view-menu-page,
+body.select-table-page,
+body.edit-table-page,
+body.customer-my-bookings-page{
     font-family: sans-serif;
     padding:0;
     margin:0;
     background-color: #EFEFEF;
+    
 }
 
-/* Navigation part */
+/* ======================================================================= */
+/* Navigation button */
 .navbar {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center the navigation buttons */
+    justify-content: center; /*Center the navigation buttons*/
     background-color: rgba(0, 173, 143, 0.75);
     box-sizing: border-box;
-    position: static; /* absolute positioning for the logo */
+    position: static; /* Allow absolute positioning for the logo */
     white-space: nowrap;
     top:0;
     width:100%;
@@ -23,7 +38,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .logo {
-    left: 20px; 
+    left: 20px; /* Add space from the left edge */
 }
 
 .navbar .logo img {
@@ -62,7 +77,8 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     display: none;
     position: absolute;
     top: 150%; /* Place below the parent menu item */
-    right: -1%; 
+    right: -0.2px;
+    /* left: 30px;  */
     background: #efefef;
     min-width: 200px;
     list-style: none;
@@ -109,6 +125,8 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     }
 }
 
+/* ======================================================================= */
+/* HOMEPAGE styling */
 .reserve-button {
     background-color: #00AD8F; 
     position: absolute;
@@ -127,32 +145,32 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     background-color: #007C64;
 }
 
-/* Hero section */
+/* Hero part */
 .hero-image {
     width:100%; 
     height:50vh; 
 }
 
-/* Why Us section */
+/* Why Us */
 .why-us{
     font-size: 18px; 
     padding: 60px 100px;; 
-    text-align: left; 
+    text-align: left; /* Center align the section header */
 }
 
 .reasons {
     display: flex; 
-    justify-content: space-evenly; 
+    justify-content: space-evenly; /* Distribute the blocks evenly */
     margin: 0 auto; 
-    max-width: 1200px; 
+    max-width: 1200px; /* Limit the section width */
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
     gap: 150px;
     padding: 20px 0; 
 }
 
 .reason {
-    width: 300px; /* block size */
-    text-align: center; 
+    width: 300px; /* Consistent block size */
+    text-align: center; /* Center align text inside the block */
 }
 
 .reason img {
@@ -210,7 +228,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 /* ========================================================================= */
-/* About page styling setting */
+/* ABOUT PAGE styling*/
 
 /* About section */
 .about-section {
@@ -247,13 +265,13 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 /* ============================================================ */
-/* Sign In page styling  */
-
+/* SIGN IN page styling  */
 .sign-in-container{
-    display: flex;
-    justify-content: center;
-    align-items: center; /*Center vertically*/
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     height: 90vh; /* Full viewport height for centering */
+
 }
 
 .sign-in-box {
@@ -266,7 +284,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     width: 300px;
     margin-top: auto;
     margin-bottom: auto;
-
 }
 
 .sign-in-box h1 {
@@ -304,9 +321,24 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     background-color: #007c64;
 }
 
-/* ============================================================ */
-/* Account + Edit Menu Page Styling */
+.registration-page p{
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
 
+.registration-page a {
+    color: #007c64;
+    text-decoration: none;
+    font-weight: bold;
+}
+  
+.registration-page a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================ */
+/* Account (restaurant and customer) general styling */
 .account-profile {
     padding: 10px 5%;
     display: block;
@@ -314,17 +346,24 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     justify-content: center;
     flex-wrap: wrap;
     text-align: center;
+    background-color: #fff;
+
+    width: 60%; /* Adjust the width (e.g., 60% of the screen) */
+    max-width: 900px; /* Set a max width to prevent it from being too wide */
+    margin: 60px auto; /* Center horizontally */
+    border-radius: 12px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .account-profile-sections {
     font-size: 16px; 
     display: inline-flex; 
     justify-content: space-between;
-    gap: 100px;
+    gap: 50px;
 }
 
 .account-profile-left {
-    width: 300px; 
+    max-width: 300px; 
     height: auto; 
     line-height: 2;
     font-size: 16px; 
@@ -413,7 +452,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .account-customer-profile-right {
-    padding: 10px 5%;
     height: 550px;
     line-height: 2.5; 
     gap: 10px;
@@ -422,10 +460,18 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     justify-content: left;
     flex-wrap: wrap;
     text-align: left;
-    min-width: 400px;
 }
 
-.account-input {
+.customer-profile-form{
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    
+}
+
+.customer-profile-form .account-input {
     width: 93%; 
     padding: 10px;
     border: 1px solid #ccc;
@@ -439,11 +485,47 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     gap: 20px;
 }
 
+.account-sign-out-button{
+    background-color:#00AD8F;
+    text-align: center;
+    color: #fff;
+    padding: 10px 30px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.account-sign-out-button:hover {
+    background-color: #007c64;
+}
+
+/* ===================================================================== */
+/* Restaurant account styling (more specific)*/
+.restaurant-profile-form{
+    margin-top: 75px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.restaurant-profile-form .account-input {
+    width: 93%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
 .restaurant-profile-bottom {
     font-size: 16px; 
     display: block; 
     text-align: left;
-    padding: 0 19%;
+    padding-top: 180px; 
+    margin: 40px;
 }
 
 .restaurant-profile-bottom h3{
@@ -468,7 +550,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 
 .floorplan-image-wrapper {
     position: relative;
-    width: 500px;
+    width: 450px;
     border-radius: 16px;
     text-align: center; 
     align-content: center;
@@ -480,7 +562,7 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     height: 100%;
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .restaurant-profile-menu{
@@ -489,6 +571,8 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     text-align: left;
 }
 
+/* ========================================================================= */
+/* EDIT MENU page styling */
 .menu-item-image-wrapper {
     position: relative;
     width: 300px;    
@@ -508,22 +592,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     object-fit: cover;
-}
-
-.account-sign-out-button{
-    background-color:#00AD8F;
-    text-align: center;
-    color: #fff;
-    padding: 5px 30px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 20px;
-    cursor: pointer;
-    display: inline-flex;
-}
-
-.account-sign-out-button:hover {
-    background-color: #007C64;
 }
 
 .edit-menu {
@@ -566,8 +634,40 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .menu-list {
-    padding: 10px 0;
+    padding: 10px 20px;
+    list-style: none;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); ;
+    max-width: 500px; 
 }
+
+.menu-list h2{
+    padding-left: 0px; 
+}
+
+body.view-menu-page .menu-list {
+    padding: 10px 10px;
+    list-style: none;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); ;
+    max-width: 500px; 
+    margin: 20px 50px;
+}
+
+body.edit-table-page .menu-list {
+    background-color: #f9f9f9;
+    padding-left: 20px;
+}
+
+body.edit-table-page .menu-list ol li {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+    width: 50%;
+} 
 
 .edit-menu p {
     font-size: 16px; 
@@ -576,23 +676,96 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 .edit-menu-done-button{
-    background-color: rgba(0, 173, 143, 0.75); 
+    background-color: #00AD8F; 
     text-align: center;
     color: #fff;
     padding: 5px 30px;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 20px;
     font-size: 18px;
     cursor: pointer;
     display: inline-flex;
+    justify-content: center;
+    
 }
 
 .edit-menu-done-button:hover {
-    background-color: #7fc1a1;
+    background-color: #007C64;
+}
+
+.edit-table-container {
+    position: relative;
+    width: 500px;
+    border-radius: 16px;
+    text-align: center; 
+    align-content: center;
+    color: #505050;  
+}
+
+.edit-table-image {
+    width: 1000px;         
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    object-fit: contain;
+    position: relative;
+}
+
+.edit-table-container p {
+    font-size: 14px;
+}
+
+.tableSquares {
+    position: absolute;
+    background-color: rgb(0, 179, 255);
+    border: 2px solid rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* ============================================================ */
-/* Customer and Restaurant Registration Page Styling */
+/* VIEW MENU page styling */
+.back-to-booking-button{
+    padding-left: 20px;
+}
+
+/* ============================================================ */
+/* REGISTRATION Page (customer and restaurant) Styling */
+
+/* Button to access customer or restaurant registration page */
+.toggle-container {
+    display: flex;
+    overflow: hidden;
+    margin-left: 535px;
+    margin-bottom: 0px;
+    margin-top: 60px;
+}
+
+.toggle-btn {
+    flex: 1; /* Makes both buttons equal in size */
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s, color 0.3s;
+    width: 320px; 
+}
+
+.toggle-btn.active {
+    background-color: #00AD8F; /* Colour when click the button*/
+    color: white;
+}
+
+.toggle-btn.inactive {
+    background-color: #E0E0E0; 
+    color: #A0A0A0;
+}
+
 .registration h1{
     text-align: center;
     font-size: 36px;
@@ -600,14 +773,12 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     font-weight: bold;
 }
 
-/* customer and restaurant registration form */
 .registration-form {
     width: 100%;
     max-width: 600px;
-    margin: 40px auto;
+    margin-left: 535px;
     padding: 20px;
     background-color: white;
-    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
   
@@ -646,7 +817,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     background-color: #007c64;
 }
 
-/* login container style */
 .login-container {
     text-align: center;
     margin-top: 20px;
@@ -671,7 +841,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     text-decoration: underline;
 }
   
-/* button container */
 .button-container {
     display: flex;
     justify-content: center;
@@ -679,7 +848,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     margin-top: 10px;
 }
 
-/* button style */
 .button-container button {
     padding: 10px 15px;
     border-radius: 8px;
@@ -696,8 +864,119 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 }
 
 /* ============================================================ */
-/* Alert Box */
-/* Alert Overlay */
+/* LIST OF RESTAURANTS PAGE styling (customer and restaurant) */
+
+.restaurant-image { /* used to display customer account profile*/
+    width: 250px;       
+    height: 350px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.restaurant-list {
+    display: flex;
+    gap: 70px;
+    flex-wrap: wrap;
+    padding: 50px;
+    padding-bottom: 20px;
+}
+
+.restaurant-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+
+    width: 250px;
+    height: 350px;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Styling for restaurant image inside the card */
+.restaurant-list-image {
+    width: 100%;
+    height: 180px;
+}
+
+/* Info section styling */
+.restaurant-details {
+    padding: 15px;
+    text-align: center;
+}
+
+.restaurant-details h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.restaurant-details p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Book button styling */
+.book-button {
+    background-color: #00AD8F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    /* display: block;  */
+}
+
+.book-button:hover {
+    background-color: #007c64;
+}
+
+.restaurant-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+/* Search Box */
+.search-restaurant-box {
+    position: relative;
+    width: 250px;
+}
+
+/* Search Input */
+.search-restaurant-input {
+    width: 80%;
+    padding: 10px 40px 10px 15px; /* Add space for the icon */
+    border: 2px solid #62b5a8;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Search Icon Button */
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #62b5a8;
+    font-size: 18px;
+}
+
+.search-icon:hover {
+    color: #4a9872;
+}
+
+/* ====================================================== */
+/* ALERT BOX Styling */
 .alert-overlay {
     position: fixed;
     top: 0;
@@ -711,7 +990,6 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
     z-index: 9999; /* Ensure the alert box is on top of other elements */
 }
 
-/* Alert Box Styling */
 .alert-box {
     background-color: #fff;
     color: #333;
@@ -735,5 +1013,178 @@ body.homepage, body.about-page, body.sign-in-page, body.account-page, body.edit-
 
 .alert-box button:hover {
     background-color: #007c64;
+}
 
+/* ========================================================================= */
+/* CUSTOMER BOOKING PAGE Styling */
+.account-booking-profile{
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.account-booking-profile-sections{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.account-booking-profile-left{
+    flex: 1;
+    text-align: center;
+}
+
+.account-restaurant-booking-profile-right{
+    flex: 2;
+    padding-top: 60px ;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    line-height: 2.25;
+}
+
+#bookingForm {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#bookingForm input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Dining Time Buttons Styling */
+.opening_hours ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dining-time-btn {
+    background-color: #ffffff;
+    border: 2px solid #00ad8f;
+    color: #00ad8f;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 14px;
+}
+
+.dining-time-btn:hover {
+    background-color: #00ad8f;
+    color: #fff;
+}
+
+.dining-time-btn.selected {
+    background-color: #00ad8f;
+    color: white;
+    font-weight: bold;
+}
+
+/* Table colour change to red when reserved */
+.reservedTableSquares {
+    position: absolute;
+    background-color: rgb(255, 0, 0);
+    border: 2px solid rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.availableTableSquares {
+    position: absolute;
+    background-color: rgb(181, 180, 180);
+    border: 2px solid rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.selected-colour {
+    background-color: #00AD8F;
+}
+
+/* Notes to let user know which table is available */
+.table-notes h3{
+    color: black; 
+    margin-top: 20px; 
+}
+
+.table-notes p{
+    color: black; 
+    font-size: 16px; 
+}
+
+.seat-selection-btn {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-container{
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    transform: translateX(50%); 
+}
+
+.button-container .table-selection-button{
+    gap: 10px; 
+    background-color: #00AD8F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* My booking page styling */
+
+.reservation-details{
+    font-size: 16px; 
+    display: inline-flex; 
+    /* justify-content: space-between; */
+    gap: 50px;
+    height: 100%;
+    padding: 0px; 
+}
+
+.reservation-details-right {
+    padding: 10px 5%;
+    height: auto; /* Allow it to adapt */
+    line-height: 2.5; 
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-wrap: wrap;
+    text-align: left;
+    flex: 2; /* Allows it to take more space */
+    min-width: 350px; /* Reduce for smaller screens */
+    max-width: 600px; /* Prevent it from being too wide */
+}
+
+.my-bookings-notes{
+    width: 50vw;
 }
