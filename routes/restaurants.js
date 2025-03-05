@@ -211,16 +211,12 @@ router.post("/account", upload.fields([{name: 'restaurant_image'}, {name: 'resta
         //Execute the query and render the page with the results
         global.db.run(updateRestaurantAccountQuery, updateRestaurantAccount, (err) => {
             if (err) {
-                next(err);
-                /*
                 return res.send(`
                     <script>
                         alert("Update Failed");
                         window.location.href = "/restaurants/account";
                     </script>
                 `);
-                */
-               
             } else {
                 res.redirect("/restaurants/account");
             }
