@@ -21,14 +21,14 @@
                     <li><a href="/customers/homepage">Home</a></li>
                     <li><a href="/customers/about-us">About</a></li>
                     <li><a href="/customers/list">Restaurants</a></li>
-                    <li><a href="/customers/homepage">My Bookings</a></li>
+                    <li><a href="/customers/my-bookings">My Bookings</a></li>
                     <li><a href="/customers/account">Account</a></li>
                 </ul>
             </nav>
         </header>
-
-        <!-- Show alert message -->
-        <% if (typeof alertMessage !== 'undefined') { %>
+        
+         <!-- Show alert message -->
+         <% if (typeof alertMessage !== 'undefined') { %>
             <div class="alert-overlay">
                 <div class="alert-box">
                     <p><%= alertMessage %></p>
@@ -36,7 +36,7 @@
                 </div>
             </div>
         <% } %>
-        
+
         <script>
             // Function to display the chosen file name
             function displayFileName(fileUploadID, fileNameID) {
@@ -75,7 +75,7 @@
 
                 <!-- Customer Data (Right Side) -->
                 <div class="account-customer-profile-right">
-                    <form action="/customers/account" method="POST">
+                    <form action="/customers/account" method="POST" class="customer-profile-form">
                         Name: <input id="customer_name" type="text" name="customer_name" value= "<%= customer_data.customer_name %>" class = "account-input" required/> <br>
                         Email: <input id="customer_email" type="text" name="customer_email" value= "<%= customer_data.customer_email %>" class = "account-input" required/> <br>
                         Phone Number: +65 <input id="customer_phone_number" type="text" name="customer_phone_number" value= "<%= customer_data.customer_phone_number %>" class = "account-input" required/> <br>

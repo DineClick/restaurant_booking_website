@@ -17,7 +17,8 @@
                     <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
                 </div>
 
-                <ul class="nav-buttons">                    
+                <ul class="nav-buttons">
+                    
                     <li><a href="/restaurants/homepage">Home</a></li>
                     <li><a href="/restaurants/about-us">About</a></li>
                     <li><a href="/restaurants/list">Restaurants</a></li>
@@ -72,15 +73,17 @@
                     <br>
                 </div>
 
-                <!-- Restaurant Data (Right Side) -->
+                <!-- Restaurant Data (Right Side) --> 
                 <div class="account-restaurant-profile-right">
-                    <form action="/restaurants/account" method="POST">
+                    <form action="/restaurants/account" method="POST" class="restaurant-profile-form">
                         Name: <input id="restaurant_name" type="text" name="restaurant_name" value= "<%= restaurant_data.restaurant_name %>" class = "account-input" required/> <br>
                         Description: <input id="restaurant_description" type="text" name="restaurant_description" value= "<%= restaurant_data.restaurant_description %>" class = "account-input"/> <br>
                         Email: <input id="restaurant_email" type="text" name="restaurant_email" value= "<%= restaurant_data.restaurant_email %>" class = "account-input" required/> <br>
                         Phone Number: +65 <input id="restaurant_phone_number" type="text" name="restaurant_phone_number" value= "<%= restaurant_data.restaurant_phone_number %>" class = "account-input" required/> <br>
                         Password: <input id="restaurant_password" type="password" name="restaurant_password" value= "<%= restaurant_data.restaurant_password %>" class = "account-input" required/> <br>
                         Address: <input id="restaurant_address" type="text" name="restaurant_address" value= "<%= restaurant_data.restaurant_address %>" class = "account-input" required/> <br>
+                        Opening Time: <input id="restaurant_opening_time" type="time" name="restaurant_opening_time" value= "<%= restaurant_data.restaurant_opening_time.split(':').slice(0, 2).join(':') %>"  class = "account-input" required/> <br>
+                        Closing Time: <input id="restaurant_closing_time" type="time" name="restaurant_closing_time" value= "<%= restaurant_data.restaurant_closing_time.split(':').slice(0, 2).join(':') %>" class = "account-input" required/> <br>
                         <br>
                         <div class="account-update-delete-button">
                             <button id = "updateRestaurantAccount" name = "submitButton" type = "submit" value = "updateRestaurantAccount" class = "account-button">Update</button> 
@@ -90,7 +93,7 @@
                 </div>
             </div>
 
-            <div class = "restaurant-profile-bottom">
+            <div class = "restaurant-profile-bottom"> 
                 <!-- Edit Floorplan -->
                 <div class = "restaurant-profile-floorplan">
                     <h3> Floorplan: </h3>
@@ -105,6 +108,9 @@
                             <div class = "account-image-file-name" id = "floorplanImageFileName">No file chosen</div>
                             <button id = "updateFloorplanImage" name = "submitButton" type = "submit" value = "updateFloorplanImage" class = "account-button">Update Floorplan</button>
                         </div>
+                    </form>
+                    <form action="/restaurants/edit-table" method="GET">
+                        <button name = "editTable" type="submit" class = "account-button">Edit Table Arrangement</button>
                     </form>
                 </div>
 

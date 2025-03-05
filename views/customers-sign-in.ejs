@@ -22,7 +22,7 @@
                     
                     <li><a href="/customers">Home</a></li>
                     <li><a href="/customers/about">About</a></li>
-                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/sign-in">Restaurants</a></li>
                     <li><a href="/customers">My Bookings</a></li>
                     <li class="dropdown-signIn">
                         <a href="#">Sign In</a>
@@ -52,13 +52,13 @@
     
                 <br><br>
     
-                <div class="registration-page"></div>
+                <div class="registration-page">
                     <p>Don't have an account ? <a href="/customers/registration">Register here</a></p>
                 </div>
     
             </div>
         </div>
-
+        
         <!-- show alert box -->
         <% if (typeof alertMessage !== 'undefined') { %>
             <div class="alert-overlay">
@@ -68,7 +68,7 @@
                 </div>
             </div>
         <% } %>
-        
+
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // This is used to manage the sign in options (sign in as customer or restaurant)
@@ -77,10 +77,11 @@
 
                 // Toggle the dropdown on click of "Sign In"
                 dropdown.addEventListener('click', function (event) {
+                    // Check if the clicked element have link inside 
                     if (event.target.tagName === 'A' && event.target.closest('.dropdown-signIn-option')) {
                         return; // stop further execution of this function
                     }
-                    event.preventDefault(); // Prevent default behaviour (avoid browsers jump to the top of the page)
+                    event.preventDefault(); // Prevent default behavior for the "Sign In" parent link (avoid browsers jump to the top of the page)
                     // use to toggle the dropdown
                     dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
                 });
@@ -97,7 +98,7 @@
             function closeAlert() {
                 document.querySelector('.alert-overlay').style.display = 'none';
             }
-            
+
         </script>
     </body>
 </html>

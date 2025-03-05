@@ -1,0 +1,220 @@
+<!-- My Bookings Page -->   
+
+<!DOCTYPE html> 
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Reservations</title>
+        <link rel="stylesheet" href="/main.css">
+    </head>
+
+    <body class="customer-my-bookings-page">
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="/images/dine_click_logo.png" alt="Dine Click Logo">
+                </div>
+                <ul class="nav-buttons">
+                    <li><a href="/customers/homepage">Home</a></li>
+                    <li><a href="/customers/about-us">About</a></li>
+                    <li><a href="/customers/list">Restaurants</a></li>
+                    <li><a href="/customers/my-bookings">My Bookings</a></li>
+                    <li><a href="/customers/account">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <% var currentUTCDatetime = new Date(); %>
+        <% currentUTCDatetime.setDate(currentUTCDatetime.getDate() + 1); %>
+        <% var dateString = currentUTCDatetime.toISOString().slice(0, 10); %>
+        <% var timeString = currentUTCDatetime.toISOString().slice(11, 16); %>
+        <% let aMonthLaterDateTime = new Date(); %>
+        <% aMonthLaterDateTime.setMonth(aMonthLaterDateTime.getMonth() + 1); // Add one month %>
+        <% var maxDateString = aMonthLaterDateTime.toISOString().slice(0, 10); %>
+
+        <div class="reservations">
+            <div class="my-bookings-notes">
+                <h2>Important: </h2> 
+                <p>1. Seating will not be chosen or reserved if reservation information is updated </p>
+                <p>2. Reservation details cannot be updated after the confirm button is clicked </p><br>
+            </div>
+            
+            <% if (reservations_list.length > 0) { %>
+                <ul>
+                    <h2>Confirmed:</h2>
+                        <div class="account-profile">
+                            <% reservations_list.forEach((reservation, index) => { %>
+                                <% if (reservation.status == 'Confirmed') { %>
+                                    <div class="reservation-details">
+                                        <div class="account-profile-left">
+                                            <input type="hidden" id="reservationID" name="reservationID" value="<%= reservation.reservation_id %>">
+                                            <% restaurants_list.forEach((restaurant) => { %> 
+                                                <% if (restaurant.restaurant_id == reservation.rest_id) { %> 
+                                                    <%= index + 1 %>. <%= restaurant.restaurant_name %> <br>
+                                                    <img src = "<%= restaurant.restaurant_image %>" alt = "Missing Profile Picture" class = account-image>
+                                                <% } %>
+                                            <% }) %>
+                                        </div>
+
+                                        <div class="reservation-details-right">
+                                            <form action="/customers/my-bookings" method="POST" class="customer-profile-form">
+                                                Date: <%= reservation.reservation_date %> <br>
+                                                Dining Time: <%= reservation.dining_time %> <br>
+                                                Number of Guests: <%= reservation.num_guests %> <br>
+                                                Special Request: <%= reservation.special_request %> <br>
+                                                Status: <%= reservation.status %> <br>
+                                                <br>
+                                                <button id = "cannotConfirm" name = "cannotConfirm" type = "submit" class = "account-button" disabled>Confirmed</button> 
+                                                <button id = "cannotUpdate" name = "cannotUpdate" type = "submit" class = "account-button" disabled>Update</button> 
+                                                <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "account-button">Cancel</button> 
+                                            </form>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <br>
+                            <% }) %> 
+                        </div>
+
+                        <h2>Pending: </h2>
+                            <div class="account-profile">
+                                <% reservations_list.forEach((reservation, index) => { %>
+                                <% if (reservation.status == 'Pending') { %>
+                                <div class="reservation-details">
+                                    <div class="account-profile-left">
+                                        <input type="hidden" id="reservationID" name="reservationID" value="<%= reservation.reservation_id %>">
+                                            <% restaurants_list.forEach((restaurant) => { %> 
+                                                <% if (restaurant.restaurant_id == reservation.rest_id) { %> 
+                                                    <%= index + 1 %>. <%= restaurant.restaurant_name %> 
+                                                    <img src = "<%= restaurant.restaurant_image %>" alt = "Missing Profile Picture" class = account-image>
+                                                    <input type="hidden" id="<%= 'opening_time' + reservation.reservation_id %>" name="opening_time" value="<%= restaurant.restaurant_opening_time %>">
+                                                    <input type="hidden" id="<%= 'closing_time' + reservation.reservation_id %>" name="closing_time" value="<%= restaurant.restaurant_closing_time %>">
+                                                <% } %>
+                                            <% }) %>
+                                    </div>
+                                
+                                    <div class="reservation-details-right">
+                                        <form action="/customers/my-bookings" method="POST" class="customer-profile-form">
+                                            Date: <input id="reservation_date" type="date" name="reservation_date" value="<%= reservation.reservation_date %>" min="<%= dateString %>" max="<%= maxDateString %>" class = "account-input" required/>
+                                            Dining Time: 
+                                            <select name="timeOptions" id="<%= 'timeOptions' + reservation.reservation_id %>" class="account-input" required>
+                                                <!-- The dropdown will appear here -->
+                                            </select>
+                                            <br>
+                                            
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    const reservationID = '<%= reservation.reservation_id %>';
+
+                                                    openingTimeID = 'opening_time' + reservationID;
+                                                    opening_time = document.getElementById(openingTimeID).value;
+                                                    hourOT = opening_time.split(":")[0];
+                                                    minuteOT = opening_time.split(":")[1];
+                            
+                                                    closing_timeID = 'closing_time' + reservationID;
+                                                    closing_time = document.getElementById(closing_timeID).value;
+                                                    hourCT = closing_time.split(":")[0];
+                                                    minuteCT = closing_time.split(":")[1];
+                            
+                                                    //Get time (per hour) restaurant is open from opening time to closing time
+                                                    hoursOpen = [];
+                            
+                                                    intHourOT = parseInt(hourOT);
+                                                    intHourCT = parseInt(hourCT);
+                            
+                                                    if (minuteOT == "00") {hoursOpen.push(hourOT + ":00");}
+                                                    intHourOT = intHourOT + 1;
+                                                    while (intHourOT < intHourCT) {
+                                                        if (intHourOT < 10) {strHourOT = "0" + intHourOT.toString();}
+                                                        else {strHourOT = intHourOT.toString();}
+                                                        hoursOpen.push(strHourOT + ":00");
+                                                        intHourOT = intHourOT + 1;
+                                                    }
+                                                    if (minuteCT != "00") {hoursOpen.push(hourCT + ":00");}
+
+                                                    dropdownID = 'timeOptions' + reservationID;
+                                                    dropdownTimeOptions = document.getElementById(dropdownID);
+
+                                                    hoursOpen.forEach(time => {
+                                                        timeOption = document.createElement('option');
+                                                        timeOption.value = time;
+                                                        timeOption.textContent = time;
+                                                        dropdownTimeOptions.appendChild(timeOption);
+
+                                                        dining_time = time + ':00';
+                                                        if (dining_time === '<%= reservation.dining_time %>') {
+                                                            timeOption.selected = true;
+                                                        }
+                                                    });
+                                                })
+                                            </script>
+
+                                            Number of Guests: <input id="num_guests" type="number" name="num_guests" value="<%= reservation.num_guests %>" class="account-input" required/> <br>
+                                            Special Request: <input id="special_request" type="text" name="special_request" value="<%= reservation.special_request %>" class="account-input"/> <br>
+                                            Status: <%= reservation.status %> <br>
+
+                                            <% reservedDate = reservation.reservation_date %>
+                                            <% reservedTime = reservation.dining_time %>
+                                            <% reservedDateYear = parseInt(reservedDate.slice(0, 4)); %>
+                                            <% reservedDateMonth = parseInt(reservedDate.slice(5, 7)); %>
+                                            <% reservedDateDate = parseInt(reservedDate.slice(8, 10)); %>
+                                            <% reservedTimeHour = parseInt(reservedTime.slice(0, 2)); %>
+                                            <% reservedTimeMinute = parseInt(reservedTime.slice(3, 5)); %>
+                                            <% reservedDateTime = new Date(Date.UTC(reservedDateYear, reservedDateMonth, reservedDateDate, reservedTimeHour, reservedTimeMinute)); %>
+                                            <% canConfirmDateTime = new Date(reservedDateTime); %>
+                                            <% canConfirmDateTime.setUTCDate(canConfirmDateTime.getUTCDate() - 1); %>
+
+                                            <% if (currentUTCDatetime < canConfirmDateTime) { %>
+                                                <button id = "cannotConfirm" name = "cannotConfirm" type = "submit" class = "account-button" disabled>Confirm</button> 
+                                            <% } else if (currentUTCDatetime > canConfirmDateTime) { %>
+                                                <button id = "confirmReservation" name = "submitButton" type = "submit" value = "<%= 'confirmReservation' + reservation.reservation_id %>" class = "account-button">Confirm</button> 
+                                            <% } %>
+                                            <button id = "updateReservation" name = "submitButton" type = "submit" value = "<%= 'updateReservation' + reservation.reservation_id %>" class = "account-button">Update</button> 
+                                            <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "account-button">Cancel</button> 
+                                        </form>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }) %> 
+                        </div>
+
+                        <h2>Completed: </h2>
+                        <div class="account-profile">
+                            <% reservations_list.forEach((reservation, index) => { %>
+                                <% if (reservation.status == 'Completed') { %>
+                                    <div class="reservation-details">
+                                        <div class="account-profile-left">
+                                            <input type="hidden" id="reservationID" name="reservationID" value="<%= reservation.reservation_id %>">
+                                            <% restaurants_list.forEach((restaurant) => { %> 
+                                                <% if (restaurant.restaurant_id == reservation.rest_id) { %> 
+                                                    <%= index + 1 %>. <%= restaurant.restaurant_name %> <br>
+                                                    <img src = "<%= restaurant.restaurant_image %>" alt = "Missing Profile Picture" class = account-image>
+                                                <% } %>
+                                            <% }) %>
+                                        </div>
+
+                                        <div class="reservation-details-right">
+                                            <form action="/customers/my-bookings" method="POST" class="customer-profile-form">
+                                                Date: <%= reservation.reservation_date %> <br>
+                                                Dining Time: <%= reservation.dining_time %> <br>
+                                                Number of Guests: <%= reservation.num_guests %> <br>
+                                                Special Request: <%= reservation.special_request %> <br>
+                                                Status: <%= reservation.status %> <br>
+                                                <br>
+                                                <button id = "cannotConfirm" name = "cannotConfirm" type = "submit" class = "account-button" disabled>Confirmed</button> 
+                                                <button id = "cannotUpdate" name = "cannotUpdate" type = "submit" class = "account-button" disabled>Update</button> 
+                                                <button id = "cannotCancel" name = "cannotCancel" type = "submit" class = "account-button" disabled>Cancel</button>  
+                                            </form>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <br>
+                            <% }) %> 
+                        </div>
+                    </ul> 
+                <% } else { %>
+                No reservations have been made.
+            <% } %>
+        </div>
+    </body>
+</html>
