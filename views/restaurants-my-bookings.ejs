@@ -35,37 +35,43 @@
             <% if (reservations_list.length > 0) { %>
                 <ul>
                     <% distinct_date.forEach((date) => { %>
-                        <div class="restaurant-reservation-datetime">
-                        Date: <%= date.reservation_date %>
-                        <% disctinct_datetime.forEach((datetime) => { %>
-                            <% if (datetime.reservation_date == date.reservation_date) { %>
-                                Time: <%= datetime.dining_time %>
-                            </div>
-                                <% reservations_list.forEach((reservation, index) => { %>
-                                    <% if (reservation.reservation_date == datetime.reservation_date && reservation.dining_time == datetime.dining_time) { %>
-                                        <% customers_list.forEach((customer) => { %> 
-                                            <% if (customer.customer_id == reservation.customer_id) { %> 
-                                                <form action="/restaurants/my-bookings" method="POST" class="restaurant-reservation-details">
-                                                    <p><strong>Name            :</strong> <%= customer.customer_name %></p>
-                                                    <p><strong>Email           :</strong> <%= customer.customer_email %></p> 
-                                                    <p><strong>Phone Number    :</strong> <%= customer.customer_phone_number %></p> 
-                                                    <p><strong>Number of Guests:</strong> <%= reservation.num_guests %></p> 
-                                                    <p><strong>Special Request :</strong> <%= reservation.special_request %></p> 
-                                                    <p><strong>Status          :</strong> <%= reservation.status %></p>
-                                                    
-                                                    <br>
-                                                    <button id = "completeReservation" name = "submitButton" type = "submit" value = "<%= 'completeReservation' + reservation.reservation_id %>" class = "account-button">Complete</button> 
-                                                    <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "cancel-button">Cancel</button> 
-                                                </form>
-                                                <br><br>
-                                            <% } %>
-                                        <% }) %>
-                                    <% } %> 
-                                <% }) %> 
-                            <% } %> 
-                        <% }) %> 
-                    
-                    <% }) %> 
+                        <div class="restaurant-reservation-date">
+                            Date: <%= date.reservation_date %>
+                            <% disctinct_datetime.forEach((datetime) => { %>
+                                <% if (datetime.reservation_date == date.reservation_date) { %>
+                                </div>
+                                    <br>
+                                    <div class="restaurant-reservation-time">    
+                                        Time: <%= datetime.dining_time %>  
+                                    </div>
+                                    <br>
+                            
+                                    <div class="restaurant-booking-card">
+                                        <% reservations_list.forEach((reservation, index) => { %>
+                                            <% if (reservation.reservation_date == datetime.reservation_date && reservation.dining_time == datetime.dining_time) { %>
+                                                <% customers_list.forEach((customer) => { %> 
+                                                    <% if (customer.customer_id == reservation.customer_id) { %> 
+                                                        <form action="/restaurants/my-bookings" method="POST" class="restaurant-reservation-details">
+                                                            <p><strong>Name            :</strong> <%= customer.customer_name %></p>
+                                                            <p><strong>Email           :</strong> <%= customer.customer_email %></p> 
+                                                            <p><strong>Phone Number    :</strong> <%= customer.customer_phone_number %></p> 
+                                                            <p><strong>Number of Guests:</strong> <%= reservation.num_guests %></p> 
+                                                            <p><strong>Special Request :</strong> <%= reservation.special_request %></p> 
+                                                            <p><strong>Status          :</strong> <%= reservation.status %></p>
+                                                            
+                                                            <br>
+                                                            <button id = "completeReservation" name = "submitButton" type = "submit" value = "<%= 'completeReservation' + reservation.reservation_id %>" class = "account-button">Complete</button> 
+                                                            <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "cancel-button">Cancel</button> 
+                                                        </form>
+                                                    <% } %>
+                                                <% }) %>
+                                            <% } %>          
+                                        <% }) %> 
+                                <% } %> 
+                            <% }) %> 
+                        </div>
+                        <br><br>
+                    <% }) %>
                 </ul>
             <% } else { %>
                 No reservations have been made.
@@ -73,3 +79,4 @@
         </div>
     </body>
 </html>
+
