@@ -156,7 +156,7 @@
                                             <% reservedDate = reservation.reservation_date %>
                                             <% reservedTime = reservation.dining_time %>
                                             <% reservedDateYear = parseInt(reservedDate.slice(0, 4)); %>
-                                            <% reservedDateMonth = parseInt(reservedDate.slice(5, 7)); %>
+                                            <% reservedDateMonth = parseInt(reservedDate.slice(5, 7)) - 1; %>
                                             <% reservedDateDate = parseInt(reservedDate.slice(8, 10)); %>
                                             <% reservedTimeHour = parseInt(reservedTime.slice(0, 2)); %>
                                             <% reservedTimeMinute = parseInt(reservedTime.slice(3, 5)); %>
