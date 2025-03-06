@@ -44,7 +44,6 @@
                                 <% reservations_list.forEach((reservation, index) => { %>
                                     <% if (reservation.reservation_date == datetime.reservation_date && reservation.dining_time == datetime.dining_time) { %>
                                         <% customers_list.forEach((customer) => { %> 
-                                            <!-- <div class="restaurant-booking-container"> -->
                                             <% if (customer.customer_id == reservation.customer_id) { %> 
                                                 <form action="/restaurants/my-bookings" method="POST" class="restaurant-reservation-details">
                                                     <p><strong>Name            :</strong> <%= customer.customer_name %></p>
@@ -58,10 +57,8 @@
                                                     <button id = "completeReservation" name = "submitButton" type = "submit" value = "<%= 'completeReservation' + reservation.reservation_id %>" class = "account-button">Complete</button> 
                                                     <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "cancel-button">Cancel</button> 
                                                 </form>
-                                                <!-- </div> -->
                                                 <br><br>
                                             <% } %>
-                                            <!-- </div> -->
                                         <% }) %>
                                     <% } %> 
                                 <% }) %> 
