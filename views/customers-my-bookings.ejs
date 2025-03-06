@@ -33,7 +33,7 @@
         <% aMonthLaterDateTime.setMonth(aMonthLaterDateTime.getMonth() + 1); // Add one month %>
         <% var maxDateString = aMonthLaterDateTime.toISOString().slice(0, 10); %>
 
-        <div class="reservations">
+        <div class="customers-reservations">
             <div class="my-bookings-notes">
                 <h2>Important: </h2> 
                 <p>1. Seating will not be chosen or reserved if reservation information is updated </p>
@@ -67,7 +67,7 @@
                                                 <br>
                                                 <button id = "cannotConfirm" name = "cannotConfirm" type = "submit" class = "account-button" disabled>Confirmed</button> 
                                                 <button id = "cannotUpdate" name = "cannotUpdate" type = "submit" class = "account-button" disabled>Update</button> 
-                                                <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "account-button">Cancel</button> 
+                                                <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "cancel-button">Cancel</button> 
                                             </form>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                                                 <button id = "confirmReservation" name = "submitButton" type = "submit" value = "<%= 'confirmReservation' + reservation.reservation_id %>" class = "account-button">Confirm</button> 
                                             <% } %>
                                             <button id = "updateReservation" name = "submitButton" type = "submit" value = "<%= 'updateReservation' + reservation.reservation_id %>" class = "account-button">Update</button> 
-                                            <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "account-button">Cancel</button> 
+                                            <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "cancel-button">Cancel</button> 
                                         </form>
                                     </div>
                                 </div>
@@ -195,11 +195,11 @@
 
                                         <div class="reservation-details-right">
                                             <form action="/customers/my-bookings" method="POST" class="customer-profile-form">
-                                                Date: <%= reservation.reservation_date %> <br>
-                                                Dining Time: <%= reservation.dining_time %> <br>
-                                                Number of Guests: <%= reservation.num_guests %> <br>
-                                                Special Request: <%= reservation.special_request %> <br>
-                                                Status: <%= reservation.status %> <br>
+                                                <strong>Date:</strong> <%= reservation.reservation_date %> <br>
+                                                <strong>Dining Time:</strong> <%= reservation.dining_time %> <br>
+                                                <strong>Number of Guests:</strong> <%= reservation.num_guests %> <br>
+                                                <strong>Special Request:</strong> <%= reservation.special_request %> <br>
+                                                <strong>Status:</strong> <%= reservation.status %> <br>
                                                 <br>
                                                 <button id = "cannotConfirm" name = "cannotConfirm" type = "submit" class = "account-button" disabled>Confirmed</button> 
                                                 <button id = "cannotUpdate" name = "cannotUpdate" type = "submit" class = "account-button" disabled>Update</button> 
