@@ -520,7 +520,7 @@ router.get("/select-table", (req, res) => {
 //Customer My Bookings Page
 router.get("/my-bookings", (req, res) => {
     customerID = req.session.customer_id;
-    customerReservationsQuery = "SELECT * FROM reservations WHERE customer_id = ? ORDER BY reservation_date ASC";
+    customerReservationsQuery = "SELECT * FROM reservations WHERE customer_id = ? ORDER BY reservation_date ASC, dining_time ASC";
     global.db.all(customerReservationsQuery, [customerID], (err, customerReservationsResult) => {
         if (err) {
             console.error("Database error (Customer Reservations List)", err);
