@@ -14,7 +14,8 @@ body.booking-page,
 body.view-menu-page,
 body.select-table-page,
 body.edit-table-page,
-body.customer-my-bookings-page{
+body.customer-my-bookings-page,
+body.restaurant-my-bookings-page{
     font-family: sans-serif;
     padding:0;
     margin:0;
@@ -468,7 +469,6 @@ body.customer-my-bookings-page{
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    
 }
 
 .customer-profile-form .account-input {
@@ -1159,7 +1159,8 @@ body.edit-table-page .menu-list ol li {
     font-size: 16px;
 }
 
-/* My booking page styling */
+/* ======================================================= */
+/* Customer My booking page styling */
 
 .reservation-details{
     font-size: 16px; 
@@ -1185,3 +1186,84 @@ body.edit-table-page .menu-list ol li {
     max-width: 600px; /* Prevent it from being too wide */
 }
 
+.my-bookings-notes{
+    margin-left: 20px;
+}
+
+
+/* ======================================================= */
+/* Restaurant My booking page styling */
+.reservations {
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Styling */
+.reservations h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Date Section */
+.reservations ul {
+    list-style: none;
+    padding: 0;
+}
+
+.reservations ul li {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #333;
+}
+
+/* Dining Time */
+.reservations ul li span {
+    font-weight: normal;
+    color: #666;
+    display: block;
+    margin-top: 5px;
+}
+
+.restaurant-reservation-details{
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    grid-template-columns: auto 1fr;
+}
+
+.restaurant-reservation-datetime { 
+    background-color: #00AD8F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: fit-content; /* Only take as much space as needed */
+}
+
+.cancel-button{
+    background-color: rgb(225, 33, 33); 
+    text-align: center;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+
+.cancel-button:hover {
+    background-color: rgb(153, 0, 0);
+}
