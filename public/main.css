@@ -435,6 +435,7 @@ body.restaurant-my-bookings-page{
     margin-bottom: 10px;
 }
 
+
 .account-button:hover {
     background-color: #007C64;
 }
@@ -890,10 +891,11 @@ body.edit-table-page .menu-list ol li {
     transition: transform 0.2s ease-in-out;
 
     width: 250px;
-    height: 350px;
+    height: 370px;
     justify-content: space-between;
     display: flex;
     flex-direction: column;
+
 }
 
 /* Styling for restaurant image inside the card */
@@ -1162,6 +1164,8 @@ body.edit-table-page .menu-list ol li {
 /* ======================================================= */
 /* Customer My booking page styling */
 
+
+
 .reservation-details{
     font-size: 16px; 
     display: inline-flex; 
@@ -1190,6 +1194,20 @@ body.edit-table-page .menu-list ol li {
     margin-left: 20px;
 }
 
+.booking-complete-button {
+    background-color: #9CCBBC; 
+    text-align: center;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+
+
 
 /* ======================================================= */
 /* Restaurant My booking page styling */
@@ -1210,29 +1228,15 @@ body.edit-table-page .menu-list ol li {
     margin-bottom: 20px;
 }
 
-/* Date */
+/* Date*/
 .reservations ul {
     list-style: none;
     padding: 0;
 }
 
-.reservations ul li {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-top: 20px;
-    color: #333;
-}
 
-.restaurant-reservation-details{
-    margin-top: 20px;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    grid-template-columns: auto 1fr;
-}
 
-.restaurant-reservation-datetime { 
+.restaurant-reservation-date { 
     background-color: #00AD8F;
     color: white;
     border: none;
@@ -1241,6 +1245,40 @@ body.edit-table-page .menu-list ol li {
     cursor: pointer;
     font-size: 16px;
     width: fit-content; /* Only take as much space as needed */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.restaurant-reservation-time { 
+    background-color: #fff;
+    border: 2px solid #00ad8f;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: fit-content; /* Only take as much space as needed */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.restaurant-booking-card{
+    display: flex;
+    gap: 70px;
+    flex-wrap: wrap;
+}
+
+.restaurant-reservation-details{
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    grid-template-columns: auto 1fr;
+
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    justify-content: space-between;
+    
+    width: 280px; 
+    background-color: #f9f9f9;
 }
 
 .cancel-button{
