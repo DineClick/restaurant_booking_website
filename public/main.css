@@ -1262,7 +1262,7 @@ body.edit-table-page .menu-list ol li {
 
 .restaurant-booking-card{
     display: flex;
-    gap: 70px;
+    gap: 50px;
     flex-wrap: wrap;
 }
 
