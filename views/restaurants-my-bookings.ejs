@@ -60,7 +60,11 @@
                                                             <p><strong>Status          :</strong> <%= reservation.status %></p>
                                                             
                                                             <br>
-                                                            <button id = "completeReservation" name = "submitButton" type = "submit" value = "<%= 'completeReservation' + reservation.reservation_id %>" class = "account-button">Complete</button> 
+                                                            <% if (<%= reservation.status %> == "Completed") { %>
+                                                                <button id = "cannotComplete" name = "cannotComplete" type = "submit" class = "account-button" disabled>Completed</button> 
+                                                            <% } else { %>
+                                                                <button id = "completeReservation" name = "submitButton" type = "submit" value = "<%= 'completeReservation' + reservation.reservation_id %>" class = "account-button">Complete</button> 
+                                                            <% } %>
                                                             <button id = "cancelReservation" name = "submitButton" type = "submit" value = "<%= 'cancelReservation' + reservation.reservation_id %>" class = "cancel-button">Cancel</button> 
                                                         </form>
                                                     <% } %>
