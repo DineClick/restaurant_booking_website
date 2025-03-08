@@ -1,4 +1,5 @@
-# restaurant_booking_website
+# DineClick
+## Dine Click is an innovative restaurant reservation platform designed to simplify and enhance custoner dining experience. With Dine Click, customers can seemlessly search for the restaurant, explore menus and make table reservations with just a few clicks.
 
 #### Step to run the code ####
 
